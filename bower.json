@@ -1,0 +1,13 @@
+{
+  "name": "node-simplex",
+  "version": "0.1.2",
+  "description": "Simple node.js framework for our internal use.",
+  "directory" : "app/code/public_html/plugins/",
+  "author": "Abijeet Patro",
+  "contributors" : ["<abijeet.p@osmosys.asia> (http://osmosys.asia)"],  
+  "dependencies": { 
+    "bootstrap":"3.3.0",
+    "bootstrap-select" : "1.6.3",
+    "datatables" : "1.10.4"
+  }
+}
