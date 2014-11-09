@@ -1,15 +1,33 @@
-node-simplex
-================
+powerpath-server-base
+========================
 
-A simple framework created to use with our applications.
+A base framework for the PowerPath server.
 
+# Requirements
+- Ensure that you have python. `node-mariasql` requires python to be installed and in the PATH variable.
+- node.js
+- npm
+- bower (`npm install -g bower`)
 
-## Installation
+# Installation
+
+## Get the files from github
+
+1. Do a git clone - `git clone /path/to/git --recursive`. This will pull the latest code including the sub-directoy.
+2. Open a terminal in the sub-directory - `cd app/code`
+3. Change the branch to whatever is the current sprint. You can do so - `git checkout -b sprint_X`.
+
+## Setup the SQL database
+
+We use the MariaDB server.
+
 1. Restore the database from the `sql` folder
-2. Run `npm-install`
-3. Update the `db-config.js` file to point to your database
-4. Run `npm start`
+2. Update the `db-config.js` file to point to your database
 
-A sample application has been **Garage** application is present with the source code. 
+## Installing dependencies
 
-To start working on your application, please delete the folders and start writing your own code. You will also have to change the routes in the base [server.js](https://github.com/OsmosysSoftware/node-simplex/blob/master/app/server.js#L16) file.
+1. Run `npm install` to install node.js dependencies
+2. Run `bower install` to install frontend dependencies
+3. Run `npm start`
+
+
