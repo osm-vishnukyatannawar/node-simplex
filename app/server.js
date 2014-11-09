@@ -40,7 +40,6 @@ function parseQueryStringValues(request, response, next) {
 
   request.queryParams.sortCol = (__.isString(request.query.sortcol)
           && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);
-  console.log(request.queryParams);
   next();
 }
 
