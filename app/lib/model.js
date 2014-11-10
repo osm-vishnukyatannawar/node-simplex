@@ -6,6 +6,7 @@ var __ = require('underscore');
 var async = require('async');
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
+var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -14,6 +15,7 @@ function Model(mProperties, objToBind, queryModifiers) {
   this.getStatusCode = getStatus;
   this.queryModifiers = queryModifiers;
   this.buildObject(mProperties, objToBind);
+  this.dbUtils = utility;
 }
 
 function processError(err) {

@@ -3,7 +3,8 @@ var status = {
     notFound : 404,
     internalError : 500,
     unknown : 450,
-    badRequest : 400
+    badRequest : 400,
+    noPermission : 403
 };
 
 var getStatus = function(str) {
