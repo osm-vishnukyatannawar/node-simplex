@@ -1,20 +1,18 @@
 var winston = require('winston');
 
 var logger = (function() {
-  var errLogger = new (winston.Logger)({ 
-    transports : [
-      new winston.transports.File({
-        filename : "../logs/exceptions.log",
-        timestamp : true,
-        prettyPrint : false,
-        json: false
-      })
-    ],
+  var errLogger = new (winston.Logger)({
+    transports: [new winston.transports.File({
+      filename: __CONFIG__.app_base_path + "../logs/exceptions.log",
+      timestamp: true,
+      prettyPrint: false,
+      json: false
+    })],
     exceptionHandlers: [new winston.transports.File({
       filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
       json: false,
       timestamp: true,
-      prettyPrint : false
+      prettyPrint: false
     })],
     exitOnError: false
   });
@@ -39,7 +37,7 @@ var logger = (function() {
   };
 
   var writeErrLog = function(err) {
-    errLogger.error(err + "\n----\n");
+    errLogger.error(err);
   };
   return {
     logAppErrors: logAppErrors,

@@ -33,7 +33,7 @@ AppError.prototype.writeToLog = function() {
     strError += 'StackTrace : ' + this.stack + ' \n';
     strError += 'Message : ' + this.message + ' \n';
   }
-  strError += '-----------\n \n \n';
+  strError += '-----------\n\n';
   logger.writeLogErr(strError);
 };
 

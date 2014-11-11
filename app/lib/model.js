@@ -39,17 +39,17 @@ Model.prototype.query = function(objQuery) {
               "Validation error.", this.validator.getErrors()));
       return;
     }
-    var beforeEvents = objQuery.before;
-    if (__.isArray(beforeEvents) && beforeEvents.length !== 0) {
-      this.currentData = objQuery.data;
-      async.waterfall(beforeEvents, function(err, result) {
-        if (err) {
-          objQuery.cb(err);
-          return;
-        }
-        runQuery(objQuery, self);
-      });
-    }
+  }
+  var beforeEvents = objQuery.before;
+  if (__.isArray(beforeEvents) && beforeEvents.length !== 0) {
+    this.currentData = objQuery.data;
+    async.waterfall(beforeEvents, function(err, result) {
+      if (err) {
+        objQuery.cb(err);
+        return;
+      }
+      runQuery(objQuery, self);
+    });
   } else {
     runQuery(objQuery, self);
   }
@@ -85,9 +85,8 @@ Model.prototype.buildObject = function(properties, objToBind) {
 };
 
 Model.prototype.validateProp = function(obj, propsToValidate) {
-  if (!this.validator.isValid(obj, propsToValidate)) {
-    return this.validator.getErrors();
-  }
+  if (!this.validator.isValid(obj, propsToValidate)) { return this.validator
+          .getErrors(); }
   return false;
 };
 
