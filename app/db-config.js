@@ -4,9 +4,9 @@ var dbConfig = {
     maxConn : 60,
     minConn : 2,
     idleTimeout : 30000,
-    host: 'localhost',
+    host: '10.0.0.6',
     user: 'root',
-    password: 'B3stPr@c',
+    password: 'Maria123',
     db: 'dev_emanate_db',
     connTimeout: 10,
   }  

@@ -9,6 +9,6 @@ global.__CONFIG__ = {
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "localhost",
+  ip: "10.0.0.15",
   isProduction : PRODUCTION
 };

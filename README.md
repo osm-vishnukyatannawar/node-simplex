@@ -4,7 +4,7 @@ powerpath-server-base
 A base framework for the PowerPath server.
 
 # Requirements
-- Ensure that you have python. `node-mariasql` requires python to be installed and in the PATH variable.
+- Ensure that you have python (version of python must be > 2.5.0 and < 3.0.0). `node-mariasql` requires python to be installed and in the PATH variable.
 - node.js
 - npm
 - bower (`npm install -g bower`)
