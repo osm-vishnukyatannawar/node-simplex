@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
+
 var sendEmail = {
 	emailSend : function(toEmail) {
 		if(toEmail === undefined){
