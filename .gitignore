@@ -6,6 +6,9 @@ pids
 *.pid
 *.seed
 
+# SVN
+.svn
+
 # Eclipse
 .project
 .settings/
