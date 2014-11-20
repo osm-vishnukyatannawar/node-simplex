@@ -105,6 +105,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray) {
   var hadError = false;
   var response = [];
   var clientObj = null;
+  console.log(query);
   objMaria.pool.acquire(function(err, client) {    
     if (err) {
       cb(new AppError(err, 'There was an error while acquiring the connection', {}));

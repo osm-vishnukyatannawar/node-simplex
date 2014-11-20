@@ -90,4 +90,41 @@ Model.prototype.validateProp = function(obj, propsToValidate) {
   return false;
 };
 
+Model.prototype.processGridQuery = function(selectQuery) {
+  var finalQueryParams = this.defaultSelectProps;
+  if (!__.isEmpty(this.queryModifiers)) {
+
+    // Columns
+    if (this.queryModifiers.sortCol) {
+      finalQueryParams.sortCol = __
+              .isEmpty(this.properties[this.queryModifiers.sortCol].dbName)
+              ? finalQueryParams.sortCol
+              : this.properties[this.queryModifiers.sortCol].dbName;
+      finalQueryParams.sortBy = __.isEmpty(this.queryModifiers.sortBy)
+              ? finalQueryParams.sortBy : this.queryModifiers.sortBy;
+      finalQueryParams.sortBy = finalQueryParams.sortBy.toUpperCase();
+    }
+
+    // Records - Limit
+    var intLimit = parseInt(this.queryModifiers.limit, 10);
+
+    finalQueryParams.limit = isNaN(intLimit) ? finalQueryParams.limit
+            : intLimit;
+    var intStart = parseInt(this.queryModifiers.startRecord, 10);
+    finalQueryParams.startRecord = isNaN(intStart)
+            ? finalQueryParams.startRecord : this.queryModifiers.startRecord;
+  }
+  if (finalQueryParams.sortBy !== 'ASC' && finalQueryParams.sortBy !== 'DESC') {
+    finalQueryParams.sortBy = 'ASC';
+  }
+
+  if (selectQuery) {
+    selectQuery += ' ORDER BY ' + finalQueryParams.sortCol + ' '
+            + finalQueryParams.sortBy + ' LIMIT '
+            + finalQueryParams.startRecord + ', ' + finalQueryParams.limit;
+  }
+  this.defaultSelectProps = finalQueryParams;
+  return selectQuery;
+};
+
 module.exports = Model;

@@ -20,7 +20,7 @@ function parseQueryStringValues(request, response, next) {
   }
   request.queryParams = {};
   request.queryParams.limit = parseInt(request.query.limit, 10);
-  request.queryParams.startRecord = parseInt(request.query.start, 10);
+  request.queryParams.startRecord = parseInt(request.query.startRecord, 10);
 
   request.queryParams.limit = isNaN(request.queryParams.limit) ? 20
           : request.queryParams.limit;
@@ -40,6 +40,7 @@ function parseQueryStringValues(request, response, next) {
 
   request.queryParams.sortCol = (__.isString(request.query.sortcol)
           && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);
+  console.log(request.query);
   next();
 }
 
