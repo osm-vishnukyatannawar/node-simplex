@@ -8,6 +8,8 @@
 
 var mSQLClient = require('mariasql');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var uuid = require('node-uuid');
+var transactionPool = {};
 var getPool = require(__CONFIG__.app_base_path
         + 'lib/db-connector/pools/mariadb-pool');
 var defaultMsg = {
@@ -45,7 +47,7 @@ function MariaDB(dbConfig, customMsgs) {
 MariaDB.prototype.query = function(objQuery, cb) {
   objQuery = getDefaultValues(objQuery);
   runQuery(this, false, objQuery.query, objQuery.data, cb, objQuery.closeConn,
-          objQuery.useArray);
+          objQuery.useArray, objQuery.transaction);
 };
 
 MariaDB.prototype.getResult = function(objQuery, cb) {
@@ -60,13 +62,13 @@ MariaDB.prototype.getResult = function(objQuery, cb) {
       response = data[0];
     }
     cb(null, response);
-  }, objQuery.closeConn, objQuery.useArray);
+  }, objQuery.closeConn, objQuery.useArray, objQuery.transaction);
 };
 
 MariaDB.prototype.getResults = function(objQuery, cb) {
   objQuery = getDefaultValues(objQuery);
   runQuery(this, true, objQuery.query, objQuery.data, cb, objQuery.closeConn,
-          objQuery.useArray);
+          objQuery.useArray, objQuery.transaction);
 };
 
 /**
@@ -88,7 +90,44 @@ MariaDB.prototype.getValue = function(objQuery, cb) {
       response = data[0][0];
     }
     cb(null, response);
-  }, objQuery.closeConn, objQuery.useArray);
+  }, objQuery.closeConn, objQuery.useArray, objQuery.transaction);
+};
+
+MariaDB.prototype.beginTransaction = function(cb) {
+  var transactionID = uuid.v4();
+  objMaria.pool.acquire(function(err, client) {
+    if (err) { return cb(err); }
+    transactionPool[transactionID] = client;
+    client.query('START TRANSACTION').on('result', function(res) {
+    }).on('end', function(info) {
+      info.transactionID = transactionID;
+      cb(null, info);
+    }).on('error', function(err) {
+      cb(err);
+    });
+    cb(null, transactionID);
+  });
+};
+
+MariaDB.prototype.commitTransaction = function(transactionID, cb) {
+  var client = transactionPool[transactionID];
+  if (!client) {
+    // TODO : Change this...
+    return cb(new AppError(500, 'Invalid transaction ID while committing', {
+      transactionID: 'Invalid transaction ID - ' + transactionID
+    }));
+  }
+  client.query('COMMIT TRANSACTION').on('result', function(res) {
+    res.on('error', function() {
+      client.query('ROLLBACK');
+      return cb(err);
+    });
+  }).on('error', function(err) {
+    client.query('ROLLBACK');
+    return cb(err);
+  }).on('end', function(info) {
+    cb(null, info);
+  });
 };
 
 function getDefaultValues(objQuery) {
@@ -98,6 +137,9 @@ function getDefaultValues(objQuery) {
   if (objQuery.useArray === undefined) {
     objQuery.useArray = false;
   }
+  if (objQuery.transaction === undefined) {
+    objQuery.transaction = false;
+  }
   return objQuery;
 }
 
@@ -105,10 +147,10 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray) {
   var hadError = false;
   var response = [];
   var clientObj = null;
-  console.log(query);
-  objMaria.pool.acquire(function(err, client) {    
+  objMaria.pool.acquire(function(err, client) {
     if (err) {
-      cb(new AppError(err, 'There was an error while acquiring the connection', {}));
+      cb(new AppError(err, 'There was an error while acquiring the connection',
+              {}));
       return;
     }
     clientObj = client;
@@ -138,7 +180,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray) {
     });
   }
 
-  function cbEndQuery(info) {    
+  function cbEndQuery(info) {
     if (closeConn) {
       objMaria.pool.release(clientObj);
     }
@@ -160,7 +202,7 @@ function modifyConfigObj(dbConfig) {
     });
   };
 
-  dbConfig.destroy = function(client) {    
+  dbConfig.destroy = function(client) {
     client.end();
   };
 
