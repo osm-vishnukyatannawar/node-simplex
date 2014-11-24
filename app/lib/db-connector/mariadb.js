@@ -47,7 +47,7 @@ function MariaDB(dbConfig, customMsgs) {
 MariaDB.prototype.query = function(objQuery, cb) {
   objQuery = getDefaultValues(objQuery);
   runQuery(this, false, objQuery.query, objQuery.data, cb, objQuery.closeConn,
-          objQuery.useArray, objQuery.transaction);
+          objQuery.useArray, objQuery.transactionID);
 };
 
 MariaDB.prototype.getResult = function(objQuery, cb) {
@@ -62,13 +62,13 @@ MariaDB.prototype.getResult = function(objQuery, cb) {
       response = data[0];
     }
     cb(null, response);
-  }, objQuery.closeConn, objQuery.useArray, objQuery.transaction);
+  }, objQuery.closeConn, objQuery.useArray, objQuery.transactionID);
 };
 
 MariaDB.prototype.getResults = function(objQuery, cb) {
   objQuery = getDefaultValues(objQuery);
   runQuery(this, true, objQuery.query, objQuery.data, cb, objQuery.closeConn,
-          objQuery.useArray, objQuery.transaction);
+          objQuery.useArray, objQuery.transactionID);
 };
 
 /**
@@ -90,45 +90,79 @@ MariaDB.prototype.getValue = function(objQuery, cb) {
       response = data[0][0];
     }
     cb(null, response);
-  }, objQuery.closeConn, objQuery.useArray, objQuery.transaction);
+  }, objQuery.closeConn, objQuery.useArray, objQuery.transactionID);
 };
 
 MariaDB.prototype.beginTransaction = function(cb) {
   var transactionID = uuid.v4();
-  objMaria.pool.acquire(function(err, client) {
+  var that = this;
+  this.pool.acquire(function(err, client) {
     if (err) { return cb(err); }
     transactionPool[transactionID] = client;
     client.query('START TRANSACTION').on('result', function(res) {
-    }).on('end', function(info) {
-      info.transactionID = transactionID;
-      cb(null, info);
+    }).on('end', function(info) {      
+      cb(null, transactionID);
     }).on('error', function(err) {
+      destroyTransactionClient(that, transactionID);
       cb(err);
-    });
-    cb(null, transactionID);
+    });    
   });
 };
 
 MariaDB.prototype.commitTransaction = function(transactionID, cb) {
   var client = transactionPool[transactionID];
+  var that = this;
   if (!client) {
     // TODO : Change this...
     return cb(new AppError(500, 'Invalid transaction ID while committing', {
       transactionID: 'Invalid transaction ID - ' + transactionID
     }));
   }
-  client.query('COMMIT TRANSACTION').on('result', function(res) {
+  client.query('COMMIT;').on('result', function(res) {    
     res.on('error', function() {
-      client.query('ROLLBACK');
-      return cb(err);
+      this.rollbackTransaction(transactionID, function(err, data) {
+        return cb(err, data);
+      });
     });
   }).on('error', function(err) {
-    client.query('ROLLBACK');
-    return cb(err);
+    this.rollbackTransaction(transactionID, function(err, data) {
+      return cb(err, data);
+    });   
   }).on('end', function(info) {
+    destroyTransactionClient(that, transactionID);
     cb(null, info);
   });
 };
+
+MariaDB.prototype.rollbackTransaction = function(transactionID, cb) {
+  var client = transactionPool[transactionID];
+  var that = this;
+  if(client) {
+    client.query('ROLLBACK;').on('result', function(res) {
+      res.on('error', function() {
+        destroyTransactionClient(that, transactionID);
+        return cb(err);
+        
+      });
+    }).on('error', function(err) {
+      destroyTransactionClient(that, transactionID);
+      return cb(err);
+      
+    }).on('end', function(info) {
+      destroyTransactionClient(that, transactionID);
+      return cb(null, info);      
+    });
+  }
+};
+
+function destroyTransactionClient(objMaria, transactionID) {
+  if(!transactionPool[transactionID]) {
+    return;
+  }
+  var clientObj = transactionPool[transactionID];
+  objMaria.pool.release(clientObj);  
+  delete transactionPool[transactionID];
+}
 
 function getDefaultValues(objQuery) {
   if (objQuery.closeConn === undefined) {
@@ -137,26 +171,36 @@ function getDefaultValues(objQuery) {
   if (objQuery.useArray === undefined) {
     objQuery.useArray = false;
   }
-  if (objQuery.transaction === undefined) {
-    objQuery.transaction = false;
+  if (objQuery.transactionID === undefined) {
+    objQuery.transactionID = false;
   }
   return objQuery;
 }
 
-function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray) {
+function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, transactionID) {
   var hadError = false;
   var response = [];
   var clientObj = null;
-  objMaria.pool.acquire(function(err, client) {
-    if (err) {
-      cb(new AppError(err, 'There was an error while acquiring the connection',
-              {}));
-      return;
-    }
-    clientObj = client;
-    client.query(query, data, useArray).on('result', cbResultQuery).on('end',
+  
+  if(transactionID) {
+    clientObj = transactionPool[transactionID];
+    runQueryWithClient();
+  } else {
+    objMaria.pool.acquire(function(err, client) {
+      if (err) {
+        return cb(new AppError(err, 'There was an error while acquiring the connection',
+                {}));
+        
+      }
+      clientObj = client;
+      runQueryWithClient();
+    });  
+  }
+  
+  function runQueryWithClient() {    
+    clientObj.query(query, data, useArray).on('result', cbResultQuery).on('end',
             cbEndQuery);
-  });
+  }
 
   function cbResultQuery(res) {
     if (isSelect) {
@@ -190,6 +234,9 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray) {
   }
 }
 
+/***
+ * This method is called by the Pooling handler. 
+ */
 function modifyConfigObj(dbConfig) {
   dbConfig.create = function(callback) {
     var client = new mSQLClient();

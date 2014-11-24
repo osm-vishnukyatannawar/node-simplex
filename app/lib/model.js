@@ -18,19 +18,6 @@ function Model(mProperties, objToBind, queryModifiers) {
   this.dbUtils = utility;
 }
 
-function processError(err) {
-  if (err && err.isInternalErr) {
-    err.writeToLog();
-  }
-}
-
-function runQuery(objQuery, self) {
-  self.db.query(objQuery, function(err, info) {
-    processError(err);
-    objQuery.cb(err, info);
-  });
-}
-
 Model.prototype.query = function(objQuery) {
   var self = this;
   if (objQuery.validate === true || objQuery.validate === undefined) {
@@ -127,4 +114,37 @@ Model.prototype.processGridQuery = function(selectQuery) {
   return selectQuery;
 };
 
+Model.prototype.beginTransaction = function(cb) {
+  this.db.beginTransaction(function(err, data) {
+    processError(err);
+    return cb(err, data);    
+  });
+};
+
+Model.prototype.commitTransaction = function(transactionID, cb) {
+  this.db.commitTransaction(transactionID, function(err, data) {
+    processError(err);
+    return cb(err, data);
+  });
+};
+
+Model.prototype.rollbackTransaction = function(transactionID, cb) {
+  this.db.rollbackTransaction(transactionID, function(err, data) {
+    processError(err);
+    return cb(err, data);
+  });
+};
+
+function processError(err) {
+  if (err && err.isInternalErr) {
+    err.writeToLog();
+  }
+}
+
+function runQuery(objQuery, self) {
+  self.db.query(objQuery, function(err, info) {
+    processError(err);
+    objQuery.cb(err, info);
+  });
+}
 module.exports = Model;
