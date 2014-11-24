@@ -121,7 +121,7 @@ Model.prototype.beginTransaction = function(cb) {
   });
 };
 
-Model.prototype.commitTransaction = function(transactionID, cb) {
+Model.prototype.commitTransaction = function(transactionID, cb) { 
   this.db.commitTransaction(transactionID, function(err, data) {
     processError(err);
     return cb(err, data);

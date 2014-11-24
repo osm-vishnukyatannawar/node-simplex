@@ -99,7 +99,7 @@ MariaDB.prototype.beginTransaction = function(cb) {
   this.pool.acquire(function(err, client) {
     if (err) { return cb(err); }
     transactionPool[transactionID] = client;
-    client.query('START TRANSACTION').on('result', function(res) {
+    client.query('START TRANSACTION;').on('result', function(res) {
     }).on('end', function(info) {      
       cb(null, transactionID);
     }).on('error', function(err) {
