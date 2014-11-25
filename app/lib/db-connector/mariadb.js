@@ -225,7 +225,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
   }
 
   function cbEndQuery(info) {
-    if (closeConn) {
+    if (closeConn && !transactionID) {
       objMaria.pool.release(clientObj);
     }
     if (!hadError && isSelect) {

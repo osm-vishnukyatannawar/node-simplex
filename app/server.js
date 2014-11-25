@@ -39,8 +39,7 @@ function parseQueryStringValues(request, response, next) {
           && !__.isEmpty(request.query.sortby) ? request.query.sortby : false);
 
   request.queryParams.sortCol = (__.isString(request.query.sortcol)
-          && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);
-  console.log(request.query);
+          && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);  
   next();
 }
 
