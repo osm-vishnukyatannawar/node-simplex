@@ -9,9 +9,10 @@
 
 TODO -
 
-- HTML Format of the email being sent to newly registered users.
+- HTML Format of the email being sent to newly registered users should be customizable.
 - Newly registered users should also be logged in.
 - Create a new page for registration successful to do the above things. This page should be accessible only when logged in.
-- In the verification email message, the user should be allowed to change the email address or resend the email.
+- In the verification email message, the user should be allowed to change the email address. This email address should not be equal to an existing email.
+- The user should be allowed to resend the email.
 - Error/Success messages for the page, 
 
