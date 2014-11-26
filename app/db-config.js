@@ -8,7 +8,8 @@ var dbConfig = {
     user: 'root',
     password: 'Maria123',
     db: 'dev_emanate_db',
-    connTimeout: 10,
+    connTimeout: 15,
+    multiSelect : true
   },
   'cassandradb': {
 	    name : 'cassandradb',
@@ -16,7 +17,6 @@ var dbConfig = {
 	    keyspace: 'emanate',
 	    connTimeout: 10,
   } 
-  
 };
 
 module.exports = dbConfig;
