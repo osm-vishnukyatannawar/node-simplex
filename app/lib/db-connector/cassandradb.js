@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var cassandra = require(__CONFIG__.app_base_path + 'lib/db-connector/cassandra-driver');
+var cassandra = require('cassandra-driver');
 
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
