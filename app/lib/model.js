@@ -152,6 +152,20 @@ Model.prototype.rollbackTransaction = function(transactionID, cb) {
   });
 };
 
+Model.prototype.handleTransactionEnd = function(err, cb) {
+  if (err) {
+    that.rollbackTransaction(transactionID, function(rollBackErr) {        
+      if (rollBackErr) { return cb(rollBackErr); }
+      return cb(err);
+    });
+    return;
+  } else {
+    that.commitTransaction(transactionID, function(err) {
+      return cb(err);
+    });
+  }
+};
+
 function processError(err) {
   if (err && err.isInternalErr) {
     err.writeToLog();

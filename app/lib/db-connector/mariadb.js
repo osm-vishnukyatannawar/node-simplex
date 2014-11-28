@@ -121,16 +121,16 @@ MariaDB.prototype.commitTransaction = function(transactionID, cb) {
   client.query('COMMIT;').on('result', function(res) {    
     res.on('error', function() {
       this.rollbackTransaction(transactionID, function(err, data) {
-        return cb(err, data);
+        return cb(err);
       });
     });
   }).on('error', function(err) {
     this.rollbackTransaction(transactionID, function(err, data) {
-      return cb(err, data);
+      return cb(err);
     });   
   }).on('end', function(info) {
     destroyTransactionClient(that, transactionID);
-    cb(null, info);
+    cb(null);
   });
 };
 
@@ -150,7 +150,7 @@ MariaDB.prototype.rollbackTransaction = function(transactionID, cb) {
       
     }).on('end', function(info) {
       destroyTransactionClient(that, transactionID);
-      return cb(null, info);      
+      return cb(null);      
     });
   }
 };
