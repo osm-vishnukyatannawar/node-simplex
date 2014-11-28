@@ -1,4 +1,6 @@
 var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
+var cassandraDb = require(__CONFIG__.app_base_path + 'lib/db-connector/cassandradb');
+
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var logger = require(__CONFIG__.app_base_path + 'logger');
 var validator = require(__CONFIG__.app_base_path + 'lib/validator');
@@ -11,7 +13,9 @@ var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
+  this.cassandraConfig = dbConfig['cassandradb'];
   this.db = new mariaDb(this.config);
+  this.csDb = new cassandraDb(this.cassandraConfig);
   this.validator = new validator(mProperties);
   this.getStatusCode = getStatus;
   this.queryModifiers = queryModifiers;
@@ -50,17 +54,27 @@ Model.prototype.getActiveID = function() {
 };
 
 Model.prototype.getResults = function(objQuery) {
-  this.db.getResults(objQuery, function(err, data) {
+  var cbProcess = function(err, data) {
     processError(err);
     objQuery.cb(err, data);
-  });
+  };
+  if(objQuery.isCassandra) {
+    this.csDb.getResults(objQuery, cbProcess);
+  } else {
+    this.db.getResults(objQuery, cbProcess);
+  };  
 };
 
 Model.prototype.getResult = function(objQuery) {
-  this.db.getResult(objQuery, function(err, data) {
+  var cbProcess = function(err, data) {
     processError(err);
     objQuery.cb(err, data);
-  });
+  };
+  if(objQuery.isCassandra) {
+    this.csDb.getResult(objQuery, cbProcess);
+  } else {
+    this.db.getResult(objQuery, cbProcess);
+  }
 };
 
 Model.prototype.buildObject = function(properties, objToBind) {
@@ -145,9 +159,14 @@ function processError(err) {
 }
 
 function runQuery(objQuery, self) {
-  self.db.query(objQuery, function(err, info) {
+  var cbProcess = function(err, data) {
     processError(err);
-    objQuery.cb(err, info);
-  });
+    objQuery.cb(err, data);
+  };
+  if(objQuery.isCassandra) {
+    self.csDb.query(objQuery, cbProcess);
+  } else {
+    self.db.query(objQuery, cbProcess);
+  }  
 }
 module.exports = Model;

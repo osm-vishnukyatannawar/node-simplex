@@ -4,7 +4,6 @@
 
 'use strict';
 var cassandra = require('cassandra-driver');
-
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
 var defaultMsg = {
@@ -15,8 +14,13 @@ var defaultMsg = {
 /**
  * The base cassandra constructor.
  */
-function cassandraDB(dbConfig) {
-	this.client = new cassandra.Client({contactPoints : [ dbConfig.host ]});
+var client = false;
+
+function CassandraDB(dbConfig) {
+  if(client === false) {
+    client = new cassandra.Client({contactPoints : [ dbConfig.host ], });
+  }
+	this.client = client;
 	this.msgStrings = defaultMsg;
 };
 
@@ -27,13 +31,13 @@ function cassandraDB(dbConfig) {
  *            Contains the following the properties - query - The SQL Query.
  *            data - Data to be sent for the query. cb - Callback method.
  */
-cassandraDB.prototype.query = function(objQuery, cb) {
-	// objQuery = getDefaultValues(objQuery); cassandra has no close connection option and returning array
+CassandraDB.prototype.query = function(objQuery, cb) {
+	// cassandra has no close connection option and returning array
 	runQuery(this, false, objQuery.query, objQuery.data, cb);
 	return;
 };
 
-cassandraDB.prototype.getResult = function(objQuery, cb) {
+CassandraDB.prototype.getResult = function(objQuery, cb) {
 	// objQuery = getDefaultValues(objQuery);
 	runQuery(this, true, objQuery.query, objQuery.data, function(err, data) {
 		if (err) {
@@ -48,7 +52,7 @@ cassandraDB.prototype.getResult = function(objQuery, cb) {
 	});
 };
 
-cassandraDB.prototype.getResults = function(objQuery, cb) {
+CassandraDB.prototype.getResults = function(objQuery, cb) {
 	// objQuery = getDefaultValues(objQuery);
 	runQuery(this, true, objQuery.query, objQuery.data, cb);
 	return;
@@ -60,9 +64,7 @@ cassandraDB.prototype.getResults = function(objQuery, cb) {
  * @param objQuery
  *            Object containing query, parameters etc.
  */
-cassandraDB.prototype.getValue = function(objQuery, cb) {
-	// objQuery = getDefaultValues(objQuery);
-	// objQuery.useArray = true;
+CassandraDB.prototype.getValue = function(objQuery, cb) {
 	runQuery(this, true, objQuery.query, objQuery.data, function(err, data) {
 		if (err) {
 			cb(err, null);
@@ -78,7 +80,7 @@ cassandraDB.prototype.getValue = function(objQuery, cb) {
 
 
 function runQuery(objCassandra, isSelect, query, data, cb) {
-	objCassandra.client.execute(query, data, {prepare: true},cb);
+	objCassandra.client.execute(query, data, {prepare: true}, cb);
 }
 
-module.exports = cassandraDB;
+module.exports = CassandraDB;
