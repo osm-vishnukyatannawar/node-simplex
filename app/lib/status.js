@@ -5,7 +5,8 @@ var status = {
     unknown : 450,
     badRequest : 400,
     noPermission : 403,
-    mailError : 101
+    mailError : 101,
+    unauthorized : 401
 };
 
 var getStatus = function(str) {

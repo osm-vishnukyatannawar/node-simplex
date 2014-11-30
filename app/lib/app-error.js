@@ -37,4 +37,8 @@ AppError.prototype.writeToLog = function() {
   logger.writeLogErr(strError);
 };
 
+AppError.prototype.setAppMessage = function(message) {
+  this.appMessage = message;
+};
+
 module.exports = AppError;

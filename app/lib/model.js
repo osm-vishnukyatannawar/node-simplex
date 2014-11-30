@@ -1,15 +1,20 @@
 var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
-var cassandraDb = require(__CONFIG__.app_base_path + 'lib/db-connector/cassandradb');
+var cassandraDb = require(__CONFIG__.app_base_path
+        + 'lib/db-connector/cassandradb');
+
+var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
+var logger = require(__CONFIG__.app_base_path + 'logger');
 
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
-var logger = require(__CONFIG__.app_base_path + 'logger');
-var validator = require(__CONFIG__.app_base_path + 'lib/validator');
-var __ = require('underscore');
-var async = require('async');
+
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
-var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
+
 var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
+var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
+
+var __ = require('underscore');
+var async = require('async');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -58,11 +63,12 @@ Model.prototype.getResults = function(objQuery) {
     processError(err);
     objQuery.cb(err, data);
   };
-  if(objQuery.isCassandra) {
+  if (objQuery.isCassandra) {
     this.csDb.getResults(objQuery, cbProcess);
   } else {
     this.db.getResults(objQuery, cbProcess);
-  };  
+  }
+  ;
 };
 
 Model.prototype.getResult = function(objQuery) {
@@ -70,7 +76,7 @@ Model.prototype.getResult = function(objQuery) {
     processError(err);
     objQuery.cb(err, data);
   };
-  if(objQuery.isCassandra) {
+  if (objQuery.isCassandra) {
     this.csDb.getResult(objQuery, cbProcess);
   } else {
     this.db.getResult(objQuery, cbProcess);
@@ -90,6 +96,12 @@ Model.prototype.buildObject = function(properties, objToBind) {
 
 Model.prototype.validateProp = function(obj, propsToValidate) {
   if (!this.validator.isValid(obj, propsToValidate)) { return this.validator
+          .getErrors(); }
+  return false;
+};
+
+Model.prototype.validate = function(obj) {
+  if (!this.validator.isValid(obj, this.properties)) { return this.validator
           .getErrors(); }
   return false;
 };
@@ -134,11 +146,11 @@ Model.prototype.processGridQuery = function(selectQuery) {
 Model.prototype.beginTransaction = function(cb) {
   this.db.beginTransaction(function(err, data) {
     processError(err);
-    return cb(err, data);    
+    return cb(err, data);
   });
 };
 
-Model.prototype.commitTransaction = function(transactionID, cb) { 
+Model.prototype.commitTransaction = function(transactionID, cb) {
   this.db.commitTransaction(transactionID, function(err, data) {
     processError(err);
     return cb(err, data);
@@ -154,7 +166,7 @@ Model.prototype.rollbackTransaction = function(transactionID, cb) {
 
 Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
   if (err) {
-    this.rollbackTransaction(transactionID, function(rollBackErr) {        
+    this.rollbackTransaction(transactionID, function(rollBackErr) {
       if (rollBackErr) { return cb(rollBackErr); }
       return cb(err);
     });
@@ -177,10 +189,11 @@ function runQuery(objQuery, self) {
     processError(err);
     objQuery.cb(err, data);
   };
-  if(objQuery.isCassandra) {
+  if (objQuery.isCassandra) {
     self.csDb.query(objQuery, cbProcess);
   } else {
     self.db.query(objQuery, cbProcess);
-  }  
+  }
 }
+
 module.exports = Model;
