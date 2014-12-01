@@ -2,6 +2,14 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 
 var mailer = {
+  queue : function(objMail) {
+    var toMail = objMail.toEmail;
+    var ccMail = objMail.ccEmail;
+    var bccMail = objMail.bccEmail;
+    var subject = objMail.subject;
+    var templateName = objMail.template;
+    
+  },
   send: function(objSendEmail) {
     var toEmail = objSendEmail.toEmail;
     var template = objSendEmail.template;
