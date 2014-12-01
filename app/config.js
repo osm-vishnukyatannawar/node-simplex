@@ -11,12 +11,14 @@ global.__CONFIG__ = {
     'username' : 'emanate@osmosys.asia',    
     'password' : 'Emanat3!1',
     'port' : 587,
-    'fromName' : 'Emanate Wireless'
+    'fromName' : 'Emanate Wireless',
+    'maxCon' : 5,
+    'maxMsgPerCon' : 20
   }
 };
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  ip: "localhost",
   isProduction : PRODUCTION
 };
