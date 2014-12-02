@@ -1,10 +1,14 @@
 Hi <%= user.username %>,
 
-You have been signed up for a Emanate account with administrator privileges to the organization "<%= user.organizationName %>" Your login email is <%= user.emailID %>. 
+You signed up for a Powerpath account using the email <%= user.emailID %>.
 
-Please click here to login.
+Please confirm your email address by following this link:
+
+<%= email.baseURL %>confirm-email?userID=<%= user.userID %> 
+
+You can login into the Powerpath Dashboard at <%= email.baseURL %>
 
 Thanks,
-Emanate Wireless.
+<%= email.fromName %> 
 ----------------------------------
-Please do not reply to this email. Click here to contact Emanate Support.
+Please do not reply to this email. Click on <%= email.baseURL %>help to contact Emanate Support.

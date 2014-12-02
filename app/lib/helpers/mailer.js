@@ -2,24 +2,23 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var path = require('path');
 var templatesDir = path.join(__CONFIG__.app_base_path, 'templates');
+var emailTemplates = require('email-templates');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
-var transport = nodemailer.createTransport(smtpPool({
-  'host': __CONFIG__.server,
-  'port': __CONFIG__.port,
+var transport = nodemailer.createTransport(smtpTransport({
+  'host': __CONFIG__.email.server,
+  'port': __CONFIG__.email.port,
   'auth': {
-    user: __CONFIG__.username,
-    pass: __CONFIG__.password
+    user: __CONFIG__.email.username,
+    pass: __CONFIG__.email.password
   },
-  maxConnections: __CONFIG__.maxCon,
-  maxMessages: __CONFIG__.maxMsgPerCon
+  maxConnections: __CONFIG__.email.maxCon,
+  maxMessages: __CONFIG__.email.maxMsgPerCon
 }));
 var mailer = function() {
   var sendMails = function(arrObjEmails, cb) {
     var allEmailsLen = arrObjEmails.length;
-    if (!allEmailsLen) {
-      return;
-    }
+    if (!allEmailsLen) { return; }
     var errMails = [];
     var succMails = [];
     var processResponse = function(isSuccess, respObj) {
@@ -28,42 +27,37 @@ var mailer = function() {
       } else {
         errMails.push(respObj);
       }
-      if (allEmailsLen >= (errMails.length + succMails.length)) {
+      if (allEmailsLen <= (errMails.length + succMails.length)) {
         cb(null, {
           success: succMails,
           error: errMails
         });
       }
-    };    
+    };
     emailTemplates(templatesDir, function(err, template) {
-      if (err) {
-        return cb(new AppError(that.getStatusCode('i'),
-          'There was an error while reading the templates', {}));
-      }
+      if (err) { return cb(new AppError(that.getStatusCode('i'),
+              'There was an error while reading the templates', {})); }
       for (var i = 0; i < allEmailsLen; ++i) {
         if (!arrObjEmails[i].templateName) {
-          mailer.sendNormalMail(arrObjEmails[i], processResponse);
-        } else {
-          mailer.sendTemplateMail(arrObjEmails[i], processResponse);
+          sendNormalMail(arrObjEmails[i], processResponse);
+        } else {          
+          sendTemplateMail(arrObjEmails[i], template, processResponse);
         }
       }
-    });    
+    });
   };
 
-  var sendTemplateMail = function(mailObj, cb) {
-    if (!mailObj.templateName) {
-      return cb(false, {
+  var sendTemplateMail = function(mailObj, template, cb) {
+    if (!mailObj.templateName) { return cb(false, {
+      'id': mailObj.emailID,
+      'error': 'No template provided'
+    }); }
+    template(mailObj.templateName, JSON.parse(mailObj.data), function(err,
+            html, text) {
+      if (err) { return cb(false, {
         'id': mailObj.emailID,
-        'error': 'No template provided'
-      });
-    }
-    template(templateName, mailObj.data, function(err, html, text) {
-      if (err) {
-        return cb(false, {
-          'id': mailObj.emailID,
-          'error': 'Couldn\'t load the template file - ' + templatesName
-        });
-      }
+        'error': 'Couldn\'t load the template file - ' + templatesName
+      }); }
       transport.sendMail({
         to: mailObj.toEmail,
         cc: mailObj.ccEmail,
@@ -87,10 +81,12 @@ var mailer = function() {
       });
     });
   };
-  
+
   var sendNormalMail = function(mailObj, cb) {
-    if(!mailObj.data) {
+    if (!mailObj.data) {
       mailObj.data = '';
+    } else {
+      mailObj.data = JSON.parse(mailObj.data);
     }
     transport.sendMail({
       to: mailObj.toEmail,
@@ -114,7 +110,7 @@ var mailer = function() {
       }
     });
   };
-  
+
   return {
     sendMails: sendMails
   };

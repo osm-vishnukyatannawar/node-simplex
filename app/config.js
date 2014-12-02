@@ -13,12 +13,13 @@ global.__CONFIG__ = {
     'port' : 587,
     'fromName' : 'Emanate Wireless',
     'maxCon' : 5,
-    'maxMsgPerCon' : 20
+    'maxMsgPerCon' : 20,
+    'baseURL' : 'http://10.0.0.15:3000/'
   }
 };
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "localhost",
+  ip: "10.0.0.15",
   isProduction : PRODUCTION
 };
