@@ -18,7 +18,7 @@ var client = false;
 
 function CassandraDB(dbConfig) {
   if(client === false) {
-    client = new cassandra.Client({contactPoints : [ dbConfig.host ], });
+    client = new cassandra.Client({contactPoints : [ dbConfig.host ]});
   }
 	this.client = client;
 	this.msgStrings = defaultMsg;
