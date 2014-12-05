@@ -16,7 +16,10 @@ global.__CONFIG__ = {
     'maxMsgPerCon' : 20,
     'baseURL' : 'http://10.0.0.15:3000/'
   },
-  'run_maria_on_main' : true
+  'maintenance' : {
+    'run_maria_on_main' : true,
+    'max_tries' : 2
+  }
 };
 
 config.express = {
