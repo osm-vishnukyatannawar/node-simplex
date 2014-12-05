@@ -12,7 +12,7 @@ var logger = (function() {
       filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
       json: false,
       timestamp: true,
-      prettyPrint: false
+      prettyPrint: true,     
     })],
     exitOnError: false
   });
@@ -28,6 +28,15 @@ var logger = (function() {
     })]
   });
 
+  var maintLogger = new (winston.Logger)({
+    transports: [new winston.transports.File({
+      filename: __CONFIG__.app_base_path + '../logs/maintenance.log',
+      json: false,
+      timestamp: true,
+      prettyPrint: true, 
+    })]
+  });
+  
   var logAppErrors = function(error, logLevel, severity) {
     errLogger.error("\n----\n" + error.stack + "\n Arguments : "
             + error.arguments + "\n Severity : " + error.severity + "\n----\n");
@@ -39,10 +48,18 @@ var logger = (function() {
   var writeErrLog = function(err) {
     errLogger.error(err);
   };
+  
+  var logMaintError = function(info) {
+    var headerDate = dt.toDateString()  + ' ' + dt.toTimeString();
+    maintLogger.info('\n------------- Maintenance Data - ' + headerDate 
+            + ' ------------------\n' + info);
+  };
+  
   return {
     logAppErrors: logAppErrors,
     logAppInfo: logAppInfo,
-    writeLogErr: writeErrLog
+    writeLogErr: writeErrLog,
+    logMaintError : logMaintError
   };
 }());
 
