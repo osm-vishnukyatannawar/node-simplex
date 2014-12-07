@@ -12,6 +12,46 @@ var middleware = require("./middleware/index");
 var loadViews = require("./code/views.js");
 var loadApi = require("./code/api.js");
 
+var express = require("express");
+var app = express();
+
+app.httpPost = function(url, route, isPublic) {
+  url = getFinalUrl(url, isPublic);
+  bindHttpRequest(getFinalUrl(url, isPublic), route, isPublic, 'post');
+};
+
+app.httpGet = function(url, route, isPublic) {
+  url = getFinalUrl(url, isPublic);
+  bindHttpRequest(getFinalUrl(url, isPublic), route, isPublic, 'get');
+};
+
+app.httpDelete = function(url, route, isPublic) {
+  bindHttpRequest(getFinalUrl(url, isPublic), route, isPublic, 'delete');
+};
+
+function bindHttpRequest(url, route, isPublic, method) {
+  if (isPublic) {
+    app[method](url, route);
+  } else {
+    app[method](url, loadApi.validate);
+    app[method](url, route);
+  }
+}
+
+function normalizeUrl(url) {
+  if (url.indexOf('/') === 0) { return url; }
+  return url;
+}
+
+function getFinalUrl(url, isPublic) {
+  url = normalizeUrl(url);
+  var finalUrl = __CONFIG__.app_base_url_token + url;
+  if (isPublic) {
+    finalUrl = __CONFIG__.app_base_url + url;
+  }
+  return finalUrl;
+}
+
 function parseQueryStringValues(request, response, next) {
   if (__.isEmpty(request.query)) {
     request.queryParams = {};
@@ -39,7 +79,7 @@ function parseQueryStringValues(request, response, next) {
           && !__.isEmpty(request.query.sortby) ? request.query.sortby : false);
 
   request.queryParams.sortCol = (__.isString(request.query.sortcol)
-          && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);  
+          && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);
   next();
 }
 
@@ -54,9 +94,6 @@ if (config.express.isProduction && cluster.isMaster) {
   }
 } else {
   // A worker process
-  var express = require("express");
-  var app = express();
-
   app.use(bodyParser.json());
   app.use(parseQueryStringValues);
 
@@ -79,4 +116,4 @@ if (config.express.isProduction && cluster.isMaster) {
     logger.logAppInfo("express is listening on http://" + config.express.ip
             + ":" + config.express.port);
   });
-}
+};
