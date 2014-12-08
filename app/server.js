@@ -15,13 +15,11 @@ var loadApi = require("./code/api.js");
 var express = require("express");
 var app = express();
 
-app.httpPost = function(url, route, isPublic) {
-  url = getFinalUrl(url, isPublic);
+app.httpPost = function(url, route, isPublic) {  
   bindHttpRequest(getFinalUrl(url, isPublic), route, isPublic, 'post');
 };
 
-app.httpGet = function(url, route, isPublic) {
-  url = getFinalUrl(url, isPublic);
+app.httpGet = function(url, route, isPublic) {  
   bindHttpRequest(getFinalUrl(url, isPublic), route, isPublic, 'get');
 };
 

@@ -32,7 +32,7 @@ var logger = (function() {
     transports: [new winston.transports.File({
       filename: __CONFIG__.app_base_path + '../logs/maintenance.log',
       json: false,
-      timestamp: true,
+      timestamp: false,
       prettyPrint: true, 
     })]
   });
@@ -50,9 +50,10 @@ var logger = (function() {
   };
   
   var logMaintError = function(info) {
+    var dt = new Date();
     var headerDate = dt.toDateString()  + ' ' + dt.toTimeString();
-    maintLogger.info('\n------------- Maintenance Data - ' + headerDate 
-            + ' ------------------\n' + info);
+    maintLogger.info('\n--------------- Maintenance Data - ' + headerDate 
+            + ' --------------------\n\n' + info);
   };
   
   return {
