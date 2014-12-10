@@ -1,3 +1,7 @@
 {
-	"invalid-creds": "Your username and password are incorrect."
+  "users" : {
+    "invalid-creds": "Your username and password are incorrect.",
+    "invalid-uuid" : "Please send a valid UUID v4.",
+    "no-user-org" : "No user found with that organization ID."
+  }	
 }

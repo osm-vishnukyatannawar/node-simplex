@@ -29,10 +29,14 @@ if (config.express.isProduction && cluster.isMaster) {
   }
 } else {
   // A worker process
+  app.use(function(req, res, next) {
+    res.setHeader('X-Powered-By', 'Emanate Wireless');
+    next();
+  });
+  
   app.use(bodyParser.json());
   
-  app.use(function(err, req, res, next) {
-    res.setHeader('X-Powered-By', 'Emanate Wireless');
+  app.use(function(err, req, res, next) {    
     if(err) {
       res.status(getStatus('badRequest')).json({
         status : 'fail',

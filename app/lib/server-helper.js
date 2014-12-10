@@ -1,4 +1,5 @@
 var __ = require('underscore');
+var loadApi = require(__CONFIG__.app_code_path +'api.js');
 
 var serverHelper = function() {
   var app = null;
@@ -19,6 +20,7 @@ var serverHelper = function() {
   };
 
   var bindHttpRequest = function(url, route, isPublic, method) {
+    console.log(url);
     if (isPublic) {
       app[method](url, route);
     } else {
