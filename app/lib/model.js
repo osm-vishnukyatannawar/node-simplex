@@ -178,6 +178,48 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
   }
 };
 
+Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
+  var initialQuery = objQueryDetails.initialQuery;
+  var finalData = objQueryDetails.staticData;
+  var propNames = objQueryDetails.propNames;
+  var staticCols = objQueryDetails.staticCols;
+  var dataToBind = objQueryDetails.data;
+  var hasPrimaryKey = objQueryDetails.hasPrimary;
+
+  var valuesQueryArr = [];
+
+  for (var i = 0, len = dataToBind.length; i < len; ++i) {
+    var dynamicCols = [];
+    if (hasPrimaryKey) {
+      // Adding the id column.
+      var idCol = ':id_' + i.toString();
+      dynamicCols.push(idCol);
+      finalData[idCol] = uuid.v4();
+    }
+
+    // Now adding the data itself.
+    var currData = dataToBind[i];
+    for (var j = 0, len2 = propNames.length; j < len2; ++j) {
+      var currColName = ':' + propNames[j] + '_' + i.toString();
+      dynamicCols.push(currColName);
+      finalData[currColName] = currData[propNames[j]];
+    }
+    valuesQueryArr.push('(' + dynamicCols.join() + staticCols.join() + ')');
+  }
+
+  var valuesQuery = valuesQueryArr.join();
+  return {
+    query: initialQuery + valuesQuery,
+    data: finalData
+  };
+};
+
+Model.prototype.convertTagTimeStamp = function(timeStamp) {
+  var convDate = new Date(timeStamp.tm_year, timeStamp.tm_mon, timeStamp.tm_mday,
+          timeStamp.tm_hour, timeStamp.tm_min, timeStamp.tm_sec, 0);
+  return convDate.toISOString().slice(0, 19).replace('T', ' ');
+};
+
 function processError(err) {
   if (err && err.isInternalErr) {
     err.writeToLog();
