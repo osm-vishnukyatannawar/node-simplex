@@ -205,7 +205,8 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
       dynamicCols.push(':' + currColName);
       finalData[currColName] = currData[propNames[j]];
     }
-    valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() + ')');
+    valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
+            + ')');
   }
 
   var valuesQuery = valuesQueryArr.join();
@@ -216,10 +217,24 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
 };
 
 Model.prototype.convertTagTimeStamp = function(timeStamp) {
-  var convDate = new Date(timeStamp.tm_year, timeStamp.tm_mon, timeStamp.tm_mday,
-          timeStamp.tm_hour, timeStamp.tm_min, timeStamp.tm_sec, 0);
+  timeStamp = __.defaults(timeStamp, getDefaultTagDateObj());
+  var convDate = new Date(timeStamp.tm_year, timeStamp.tm_mon,
+          timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
+          timeStamp.tm_sec, 0);
   return convDate.toISOString().slice(0, 19).replace('T', ' ');
 };
+
+function getDefaultTagDateObj() {
+  var dt = new Date();
+  return {
+    tm_year: 1900 + dt.getYear(),
+    tm_mon: dt.getMonth() + 1,
+    tm_mday: dt.getDate(),
+    tm_hour: 0,
+    tm_min: 0,
+    tm_sec: 0
+  };
+}
 
 function processError(err) {
   if (err && err.isInternalErr) {
