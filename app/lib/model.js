@@ -13,6 +13,7 @@ var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
 var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
 
+var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
 
@@ -192,19 +193,19 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
     var dynamicCols = [];
     if (hasPrimaryKey) {
       // Adding the id column.
-      var idCol = ':id_' + i.toString();
-      dynamicCols.push(idCol);
+      var idCol = 'id_' + i.toString();
+      dynamicCols.push(':' + idCol);
       finalData[idCol] = uuid.v4();
     }
 
     // Now adding the data itself.
     var currData = dataToBind[i];
     for (var j = 0, len2 = propNames.length; j < len2; ++j) {
-      var currColName = ':' + propNames[j] + '_' + i.toString();
-      dynamicCols.push(currColName);
+      var currColName = propNames[j] + '_' + i.toString();
+      dynamicCols.push(':' + currColName);
       finalData[currColName] = currData[propNames[j]];
     }
-    valuesQueryArr.push('(' + dynamicCols.join() + staticCols.join() + ')');
+    valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() + ')');
   }
 
   var valuesQuery = valuesQueryArr.join();
