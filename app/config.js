@@ -19,6 +19,9 @@ global.__CONFIG__ = {
   'maintenance' : {
     'run_maria_on_main' : true,
     'max_tries' : 2
+  },
+  'user' : {
+    'default_password' : 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5'
   }
 };
 
