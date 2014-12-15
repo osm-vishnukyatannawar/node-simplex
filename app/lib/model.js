@@ -186,32 +186,59 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var staticCols = objQueryDetails.staticCols;
   var dataToBind = objQueryDetails.data;
   var hasPrimaryKey = objQueryDetails.hasPrimary;
-
+  var defaultVals = objQueryDetails.defaultVals;
   var valuesQueryArr = [];
-
-  for (var i = 0, len = dataToBind.length; i < len; ++i) {
-    var dynamicCols = [];
-    if (hasPrimaryKey) {
-      // Adding the id column.
-      var idCol = 'id_' + i.toString();
-      dynamicCols.push(':' + idCol);
-      finalData[idCol] = uuid.v4();
+  var valuesQuery = ''; 
+  if(__.isArray(dataToBind)) {
+    // It's an array.
+    for (var i = 0, len = dataToBind.length; i < len; ++i) {
+      var dynamicCols = [];
+      if (hasPrimaryKey) {
+        // Adding the id column.
+        var idCol = 'id_' + i.toString();
+        dynamicCols.push(':' + idCol);
+        finalData[idCol] = uuid.v4();
+      }
+  
+      // Now adding the data itself.
+      var currData = dataToBind[i];
+      for (var j = 0, len2 = propNames.length; j < len2; ++j) {
+        var currColName = propNames[j] + '_' + i.toString();
+        dynamicCols.push(':' + currColName);
+        finalData[currColName] = currData[propNames[j]];
+      }
+      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
+              + ')');
     }
-
-    // Now adding the data itself.
-    var currData = dataToBind[i];
-    for (var j = 0, len2 = propNames.length; j < len2; ++j) {
-      var currColName = propNames[j] + '_' + i.toString();
-      dynamicCols.push(':' + currColName);
-      finalData[currColName] = currData[propNames[j]];
+    valuesQuery = valuesQueryArr.join();
+  } else {
+    // It's an object.
+    for(var i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
+      var dynamicCols = [];
+      if(hasPrimaryKey) {
+        var idCol = 'id_' + i.toString();
+        dynamicCols.push(':' + idCol);
+        finalData[idCol] = uuid.v4();
+      }
+      for(var j = 0, len2 = propNames.length; j < len2; ++j) {
+        var currColName = propNames[j] + '_' + i.toString();
+        dynamicCols.push(':' + currColName);
+        if(dataToBind[propNames[j]] && dataToBind[propNames[j]][i]) {
+          finalData[currColName] = dataToBind[propNames[j]][i];
+        } else if (defaultVals[propNames[j]]) {
+          finalData[currColName] = defaultVals[propNames[j]];
+        } else {
+          finalData[currColName] = '';
+        }        
+      }
+      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
+              + ')');
     }
-    valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
-            + ')');
+    valuesQuery = valuesQueryArr.join();
   }
-
-  var valuesQuery = valuesQueryArr.join();
+  
   return {
-    query: initialQuery + valuesQuery,
+    query: initialQuery + valuesQuery + ';',
     data: finalData
   };
 };
