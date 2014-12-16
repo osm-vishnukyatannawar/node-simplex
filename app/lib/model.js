@@ -161,7 +161,9 @@ Model.prototype.commitTransaction = function(transactionID, cb) {
 Model.prototype.rollbackTransaction = function(transactionID, cb) {
   this.db.rollbackTransaction(transactionID, function(err, data) {
     processError(err);
-    return cb(err, data);
+    if(cb) {
+      return cb(err, data);
+    }    
   });
 };
 
