@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project activeEnvironment="Default" name="Server - Tag" resourceRoot="" soapui-version="5.0.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://localhost:3000" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>http://localhost:3000</con:endpoint></con:endpoints><con:resource name="Maintenance" path="/api/v1/tag/maintenance"><con:settings/><con:parameters/><con:method name="PIM" method="POST"><con:settings/><con:parameters/><con:request name="Request 1" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request>{
+<con:soapui-project activeEnvironment="Default" name="Server - Tag" resourceRoot="" soapui-version="5.0.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://localhost:3000" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>http://localhost:3000</con:endpoint></con:endpoints><con:resource name="Maintenance" path="/api/v1/tag/maintenance"><con:settings/><con:parameters/><con:method name="PIM" method="POST"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:main="http://10.0.0.15/api/v1/tag/maintenance">main:Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:main="http://10.0.0.15/api/v1/tag/maintenance">main:Fault</con:element></con:representation><con:request name="Request 1" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request>{
     "orgID": "3",
-    "SN": "3",
+    "SN": "4",
     "type": 3,
     "data": {
         "PimHeader": {
             "currentTimeStamp": {
-                "tm_sec": 12,
+                "tm_sec": 11,
                 "tm_min": 10,
                 "tm_hour": 2,
                 "tm_mday": 12,
                 "tm_mon": 1,
                 "tm_year": 2014
             },
-            "numACPlugins": 53,
-            "numPimBlocks": 62,
-            "numSamplesInBlock": 68
+            "numACPlugins": 44,
+            "numPimBlocks": 61,
+            "numSamplesInBlock": 61
         },
         "PimData": [
             {
@@ -27,11 +27,11 @@
                     "tm_mon": 1,
                     "tm_year": 2014
                 },
-                "plugInDur_min": 280,
-                "plugInToMeasDelay_msec": 53792,
-                "rmsCurrent": 53794,
-                "peakToRms": 796,
-                "stdDev": 536
+                "plugInDur_min": 330,
+                "plugInToMeasDelay_msec": 51792,
+                "rmsCurrent": 53724,
+                "peakToRms": 792,
+                "stdDev": 522
             },
             {
                 "plugInTimeStamp": {
@@ -50,7 +50,7 @@
             }
         ]
     }
-}</con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method><con:method name="Maintenance" method="POST"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:main="http://localhost/api/v1/tag/maintenance">main:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request>{
+}</con:request><con:originalUri>http://10.0.0.15/api/v1/tag/maintenance</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method><con:method name="Maintenance" method="POST"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:main="http://localhost/api/v1/tag/maintenance">main:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:main="http://localhost/api/v1/tag/maintenance">main:Fault</con:element></con:representation><con:request name="Request 1" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request>{
     "orgID": "3",
     "SN": "3",
     "type": 1,
