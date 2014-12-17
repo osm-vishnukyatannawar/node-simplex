@@ -1,0 +1,10 @@
+Hi <%= user.username %>,
+
+You have been signed up for a  <%= email.fromName %> account with administrator privileges to the organization "<%=organization.name %>." Your login email is <%=user.emailID %>.
+		
+<%=email.baseURL %>choose-pwd?userID=<%= user.userID  %>Choose your password here.
+
+Thanks,
+<%= email.fromName %> 
+----------------------------------
+Please do not reply to this email. Click on <%= email.baseURL %>help to contact Emanate Support.

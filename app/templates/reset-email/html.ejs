@@ -1,0 +1,20 @@
+<p>Hi <%= user.username %>!</p>
+<p>
+	<%= email.fromName %> received a request to reset the password for your account (<strong><%=user.emailID %></strong>).
+</p>
+<p>Click this link to reset your password:</p>
+<p>
+	<a href="<%= email.baseURL %>reset-email?userID=<%= user.userID %>"><%=
+		email.baseURL %>/reset-email</a>
+</p>
+<p>
+	The link will expire after one day.
+</p>
+Thanks,
+<br>
+<strong><%= email.fromName %></strong>
+<hr>
+<p style="font-size: smaller">
+	Please do not reply to this email. Click <a
+		href="<%= email.baseURL %>help">here</a> to contact Emanate Support.
+</p>

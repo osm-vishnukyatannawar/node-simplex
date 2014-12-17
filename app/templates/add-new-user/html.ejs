@@ -1,0 +1,18 @@
+<p>Hi <%= user.username %>!</p>
+<p>
+	You have been signed up for a <%= email.fromName %> account with administrator privileges to the organization "<%=
+		organization.name %>." Your login email is <strong><%=user.emailID %></strong>.
+</p>
+
+<p>
+	<a href="<%=email.baseURL %>choose-pwd?userID=<%= user.userID  %>">Choose your password here.</a>
+</p>
+
+Thanks,
+<br>
+<strong><%= email.fromName %></strong>
+<hr>
+<p style="font-size: smaller">
+	Please do not reply to this email. Click <a
+		href="<%= email.baseURL %>help">here</a> to contact Emanate Support.
+</p>
