@@ -56,7 +56,7 @@ var mailer = function() {
             html, text) {
       if (err) { return cb(false, {
         'id': mailObj.emailID,
-        'error': 'Couldn\'t load the template file - ' + templatesName
+        'error': 'Couldn\'t load the template file - ' + mailObj.templateName
       }); }
       transport.sendMail({
         to: mailObj.toEmail,
