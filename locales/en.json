@@ -4,5 +4,6 @@
 		"invalid-uuid": "Please send a valid UUID v4.",
 		"no-user-org": "No user found with that organization ID."
 	},
-	"users.no-user-org": "users.no-user-org"
+	"users.no-user-org": "users.no-user-org",
+	"users.invalid-creds": "users.invalid-creds"
 }

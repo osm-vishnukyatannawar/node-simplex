@@ -16,6 +16,7 @@ var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
 var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
+var bcrypt = require('bcrypt');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -252,6 +253,19 @@ Model.prototype.convertTagTimeStamp = function(timeStamp) {
           timeStamp.tm_sec, 0);
   return convDate.toISOString().slice(0, 19).replace('T', ' ');
 };
+
+Model.prototype.getBcryptHash = function(stringToHash, noOfRounds, cb) {  
+  bcrypt.hash(stringToHash, noOfRounds, function(err, hash) {
+      return cb(err, hash);
+  });  
+};
+
+Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
+  bcrypt.compare(stringToCheck, hashString, function(err, res) {
+    return cb(err, res);
+  });
+};
+
 
 function getDefaultTagDateObj() {
   var dt = new Date();
