@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>users.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/users.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>users.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;UserController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$document</span><span class="p">,</span> <span class="nx">$timeout</span><span class="p">,</span>
+  <span class="nx">CurrentUserService</span><span class="p">,</span> <span class="nx">UserService</span><span class="p">,</span> <span class="nx">RoleService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Get all the roles.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">RoleService</span><span class="p">.</span><span class="nx">getRoles</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">roles</span> <span class="o">=</span> <span class="p">{};</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">roles</span><span class="p">[</span><span class="nx">response</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">roleID</span><span class="p">]</span> <span class="o">=</span> <span class="nx">response</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">roleName</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">$timeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">roles</span> <span class="o">=</span> <span class="nx">roles</span><span class="p">;</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">roles</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span> <span class="o">=</span> <span class="nx">CurrentUserService</span><span class="p">.</span><span class="nx">getUser</span><span class="p">();</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">deployments</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">deployments</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">[</span><span class="s1">&#39;roles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">addRoleRow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">roles</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+        <span class="nx">deploymentID</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="nx">roleID</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+      <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRole</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">roles</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">roles</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">saveUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">user</span><span class="p">.</span><span class="nx">organizationID</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currOrganization</span><span class="p">;</span>
+      <span class="nx">UserService</span><span class="p">.</span><span class="nx">saveUser</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span>
+              <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">$timeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">clearUser</span><span class="p">();</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_userDialog&#39;</span><span class="p">).</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">};</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">clearUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">[</span><span class="s1">&#39;roles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">emailID</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+    
+    <span class="kd">var</span> <span class="nx">$jqxUsers</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvUsers&#39;</span><span class="p">);</span>
+    <span class="nx">UserService</span><span class="p">.</span><span class="nx">getUsersByOrganization</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currOrganization</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span>
+      <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">datatype</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+        <span class="nx">localdata</span><span class="o">:</span> <span class="nx">response</span><span class="p">,</span>
+        <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="nx">pagesize</span><span class="o">:</span> <span class="mi">10</span>
+      <span class="p">};</span>
+      <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">gridConfig</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultGridProperties</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+        <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;userID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Username&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Contact Number&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;contactNumber&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">150</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Email ID&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;emailID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">220</span><span class="p">,</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Deployments&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;deployments&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">240</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Timezone&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;userTimeZone&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">180</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Created On&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;createdOn&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">150</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Modified On&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;modifiedOn&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">150</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">}]</span>
+      <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Grid column related stuff</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">gridConfig</span><span class="p">.</span><span class="nx">columns</span> <span class="o">=</span> <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">processColumns</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">.</span><span class="nx">columns</span><span class="p">);</span>
+      <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">generateGridToolbars</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">,</span> <span class="nx">$jqxUsers</span><span class="p">);</span>
+      <span class="nx">$jqxUsers</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;bindingcomplete&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$jqxUsers</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;clearselection&#39;</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>End of jqxGrid</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;UserService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">getUsersByOrganization</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">organizationID</span><span class="p">,</span> <span class="nx">queryParams</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;organization/&#39;</span> <span class="o">+</span> <span class="nx">organizationID</span> <span class="o">+</span> <span class="s1">&#39;/users&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;data&#39;</span><span class="o">:</span> <span class="nx">queryParams</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">saveUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userObj</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">makeAjaxCall</span><span class="p">({</span>
+      <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;user/add&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;data&#39;</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userObj</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nx">callback</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">getUsersByOrganization</span><span class="o">:</span> <span class="nx">getUsersByOrganization</span><span class="p">,</span>
+    <span class="nx">saveUser</span><span class="o">:</span> <span class="nx">saveUser</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

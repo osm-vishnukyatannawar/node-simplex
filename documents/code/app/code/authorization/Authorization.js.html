@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Authorization.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/authorization/Authorization.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Authorization.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Authorization</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Authorization</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>In hours!</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">tokenDuration</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>In integers...</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">cryptoLength</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkValidity</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">token</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span> <span class="s1">&#39;Invalid token sent.&#39;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">tokenID</span><span class="o">:</span> <span class="s1">&#39;The token is invalid.&#39;</span>
+    <span class="p">}));</span>    
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT user_id AS userID, expires_on AS expiresOn FROM token_m WHERE token_string = ? AND is_active = ?&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">token</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span>
+          <span class="s1">&#39;Invalid token &#39;</span> <span class="o">+</span> <span class="nx">token</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="s1">&#39;Invalid token&#39;</span>
+          <span class="p">});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">currDate</span> <span class="o">&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">expiresOn</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span> <span class="s1">&#39;Token has expired.&#39;</span><span class="p">,</span> <span class="p">{</span>
+          <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="s1">&#39;Token has expired&#39;</span>
+        <span class="p">}));</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">invalidateToken</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">userID</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createNewToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">crypto</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="nx">cryptoLength</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">buf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">(</span><span class="s1">&#39;internalError&#39;</span><span class="p">),</span> <span class="s1">&#39;Could not generate token&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO token_m (token_recid, user_id, token_string, created_on, expires_on) &#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;VALUES (:tokenID, :userID, :token, :tokenTime, :expiryDate)&#39;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">expiryDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">addHoursToDate</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenDuration</span><span class="p">));</span>
+    <span class="kd">var</span> <span class="nx">dataToSend</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">&#39;tokenID&#39;</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+      <span class="s1">&#39;userID&#39;</span><span class="o">:</span> <span class="nx">userID</span><span class="p">,</span>
+      <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="nx">token</span><span class="p">,</span>
+      <span class="s1">&#39;tokenTime&#39;</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+      <span class="s1">&#39;expiryDate&#39;</span><span class="o">:</span> <span class="nx">expiryDate</span>
+    <span class="p">};</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+      <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="nx">dataToSend</span><span class="p">,</span>
+      <span class="nx">before</span><span class="o">:</span> <span class="nx">that</span><span class="p">.</span><span class="nx">beforeInsertUpdate</span><span class="p">(),</span>
+      <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">token</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">invalidateToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isUUID4</span><span class="p">(</span><span class="nx">userID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;Please provide a valid User ID.&#39;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">userID</span><span class="o">:</span> <span class="s1">&#39;Please provide a valid User ID.&#39;</span>
+    <span class="p">}));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE token_m SET is_active = ? WHERE user_id = ?&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">getInactiveID</span><span class="p">(),</span> <span class="nx">userID</span><span class="p">],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInactiveID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">beforeInsertUpdate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">[</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">that</span><span class="p">.</span><span class="nx">invalidateToken</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">currentData</span><span class="p">.</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">];</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Authorization</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

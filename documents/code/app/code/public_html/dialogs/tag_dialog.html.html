@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tag_dialog.html</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../doc-style.css" />
+  <script src="../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../", thisFile = "app/code/public_html/dialogs/tag_dialog.html", defaultSidebar = true;
+  </script>
+  <script src="../../../../doc-script.js"></script>
+  <script src="../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>tag_dialog.html</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal fade&quot;</span> <span class="na">id=</span><span class="s">&quot;15_tagsDialog&quot;</span> <span class="na">tabindex=</span><span class="s">&quot;-1&quot;</span> <span class="na">role=</span><span class="s">&quot;dialog&quot;</span>
+  <span class="na">aria-labelledby=</span><span class="s">&quot;myModalLabel&quot;</span> <span class="na">aria-hidden=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal-dialog modal-lg dialog-div&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal-content content-div&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal-header&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span> <span class="na">data-dismiss=</span><span class="s">&quot;modal&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;span</span> <span class="na">aria-hidden=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;sr-only&quot;</span><span class="nt">&gt;</span>Close<span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;h4</span> <span class="na">class=</span><span class="s">&quot;modal-title&quot;</span><span class="nt">&gt;</span>Edit tag info<span class="nt">&lt;/h4&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal-body tag-modal-body&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-xs-2&quot;</span><span class="nt">&gt;</span>
+          <span class="c">&lt;!-- required for floating --&gt;</span>
+          <span class="c">&lt;!-- Nav tabs --&gt;</span>
+          <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;nav nav-tabs tabs-left&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#general&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;tab&quot;</span><span class="nt">&gt;</span>General<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#ntwrk-settings&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;tab&quot;</span><span class="nt">&gt;</span>Network
+                settings<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#blnk-settings&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;tab&quot;</span><span class="nt">&gt;</span>Blink
+                settings<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#call-settings&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;tab&quot;</span><span class="nt">&gt;</span>Maintenance
+                call settings<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#firmware&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;tab&quot;</span><span class="nt">&gt;</span>Firmware<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+          <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-xs-10&quot;</span><span class="nt">&gt;</span>
+          <span class="c">&lt;!-- Tab panes --&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-content&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-pane active&quot;</span> <span class="na">id=</span><span class="s">&quot;general&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Name:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.name&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Tag SN:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.serialNum&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Org. ID:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.name&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;fieldset&gt;</span>
+                      <span class="nt">&lt;legend&gt;</span>Device<span class="nt">&lt;/legend&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Device SN:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.name&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Device ID:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.name&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label device-info&quot;</span><span class="nt">&gt;</span>Device
+                    info:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-3&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 &quot;</span><span class="nt">&gt;</span>Type:<span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;select</span>
+                      <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>option1<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>option2<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>option3<span class="nt">&lt;/option&gt;</span>
+                    <span class="nt">&lt;/select&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-3&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 &quot;</span><span class="nt">&gt;</span>Manufacturer:<span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-3&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-4 model-label&quot;</span><span class="nt">&gt;</span>Model #:<span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.name&quot;</span>
+                      <span class="na">placeholder=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/fieldset&gt;</span>
+              <span class="nt">&lt;/form&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-pane&quot;</span> <span class="na">id=</span><span class="s">&quot;ntwrk-settings&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Cloud
+                    server:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span>
+                      <span class="na">value=</span><span class="s">&quot;cloud.emanatewireless.com&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>IP
+                    settings:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> DHCP
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Static
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label col-sm-offset-1&quot;</span><span class="nt">&gt;</span>IP
+                    address:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-8&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.ipAddress&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label col-sm-offset-1&quot;</span><span class="nt">&gt;</span>Netmask:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-8&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label col-sm-offset-1&quot;</span><span class="nt">&gt;</span>Gateway:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-8&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Wi-Fi SSID:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model =</span><span class="err"> </span><span class="s">&quot;tagData.SSID&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Encryption:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 &quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> None
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>WPA2-PSK
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label col-sm-offset-1&quot;</span><span class="nt">&gt;</span>Passphrase:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-8&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+              <span class="nt">&lt;/form&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-pane&quot;</span> <span class="na">id=</span><span class="s">&quot;blnk-settings&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal blink-settings-form&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>WiFi
+                    channels:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio2&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> FCC
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio2&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> ETSI
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 col-sm-offset-3&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
+                      <span class="na">id=</span><span class="s">&quot;inlineCheckbox1&quot;</span> <span class="na">value=</span><span class="s">&quot;option1&quot;</span><span class="nt">&gt;</span> 1
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 2
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 3
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 4
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 5
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 6
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span><span class="nt">&gt;</span> 7
+                    <span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
+                      <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 8
+                    <span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 9
+                    <span class="nt">&lt;/label&gt;</span> 
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 10
+                    <span class="nt">&lt;/label&gt;</span> 
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 11
+                    <span class="nt">&lt;/label&gt;</span> 
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 col-sm-offset-3&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 12
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 13
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span>
+                      <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 14
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Blink
+                    protocol:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;tagData.protocol&quot;</span><span class="nt">&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>CCX<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>CCX<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>CCX<span class="nt">&lt;/option&gt;</span>
+                    <span class="nt">&lt;/select&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Blink interval:<span class="nt">&lt;/label&gt;</span>             <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 row interval-div&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-4 &quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                              <span class="nt">&lt;option&gt;</span>Days<span class="nt">&lt;/option&gt;</span>
+                              <span class="nt">&lt;option&gt;</span>0<span class="nt">&lt;/option&gt;</span>
+                              <span class="nt">&lt;option&gt;</span>1<span class="nt">&lt;/option&gt;</span>
+                            <span class="nt">&lt;/select&gt;</span>
+                            <span class="nt">&lt;/div&gt;</span>
+                            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-8 interval input-group bootstrap-timepicker&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;blink-interval&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;input-group-addon&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-time&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+                    <span class="nt">&lt;/span&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                          <span class="nt">&lt;/div&gt;</span>  
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Repetitions
+                    per channel:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Motion
+                    sensor trigger:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio1&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">checked</span><span class="nt">&gt;</span> Enabled
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio1&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Disabled
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Motion
+                    update method:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio3&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">checked</span><span class="nt">&gt;</span> After motion
+                    <span class="nt">&lt;/label&gt;</span> <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span>
+                      <span class="na">name=</span><span class="s">&quot;radio3&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> During <span class="err">&amp;</span> after motion
+                    <span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Motion
+                    update interval:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>5 sec<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>10 sec<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>30 sec<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>1 min<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>2 min<span class="nt">&lt;/option&gt;</span>
+                      <span class="nt">&lt;option&gt;</span>5 min<span class="nt">&lt;/option&gt;</span>
+                    <span class="nt">&lt;/select&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+              <span class="nt">&lt;/form&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-pane&quot;</span> <span class="na">id=</span><span class="s">&quot;call-settings&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>WiFi channels:<span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;radio2&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> FFC
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;radio2&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> ETSI
+                        <span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 col-sm-offset-3&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 1
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 2
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 3
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 4
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 5
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 6
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 7
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 8
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 9
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 10
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 11
+                        <span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9 col-sm-offset-3&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 12
+                <span class="nt">&lt;/label&gt;</span>
+                <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 13
+                <span class="nt">&lt;/label&gt;</span>
+                <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;checkbox-inline checkbox-fields&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 14
+                <span class="nt">&lt;/label&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+                    <span class="nt">&lt;fieldset&gt;</span>
+                   <span class="nt">&lt;legend&gt;</span>Maintenance interval<span class="nt">&lt;/legend&gt;</span>
+                        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Tag plugged in:<span class="nt">&lt;/label&gt;</span>
+                            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;5 minutes&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;/div&gt;</span>
+                      <span class="nt">&lt;/div&gt;</span>
+                       <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Tag unplugged:<span class="nt">&lt;/label&gt;</span>
+                            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;24 hours&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;/div&gt;</span>
+                      <span class="nt">&lt;/div&gt;</span>
+                    <span class="nt">&lt;/fieldset&gt;</span>
+                    <span class="nt">&lt;fieldset&gt;</span>
+           <span class="nt">&lt;legend&gt;</span>Maintenance call<span class="nt">&lt;/legend&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>On plug-in:<span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;radio4&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Enabled
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span><span class="na">name=</span><span class="s">&quot;radio4&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Disabled
+                        <span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;/div&gt;</span>
+               <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>On button press:<span class="nt">&lt;/label&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;radio5&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Enabled
+                        <span class="nt">&lt;/label&gt;</span>
+                        <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">&quot;radio-inline radio-fields&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span><span class="na">name=</span><span class="s">&quot;radio5&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> Disabled
+                        <span class="nt">&lt;/label&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+           <span class="nt">&lt;/fieldset&gt;</span>
+              <span class="nt">&lt;/form&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-pane&quot;</span> <span class="na">id=</span><span class="s">&quot;firmware&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-horizontal&quot;</span> <span class="na">role=</span><span class="s">&quot;form&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>Current firmware rev:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;(Multiple)&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>New firmware rev:<span class="nt">&lt;/label&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
+                     <span class="nt">&lt;option&gt;</span>Choose a FW file<span class="nt">&lt;/option&gt;</span>
+                     <span class="nt">&lt;option&gt;&lt;/option&gt;</span>
+                     <span class="nt">&lt;option&gt;&lt;/option&gt;</span>
+                    <span class="nt">&lt;/select&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-offset-3 col-sm-9&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span>
+                <span class="na">value=</span><span class="s">&quot;Update Firmware&quot;</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+               <span class="nt">&lt;/form&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">clear-custom</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;modal-footer&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;clear-custom&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group pull-left no-mg-bot&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-default&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">value=</span><span class="s">&quot;Use Defaults&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-default&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">value=</span><span class="s">&quot;Save Defaults&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-default&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span>
+              <span class="na">value=</span><span class="s">&quot;Clear Defaults&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group pull-right no-mg-bot&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span>
+              <span class="na">value=</span><span class="s">&quot;Update 200 tags&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm  btn-default&quot;</span>
+              <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">data-dismiss=</span><span class="s">&quot;modal&quot;</span> <span class="na">value=</span><span class="s">&quot;Cancel&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>histogram.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/histogram.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>histogram.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;HistogramController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$document</span><span class="p">,</span> <span class="nx">HistogramService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">HistogramService</span><span class="p">.</span><span class="nx">getHistogramData</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">datatype</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+        <span class="nx">localdata</span><span class="o">:</span> <span class="nx">response</span><span class="p">,</span>
+        <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="nx">pagesize</span><span class="o">:</span> <span class="mi">10</span>
+      <span class="p">};</span>
+      <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">$jqxHistogram</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#14_dvHistogram&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">gridConfig</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultGridProperties</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+        <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Tag SN&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;tagSN&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">90</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Current TimeStamp&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;histID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Dump Record ID&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;dmpRecID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;History Data&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;histData&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Start Timestamp&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;startTimestamp&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Organization ID&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;organizationID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Created On&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;createdOn&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Created By&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;createdBy&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span>
+        <span class="p">}]</span>
+      <span class="p">});</span>
+
+      <span class="nx">gridConfig</span><span class="p">.</span><span class="nx">columns</span> <span class="o">=</span> <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">processColumns</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">.</span><span class="nx">columns</span><span class="p">);</span>
+      <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">generateGridToolbars</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">,</span> <span class="nx">$jqxHistogram</span><span class="p">);</span>
+      <span class="nx">$jqxHistogram</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">);</span>
+
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s2">&quot;HistogramService&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">getHistogramData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">makeAjaxCall</span><span class="p">({</span>
+      <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span>
+    <span class="p">},</span> <span class="nx">cbProcess</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbAlways</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">getHistogramData</span><span class="o">:</span> <span class="nx">getHistogramData</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>firmware.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/firmware.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>firmware.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;FirmwareController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$document</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">$jqxFirmware</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvFirmware&#39;</span><span class="p">);</span>
+        
+        <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nx">localdata</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Bluetooth&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Wifi&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Wifi&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Wifi&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Bluetooth&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Wifi&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Bluetooth&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Bluetooth&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Wifi&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Bluetooth&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;http://www.emanate.firmware&quot;</span><span class="p">,</span> <span class="s2">&quot;27MB&quot;</span><span class="p">,</span> <span class="s2">&quot;Rahul&quot;</span><span class="p">,</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="s2">&quot;2.4.49&quot;</span><span class="p">]</span>
+                <span class="p">],</span>
+                
+                <span class="nx">datafields</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;link&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;firmwareSize&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;whoUploaded&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;firmwareType&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;firmwareVersion&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span> <span class="p">},</span>
+                <span class="p">],</span>
+                <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                 <span class="nx">pagesize</span> <span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+                
+            <span class="p">};</span>
+            <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">firmwareGridCode</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">renderToolbars</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">toolbar</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;margin: 5px;&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">colButton</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;button class=&quot;btn btn btn-xs pull-right dropdown-toggle&quot; id=&quot;tag_btnAddCols&quot; data-toggle=&quot;dropdown&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-plus&quot;&gt;&lt;/span&gt;&lt;/button&gt;&#39;</span>
+  <span class="p">);</span>
+  
+          <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">colButton</span><span class="p">);</span>
+          <span class="nx">toolbar</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+      <span class="kd">var</span> <span class="nx">renderer</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="nx">column</span><span class="p">,</span><span class="nx">value</span><span class="p">){</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;div style=&quot;overflow: hidden; text-overflow: ellipsis; padding-bottom: 2px; text-align: left; margin-right: 2px; margin-left: 4px; margin-top: 5px;&quot;&gt;&lt;a href=&quot;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">value</span><span class="o">+</span><span class="s1">&#39;&lt;/a&gt;&lt;/div&gt;&#39;</span><span class="p">;</span>
+        
+      <span class="p">}</span> 
+        <span class="nx">$jqxFirmware</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">({</span>
+            <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+            <span class="nx">pageable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">theme</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">theme</span><span class="p">,</span>
+           <span class="nx">autorowheight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">columnsreorder</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">showtoolbar</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+             <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">selectionmode</span><span class="o">:</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">,</span>
+          <span class="cm">/*virtualmode: true, */</span>       
+            <span class="nx">rendertoolbar</span><span class="o">:</span> <span class="nx">firmwareGridCode</span><span class="p">.</span><span class="nx">renderToolbars</span><span class="p">,</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>rendergridrows : userGridCode.renderGridRows,</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+            <span class="nx">height</span> <span class="o">:</span> <span class="s1">&#39;510px&#39;</span><span class="p">,</span>
+            <span class="nx">altrows</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+                <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Link&#39;</span><span class="p">,</span>
+                <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;link&#39;</span><span class="p">,</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+               <span class="nx">cellsrenderer</span><span class="o">:</span> <span class="nx">renderer</span> 
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Firmware size&#39;</span><span class="p">,</span>
+                <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;firmwareSize&#39;</span><span class="p">,</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Who uploaded&#39;</span><span class="p">,</span>
+                <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;whoUploaded&#39;</span><span class="p">,</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Firmware type&#39;</span><span class="p">,</span>
+                <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;firmwareType&#39;</span><span class="p">,</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Firmware version&#39;</span><span class="p">,</span>
+                <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;firmwareVersion&#39;</span><span class="p">,</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+                
+            <span class="p">}]</span>
+        <span class="p">});</span> 
+        
+    <span class="p">});</span>
+  <span class="p">});</span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ 
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

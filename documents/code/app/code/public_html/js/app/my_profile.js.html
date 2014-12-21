@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>my_profile.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/my_profile.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>my_profile.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;MyProfileController&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$document</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">,</span><span class="nx">CurrentUserService</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">$jqxRecentLogins</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvRecentLogins&#39;</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">localdata</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="s2">&quot;122.175.39.164&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov 26 20:30 PST  (less than a minute ago)&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;122.175.39.164&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov 26 06:20 PST  (about 14 hours ago)&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;122.175.39.164&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov 26 05:48 PST  (about 15 hours ago)&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;183.82.96.65&quot;</span><span class="p">,</span> <span class="s2">&quot;Secunderabad, India (183.82.96.65)&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov 26 01:22 PST  (about 19 hours ago)&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;183.82.96.65&quot;</span><span class="p">,</span> <span class="s2">&quot;Secunderabad, India (183.82.96.65)&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov 26 01:21 PST  (about 19 hours ago)&quot;</span><span class="p">]</span>
+                    <span class="p">],</span>
+      
+                <span class="nx">datafields</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;IPAddress&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;DateTime&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span> <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;array&quot;</span>
+            <span class="p">};</span>
+            <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+       
+            <span class="nx">$jqxRecentLogins</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span>
+            <span class="p">{</span> <span class="nx">pageable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">theme</span><span class="o">:</span> <span class="s1">&#39;emanate&#39;</span><span class="p">,</span>
+          <span class="nx">rowsheight</span> <span class="o">:</span> <span class="mi">19</span><span class="p">,</span>
+          <span class="nx">autorowheight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">columnsreorder</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">autoheight</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>            
+          <span class="nx">altrows</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+                <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">columns</span><span class="o">:</span> <span class="p">[</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;IP Address&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;IPAddress&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Date/Time&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;DateTime&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">230</span> <span class="p">}</span>
+                <span class="p">]</span>
+          <span class="p">});</span>
+          
+          <span class="kd">var</span> <span class="nx">$jqxActiveSessions</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvActiveSessions&#39;</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">localdata</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;less than a minute ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;about 1 month&quot;</span><span class="p">,</span> <span class="s2">&quot;less than a minute ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Chrome on Windows 8&quot;</span><span class="p">,</span> <span class="s2">&quot;Current Session&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;about 14 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;29 days&quot;</span><span class="p">,</span> <span class="s2">&quot;about 14 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Chrome on Windows 8&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;&#39;&gt;End&lt;/a&gt;&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;about 15 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Hyderabad, India (122.175.39.164)&quot;</span><span class="p">,</span> <span class="s2">&quot;29 days&quot;</span><span class="p">,</span> <span class="s2">&quot;about 15 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Chrome on Windows 8&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;&#39;&gt;End&lt;/a&gt;&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;about 19 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Secunderabad, India (183.82.96.65)&quot;</span><span class="p">,</span> <span class="s2">&quot;29 days&quot;</span><span class="p">,</span> <span class="s2">&quot;about 19 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Chrome&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;&#39;&gt;End&lt;/a&gt;&quot;</span><span class="p">],</span>
+                    <span class="p">[</span><span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;about 19 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Secunderabad, India (183.82.96.65)&quot;</span><span class="p">,</span> <span class="s2">&quot;29 days&quot;</span><span class="p">,</span> <span class="s2">&quot;about 19 hours ago&quot;</span><span class="p">,</span> <span class="s2">&quot;Chrome&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;a href=&#39;&#39;&gt;End&lt;/a&gt;&quot;</span><span class="p">]</span>
+                    <span class="p">],</span>
+      
+                <span class="nx">datafields</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Num&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Started&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;ExpiresIn&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;LastActive&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;UserAgent&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;5&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;EndSession&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">map</span><span class="o">:</span> <span class="s1">&#39;6&#39;</span> <span class="p">}</span>
+    
+                <span class="p">],</span>
+                <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;array&quot;</span>
+            <span class="p">};</span>
+            <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+       
+            <span class="nx">$jqxActiveSessions</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span>
+            <span class="p">{</span> <span class="nx">pageable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">theme</span><span class="o">:</span> <span class="s1">&#39;emanate&#39;</span><span class="p">,</span>
+          <span class="nx">rowsheight</span> <span class="o">:</span> <span class="mi">19</span><span class="p">,</span>
+          <span class="nx">autorowheight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">columnsreorder</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">autoheight</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>            
+          <span class="nx">altrows</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+                <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">columns</span><span class="o">:</span> <span class="p">[</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;Num&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">30</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Started&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;Started&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Location(IP Address)&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Expires in&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;ExpiresIn&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Last active&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;LastActive&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">130</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;User agent&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;UserAgent&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;End session&#39;</span><span class="p">,</span> <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;EndSession&#39;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span> <span class="p">}</span>
+                   
+                <span class="p">]</span>
+          <span class="p">});</span>
+          
+           <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.show-hide-form&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">$changeEmailForm</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.email-form&#39;</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;hidden&#39;</span><span class="p">)){</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;Hide&#39;</span><span class="p">);</span>
+          <span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;hidden&#39;</span><span class="p">);</span>
+          <span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">)){</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;View&#39;</span><span class="p">);</span>
+          <span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">);</span>
+          <span class="nx">$changeEmailForm</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;hidden&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        
+      <span class="p">});</span> 
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/emails/Email.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Email.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">emailProperties</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;emails/Properties&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Email</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Email</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">properties</span> <span class="o">=</span> <span class="nx">emailProperties</span><span class="p">;</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">queueMail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDefaultParams</span><span class="p">();</span>
+      <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">getDefaultData</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">getDefaultData</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO email_m (`email_recid`, `subject`, `to_email`, `cc_email`, `bcc_email`, `from_email`, `template_name`,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;`data`, `created_on`,  `modified_on`, `is_sent`) VALUES(:id, :subject, :toEmail, :ccEmail, :bccEmail, :fromEmail, :templateName,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;:data, :createdOn, :modifiedOn, :isSent);&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getUnsentMail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">limit</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">limit</span><span class="p">)))</span> <span class="p">{</span>
+    <span class="nx">limit</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT email_recid AS emailID, subject, to_email AS toEmail, cc_email AS ccEmail, &#39;</span>
+          <span class="o">+</span> <span class="s1">&#39; from_email AS fromEmail, template_name AS templateName, data, created_on AS createdOn, modified_on AS modifiedOn&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39; FROM email_m WHERE is_sent = ? ORDER BY created_on ASC LIMIT &#39;</span>
+          <span class="o">+</span> <span class="nx">limit</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">getUnsentMailID</span><span class="p">()],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">markAsSent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">emailRecIDs</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">lstOfMails</span> <span class="o">=</span> <span class="nx">updateMailStatus</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">emailRecIDs</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">lstOfMails</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">lstOfMails</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">markAsError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">emailRecIDs</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">lstOfMails</span> <span class="o">=</span> <span class="nx">updateMailStatus</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">emailRecIDs</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">lstOfMails</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">lstOfMails</span><span class="p">);</span>
+  <span class="p">}</span>  
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">isSent</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="nx">templateName</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="nx">ccEmail</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="nx">bccEmail</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="nx">fromEmail</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">fromName</span> <span class="o">+</span> <span class="s1">&#39; &lt;&#39;</span> <span class="o">+</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">username</span>
+            <span class="o">+</span> <span class="s1">&#39;&gt;&#39;</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getSentMailID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getUnsentMailID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getErrorMailID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Email</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultParams</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">baseURL</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">baseURL</span><span class="p">,</span>
+    <span class="nx">fromName</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">fromName</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">getDefaultData</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">mailObj</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDefaultParams</span><span class="p">();</span>
+  <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">updateMailStatus</span><span class="p">(</span><span class="nx">emailObj</span><span class="p">,</span> <span class="nx">emailRecIDs</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">isError</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">emailRecIDs</span> <span class="o">&amp;&amp;</span> <span class="nx">emailRecIDs</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">questionMarks</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">finalData</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">isError</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">finalData</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">emailObj</span><span class="p">.</span><span class="nx">getErrorMailID</span><span class="p">());</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">finalData</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">emailObj</span><span class="p">.</span><span class="nx">getSentMailID</span><span class="p">());</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">emailRecIDs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">emailObj</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isUUID4</span><span class="p">(</span><span class="nx">emailRecIDs</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+      <span class="nx">questionMarks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">);</span>
+      <span class="nx">finalData</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">emailRecIDs</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">questionMarks</span> <span class="o">=</span> <span class="nx">questionMarks</span><span class="p">.</span><span class="nx">join</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE email_m SET is_sent = ? WHERE email_recid IN (&#39;</span>
+          <span class="o">+</span> <span class="nx">questionMarks</span> <span class="o">+</span> <span class="s1">&#39;);&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">finalData</span><span class="p">,</span>
+    <span class="nx">validate</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Email</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

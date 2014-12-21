@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Current.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/current/Current.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Current.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>var crypto = require('crypto');</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="kd">function</span> <span class="nx">CurrentData</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">CurrentData</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertCurrentData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">currentData</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">currentData</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;transactionID&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">transactionID</span> <span class="o">=</span> <span class="nx">currentData</span><span class="p">.</span><span class="nx">transactionID</span><span class="p">;</span>
+    <span class="nx">currentData</span> <span class="o">=</span> <span class="nx">currentData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span>  <span class="s1">&#39;INSERT INTO tag_current_data (`tag_current_data_recid`, `cassandra_dump_rec_id`, `tag_srno`, `organization_id`,&#39;</span>
+      <span class="o">+</span> <span class="s1">&#39;`start_timestamp`,`num_samples`, `created_on`, `created_by`)&#39;</span>
+      <span class="o">+</span> <span class="s1">&#39; VALUES (:id, :dmpRecID, :tagSN, :organizationID, :startTimestamp, :numSamples, :createdOn, :createdBy);&#39;</span><span class="p">;</span>  
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="nx">currentData</span><span class="p">,</span>
+    <span class="nx">transactionID</span> <span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">currentDataID</span> <span class="o">:</span> <span class="nx">currentData</span><span class="p">.</span><span class="nx">id</span>
+      <span class="p">});</span>
+    <span class="p">}</span>  
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertCurrentDataUtil</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;transactionID&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">transactionID</span> <span class="o">=</span> <span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">transactionID</span><span class="p">;</span>
+    <span class="nx">currentDataUtil</span> <span class="o">=</span> <span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>   <span class="c1">// Array of structures</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">queryObj</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCurrentDataUtilMappingQuery</span><span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">);</span>  
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">queryObj</span><span class="p">.</span><span class="nx">query</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="nx">queryObj</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+    <span class="nx">transactionID</span> <span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="nx">data</span><span class="p">.</span><span class="nx">affectedRows</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">success</span> <span class="o">:</span> <span class="kc">true</span>          
+          <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">success</span> <span class="o">:</span> <span class="kc">false</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCurrentDataUtilMappingQuery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO tag_current_util_data ( `tag_current_util_data_recid`,&#39;</span>
+      <span class="o">+</span> <span class="s1">&#39;`current_rms`, `util_val`, `usage_state_id_enum`, `tag_current_data_recid`,`created_on`,`created_by`)&#39;</span>
+      <span class="o">+</span> <span class="s1">&#39; VALUES &#39;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">finalData</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">currentDataID</span><span class="o">:</span> <span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">currentDataID</span><span class="p">,</span>
+      <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+      <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;NodeJS&#39;</span>
+    <span class="p">};</span>
+    <span class="kd">var</span> <span class="nx">propNames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;currentRms&#39;</span><span class="p">,</span> <span class="s1">&#39;utilVal&#39;</span><span class="p">,</span><span class="s1">&#39;usageState&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">queryObj</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getMultipleInsertQuery</span><span class="p">({</span>
+      <span class="nx">initialQuery</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+      <span class="nx">staticData</span><span class="o">:</span> <span class="nx">finalData</span><span class="p">,</span>
+      <span class="nx">propNames</span><span class="o">:</span> <span class="nx">propNames</span><span class="p">,</span>
+      <span class="nx">staticCols</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;:currentDataID&#39;</span><span class="p">,</span> <span class="s1">&#39;:createdOn&#39;</span><span class="p">,</span><span class="s1">&#39;:createdBy&#39;</span><span class="p">],</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="nx">currentDataUtil</span><span class="p">,</span>
+      <span class="nx">hasPrimary</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">queryObj</span><span class="p">;</span> 
+<span class="p">};</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCurrentData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT header.tag_srno AS tagSN, header.organization_id AS organizationID, header.start_timestamp AS startTimestamp, &#39;</span> 
+    <span class="o">+</span> <span class="s1">&#39;header.num_samples AS numSamples, detail.current_rms AS currentRms, detail.util_val AS utilVal, &#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;(SELECT Lookup_value_vc FROM tag_lookup_table WHERE Lookup_Key = \&#39;powerPathUsageInfo\&#39; &#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;AND lookup_value_id = detail.usage_state_id_enum) AS powerPathUsageInfo &#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;FROM tag_current_data header, tag_current_util_data detail &#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;WHERE header.tag_current_data_recid = detail.tag_current_data_recid;&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span><span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="p">{},</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="nx">cb</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultCurrentData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;Node JS&#39;</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultCurrentDataUtil</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;Node JS&#39;</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">CurrentData</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

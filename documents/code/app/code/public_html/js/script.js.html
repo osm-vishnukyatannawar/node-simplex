@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>script.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../doc-style.css" />
+  <script src="../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../", thisFile = "app/code/public_html/js/script.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../doc-script.js"></script>
+  <script src="../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>script.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">__GLOBAL__</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">baseAPI</span><span class="o">:</span> <span class="s1">&#39;/api/v1/&#39;</span><span class="p">,</span>
+  <span class="nx">baseAPItoken</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="nx">getDefaultAjaxParams</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="s1">&#39;dataType&#39;</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;contentType&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span>
+    <span class="p">};</span>
+  <span class="p">},</span>
+  <span class="nx">currUsrData</span><span class="o">:</span> <span class="s1">&#39;CURR_USER_DATA&#39;</span><span class="p">,</span>
+  <span class="nx">theme</span><span class="o">:</span> <span class="s1">&#39;emanate&#39;</span><span class="p">,</span>
+  <span class="nx">defaultGridProperties</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">pageable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">theme</span><span class="o">:</span> <span class="s1">&#39;emanate&#39;</span><span class="p">,</span>
+    <span class="nx">columnsheight</span><span class="o">:</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="nx">rowsheight</span><span class="o">:</span> <span class="mi">19</span><span class="p">,</span>
+    <span class="nx">autorowheight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">columnsresize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">columnsreorder</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">showtoolbar</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">sortable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">selectionmode</span><span class="o">:</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">,</span>
+    <span class="nx">autoheight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+    <span class="nx">altrows</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">__APP_MESSAGE__</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">unknownErr</span><span class="o">:</span> <span class="s1">&#39;There was an error while processing your request.&#39;</span><span class="p">,</span>
+  <span class="nx">serverErr</span><span class="o">:</span> <span class="s1">&#39;There was an error on the server.&#39;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">__GRID_HELPER__</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">columnsrenderer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">&#39;&lt;div style=&quot;margin-top:5px&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">processColumns</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gridColumns</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">gridColumns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gridColumns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;renderer&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">gridColumns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">renderer</span> <span class="o">=</span> <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">columnsrenderer</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gridColumns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">gridColumns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">menu</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>      
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">gridColumns</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">generateGridToolbars</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">,</span> <span class="nx">$gridObj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">columns</span> <span class="o">=</span> <span class="nx">gridConfig</span><span class="p">.</span><span class="nx">columns</span><span class="p">;</span>    
+    <span class="nx">gridConfig</span><span class="p">.</span><span class="nx">rendertoolbar</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">toolbar</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">perColumnContent</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">columnCount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>      
+      <span class="k">if</span><span class="p">(</span><span class="nx">columns</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">perColumnContent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">columnCount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>        
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;margin: 5px;&quot; class=&quot;dropdown clearfix pull-right&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">colButton</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;button id=&quot;1_btnAddCols&quot; type=&quot;button&quot; data-toggle=&quot;dropdown&quot; class=&quot;btn btn-xs&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-plus&quot;&gt;&lt;/span&gt;&lt;/button&gt;&#39;</span><span class="p">);</span>      
+      <span class="kd">var</span> <span class="nx">currColumn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">finalArray</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">columnCount</span><span class="p">;</span> <span class="nx">i</span> <span class="o">!=</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">finalArray</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;ul class=&quot;dropdown-menu dropdown-menu-form&quot;&gt;&#39;</span><span class="p">];</span>
+      <span class="p">}</span>
+      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">columns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">!=</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">currColumn</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">%</span> <span class="nx">columnCount</span><span class="p">;</span>
+        <span class="nx">finalArray</span><span class="p">[</span><span class="nx">currColumn</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&lt;label&gt;&lt;input type=&quot;checkbox&quot;&#39;</span>
+                <span class="o">+</span> <span class="s1">&#39; data-colname=&quot;&#39;</span> <span class="o">+</span> <span class="nx">columns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">dataField</span> <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span> 
+                <span class="o">+</span> <span class="nx">columns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">text</span> <span class="o">+</span> <span class="s1">&#39;&lt;/label&gt;&lt;/li&gt;&#39;</span><span class="p">);</span>        
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">finalHTMLArr</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">columnCount</span><span class="p">;</span> <span class="nx">i</span> <span class="o">!=</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">finalArray</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">);</span>
+        <span class="nx">finalHTMLArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">finalArray</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)];</span>
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">finalHtml</span> <span class="o">=</span> <span class="nx">finalHTMLArr</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+      <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">colButton</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">finalHtml</span><span class="p">);</span>
+      <span class="nx">toolbar</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+      <span class="nx">__GRID_HELPER__</span><span class="p">.</span><span class="nx">addColChkHandler</span><span class="p">(</span><span class="nx">$gridObj</span><span class="p">);</span>
+    <span class="p">};</span>
+  <span class="p">},</span>
+  <span class="nx">addColChkHandler</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$gridObj</span><span class="p">)</span> <span class="p">{</span>    
+    <span class="nx">$gridObj</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.dropdown-menu-form&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+    <span class="p">});</span>
+    <span class="nx">$gridObj</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.dropdown-menu-form input[type=&quot;checkbox&quot;]&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      
+    <span class="p">});</span>
+  <span class="p">},</span>
+  <span class="nx">getQueryParam</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">queryParams</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">pagesize</span><span class="p">;</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">recordstartindex</span><span class="p">;</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">sortcol</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">sortdatafield</span><span class="p">;</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">sortby</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">sortorder</span><span class="p">;</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">pagenum</span> <span class="o">*</span> <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span><span class="p">;</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">endRecord</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">+</span> <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">request</span><span class="p">;</span>
+  <span class="p">}</span>  
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">getErrorResponseMsg</span><span class="p">(</span><span class="nx">responseObj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">__APP_MESSAGE__</span><span class="p">.</span><span class="nx">unknownErr</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">errObj</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">responseObj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;responseJSON&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">status</span> <span class="o">=</span> <span class="nx">responseObj</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">.</span><span class="nx">status</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">===</span> <span class="s2">&quot;fail&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">msg</span> <span class="o">=</span> <span class="nx">responseObj</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+      <span class="nx">errObj</span> <span class="o">=</span> <span class="nx">responseObj</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;error&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">msg</span> <span class="o">=</span> <span class="nx">__APP_MESSAGE__</span><span class="p">.</span><span class="nx">serverErr</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="s1">&#39;message&#39;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">,</span>
+    <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">errObj</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">makeAjaxCall</span><span class="p">(</span><span class="nx">ajaxObj</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">getDefaultAjaxParams</span><span class="p">(),</span> <span class="nx">ajaxObj</span><span class="p">));</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

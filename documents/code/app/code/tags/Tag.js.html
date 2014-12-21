@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tag.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/tags/Tag.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Tag.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+<p>Custom Models</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;logger&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Tag</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Tag</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>TODO : Add code to fetch the pending events.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getPendingEvents</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNumber</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">serialNumber</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span>
+      <span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span>
+      <span class="s1">&#39;Please send the tag\&#39;s serial number.&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="o">:</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="o">:</span> <span class="s1">&#39;value2&#39;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="o">:</span> <span class="s1">&#39;value3&#39;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="o">:</span> <span class="s1">&#39;value4&#39;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="o">:</span> <span class="s1">&#39;value5&#39;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="o">:</span> <span class="s1">&#39;value6&#39;</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>TODO : Add code to fetch the configuration parameters for the tag.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagConfig</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>if (<em>_.isEmpty(serialNum) || _</em>.isEmpty(orgID)) { return cb(new AppError(this
+.getStatusCode('badRequest'),
+'Please send the serial number and the organization ID of the tag.',
+{})); }   </p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+  <span class="kd">var</span> <span class="nx">tagConfigObj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">versionNum</span><span class="o">:</span> <span class="mi">101</span><span class="p">,</span>
+    <span class="nx">deviceID</span><span class="o">:</span> <span class="mi">102345</span><span class="p">,</span>
+    <span class="nx">customerID</span><span class="o">:</span> <span class="mi">12786</span><span class="p">,</span>
+    <span class="nx">url_home</span><span class="o">:</span> <span class="s1">&#39;http://emanatewireless.com/tag/configure&#39;</span><span class="p">,</span>
+    <span class="nx">wifiNetworkParams</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">serverIPAddr</span><span class="o">:</span> <span class="s1">&#39;128.345678.34&#39;</span><span class="p">,</span>
+      <span class="nx">numDNS_Servers</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">DNS_IP_Addr1</span><span class="o">:</span> <span class="s1">&#39;123.34.56.123&#39;</span><span class="p">,</span>
+      <span class="nx">DNS_IP_Addr2</span><span class="o">:</span> <span class="s1">&#39;123.34.56.123&#39;</span><span class="p">,</span>
+      <span class="nx">networkName</span><span class="o">:</span> <span class="s1">&#39;wifi1&#39;</span><span class="p">,</span>
+      <span class="nx">networkSSID</span><span class="o">:</span> <span class="s1">&#39;osmosys.com&#39;</span><span class="p">,</span>
+      <span class="nx">passphrase</span><span class="o">:</span> <span class="s1">&#39;mogambo&#39;</span><span class="p">,</span>
+      <span class="nx">networkSecurity</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="nx">addrtype</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nx">tagStaticIPAddr</span><span class="o">:</span> <span class="s1">&#39;192.168.2.100&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">pushButtonActions</span><span class="o">:</span> <span class="mi">34</span><span class="p">,</span>
+    <span class="nx">minMaintenanceIntervalSec</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">maintenanceIntervalPluggedInSec</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">maintenanceIntervalUnpluggedSec</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nx">maintenanceIntervalLowBattSec</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">pluggedInActions</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nx">unPluggedActions</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">regDomain</span><span class="o">:</span> <span class="s1">&#39;0x00&#39;</span><span class="p">,</span>
+    <span class="nx">ccxVendorID</span><span class="o">:</span> <span class="mi">456</span><span class="p">,</span>
+    <span class="nx">wifiCCXChannels</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nx">ccxBatteryReportOption</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">ccxReportOptions</span><span class="o">:</span> <span class="mi">23</span><span class="p">,</span>
+    <span class="nx">minBeaconIntervalSec</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">wifiPluggedInBeaconIntervalSec</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nx">wifiUnpluggedBeaconIntervalSec</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">wifiLowBattBeaconIntervalSec</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">pktSpacingms</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+    <span class="nx">wifiNumPktsperChan</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">wifiTxPowerdBm</span><span class="o">:</span> <span class="mi">23</span><span class="p">,</span>
+    <span class="nx">accelEnable</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">accelMotionTimeSec</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="nx">accelMotionUpdateSec</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">irEnable</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">lfEnable</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nx">tamperDetEnable</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">bleConfig</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">bleEnable</span><span class="o">:</span> <span class="mi">23</span><span class="p">,</span>
+      <span class="nx">bleGapRoleMinConnIntervalms</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">bleGapRoleMaxConnIntervalms</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">bleGapRoleSlaveLatency</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">bleLimitedAdvertOnTimeSec</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+      <span class="nx">bleLimitedAdvertIntervalTimems</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">bleGeneralAdvertIntervalTimems</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">bleLowBattAdvertIntervalTimems</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="nx">bleDesiredConnectionTimeoutms</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">advertOffTimems</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">blePasskey</span><span class="o">:</span> <span class="mi">234</span>
+    <span class="p">},</span>
+    <span class="nx">devFindParam</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">buzzerFreqHz</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+      <span class="nx">buzzerOnTime_msec</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">buzzerOffTime_msec</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="nx">buzzerCnt</span><span class="o">:</span> <span class="mi">8</span><span class="p">,</span>
+      <span class="nx">ledOnTime_msec</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="nx">ledOffTime_msec</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+      <span class="nx">ledCnt</span><span class="o">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+    <span class="nx">currentMeasEn</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="nx">currentMeasThresh</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">threshOff</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">threshInact</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
+      <span class="nx">threshActive</span><span class="o">:</span> <span class="mi">250</span>
+    <span class="p">},</span>
+    <span class="nx">histConfig</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">enable</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">histResetRule</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+      <span class="nx">histThresh</span><span class="o">:</span> <span class="mi">200</span>
+    <span class="p">},</span>
+    <span class="nx">pimConfig</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">enable</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">trigger</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+      <span class="nx">elapsedTime_10ms</span><span class="o">:</span> <span class="mi">30</span><span class="p">,</span>
+      <span class="nx">iirFilt_mHz</span><span class="o">:</span> <span class="mi">2000</span><span class="p">,</span>
+      <span class="nx">rmsDiffThresh_mA</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
+      <span class="nx">trigDly_10ms</span><span class="o">:</span> <span class="mi">40</span><span class="p">,</span>
+      <span class="nx">sampRateHz</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+      <span class="nx">measDur_10ms</span><span class="o">:</span> <span class="mi">20</span>
+    <span class="p">},</span>
+    <span class="nx">maxPimCurrentSamples</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="nx">batteryConfig</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">batteryRechargeLevelPercent</span><span class="o">:</span> <span class="mi">25</span><span class="p">,</span>
+      <span class="nx">batteryChargeLevelPercent</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+      <span class="nx">batteryThreshLowAlert</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+      <span class="nx">batteryThreshCriticalAlert</span><span class="o">:</span> <span class="mi">50</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tagConfigObj</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagsByOrgId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">organizationID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getQueryForAllTags</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>console.log(sqlQuery);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">organizationID</span><span class="p">],</span>
+    <span class="nx">isGrid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">queryResult</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">queryResult</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
+          <span class="s1">&#39;No tags found with organization id - &#39;</span> <span class="o">+</span> <span class="nx">organizationID</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>sqlQuery = that.getUserSelectQuery(condition, false, true);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">getQueryForAllTags</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+      <span class="nx">that</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+        <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">organizationID</span><span class="p">],</span>
+        <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+          <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>queryResult = processSelectResponse(queryResult);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="kd">var</span> <span class="nx">numOfRecords</span> <span class="o">=</span> <span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span> <span class="o">?</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">finalResult</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">data</span><span class="o">:</span> <span class="nx">queryResult</span><span class="p">,</span>
+            <span class="nx">numOfRecords</span><span class="o">:</span> <span class="nx">numOfRecords</span>
+          <span class="p">};</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">finalResult</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkIfExists</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">)</span> <span class="o">||</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">orgID</span><span class="p">))</span> <span class="p">{</span>
+      
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="p">};</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagById</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagId</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getQueryForAllTags</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">tagId</span><span class="p">],</span>
+    <span class="nx">isGrid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">queryResult</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">queryResult</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
+          <span class="s1">&#39;No tag was found with tag id - &#39;</span> <span class="o">+</span> <span class="nx">tagId</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>sqlQuery = that.getUserSelectQuery(condition, false, true);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">that</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+        <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">tagId</span><span class="p">],</span>
+        <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+          <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>queryResult = processSelectResponse(queryResult);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="kd">var</span> <span class="nx">numOfRecords</span> <span class="o">=</span> <span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span> <span class="o">?</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">finalResult</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">data</span><span class="o">:</span> <span class="nx">queryResult</span><span class="p">,</span>
+            <span class="nx">numOfRecords</span><span class="o">:</span> <span class="nx">numOfRecords</span>
+          <span class="p">};</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">finalResult</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getQueryForAllTags</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isIndTag</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">condition</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">isIndTag</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">condition</span> <span class="o">=</span> <span class="s1">&#39; WHERE tag_info.tag_info_recid = ?&#39;</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT&#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;Emanate powerpath 100&quot;        AS  &quot;tagType&quot;,  &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_info.tag_info_recid AS &quot;tagID&quot;, &#39;</span> <span class="o">+</span> <span class="s1">&#39; tag_info.hardware_version      AS  &quot;hwVersion&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_info.host_firmware_version AS &quot;fwVersion&quot;, &#39;</span> <span class="o">+</span> <span class="s1">&#39; tag_info.tag_manufacturer_name AS &quot;name&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_info.tag_serial_num        AS &quot;serialNum&quot;,&#39;</span> <span class="o">+</span> <span class="s1">&#39; tag_info.wifi_macaddr          AS &quot;macAddress&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_info.device_id             AS &quot;device&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; CONCAT(tag_info.commissioned_on, &quot;(&quot;, DATEDIFF(NOW(), tag_info.commissioned_on), &quot;days&quot;)  AS &quot;firstSeen&quot;,    &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; CASE WHEN tag_info.is_commissioned = 1 THEN &quot;OK&quot;&#39;</span> <span class="o">+</span> <span class="s1">&#39; ELSE &quot;Not commissioned&quot;&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; END  AS &quot;configStatus&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; (SELECT CONCAT(lookup_value_display, &quot; Since yesterday &quot;, TIME_FORMAT(tag_info.last_maintenance_date, &quot;%h:%i %p&quot;))&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; FROM tag_lookup_table&#39;</span> <span class="o">+</span> <span class="s1">&#39; WHERE lookup_value_id = tag_maint_call.tag_usage_info_id_enum&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; AND lookup_key = &quot;powerPathUsageInfo&quot; )   AS &quot;deviceStatus&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; &quot;Plugged in, idle since yesterday at 5:11 PM&quot; AS &quot;deviceStatus&quot;, &#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;None&quot; AS &quot;alerts&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_maint_call.battery_level_percent AS &quot;batteryLevel&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_info.last_maintenance_date  AS &quot;lastSeen&quot;,&#39;</span> <span class="o">+</span> <span class="s1">&#39; tag_info.device_last_used_on    AS  &quot;lastUsed&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; CONCAT (tag_info.nearest_ap_macaddr,&quot;, RSSI = -&quot;, tag_info.nearest_ap_rssi_dbm, &quot; dBm&quot;)  AS &quot;nearestAp&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; CONCAT(&quot;Tomorrow &quot;, TIME (DATE_ADD(tag_info.last_maintenance_date, INTERVAL 1 DAY))) AS &quot;nextMaintCall&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; IFNULL((SELECT GROUP_CONCAT(event_type_id_enum)&#39;</span> <span class="o">+</span> <span class="s1">&#39; FROM pending_events&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; WHERE organization_id = tag_info.organization_id&#39;</span> <span class="o">+</span> <span class="s1">&#39; AND tag_srno = tag_info.tag_serial_num&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; AND is_processed = 0&#39;</span> <span class="o">+</span> <span class="s1">&#39; AND is_active = 1), &quot;none&quot;) AS &quot;pendingCommands&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; &quot;1.2 days&quot; AS &quot;avgTimeBetweenUses&quot;, &#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;1.3 hours&quot; AS &quot;avgUsageDuration&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_maint_call.util_percent_6months  AS &quot;utilization&quot;,&#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;1.73 kWh&quot; AS &quot;dailyEnergyConsumption&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; (SELECT voltage_level * tag_maint_call.util_percent_1day&#39;</span> <span class="o">+</span> <span class="s1">&#39;  FROM country_m&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; INNER JOIN organization_m ON country_m.country_recid = organization_m.country_recid&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;  WHERE organization_m.organization_id = tag_info.organization_id) AS &quot;Daily energy consumption&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; wifi_network_params.server_url  AS &quot;server&quot;,          &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; wifi_network_params.tag_static_ip_addr  AS &quot;ipAddress&quot;,  &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; wifi_network_params.network_ssid  AS &quot;SSID&quot;,       &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; wifi_network_params.network_security AS &quot;encryption&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.wifi_ccx_channels  AS &quot;channels&quot;,  &#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;CCX&quot; AS &quot;protocol&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.accel_motion_time_sec   AS &quot;interval&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.wifi_num_pkts_per_chan  AS &quot;repetitionsPerChannel&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; &quot;Enabled&quot;                                 AS &quot;motionSensorTrigger&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; &quot;After motion&quot;                            AS &quot;motionUpdateMethod&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.accel_motion_update_sec AS &quot;motionUpdateInterval&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.wifi_ccx_channels  AS &quot;channels&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.maint_interval_pluggedin_sec  AS &quot;intervalTagPluggedInSec&quot;,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_config_params.maint_interval_unplugged_sec AS &quot;intervalTagunPluggedInHr&quot;, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; &quot;Enabled&quot; AS &quot;maintCallOnPlugIn&quot;,&#39;</span> <span class="o">+</span> <span class="s1">&#39; &quot;Enabled&quot; AS &quot;MaintCallOnButtonPress&quot;  &#39;</span> <span class="o">+</span> <span class="s1">&#39; FROM tag_info&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; LEFT OUTER JOIN tag_maint_call ON tag_info.organization_id = tag_maint_call.organization_id&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; AND tag_info.tag_serial_num = tag_maint_call.tag_srno &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; AND tag_info.last_tag_maint_call_recid  = tag_maint_call.tag_maint_call_recid&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; LEFT OUTER JOIN tag_config_params ON tag_info.tag_config_params_recid = tag_config_params.tag_config_params_recid &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; LEFT OUTER JOIN  wifi_network_params ON tag_config_params.wifi_network_params_recid = wifi_network_params.wifi_network_params_recid  &#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>+' WHERE tag_info.organization_id = 1 '</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="o">+</span> <span class="nx">condition</span>
+  <span class="nx">sqlQuery</span> <span class="o">+=</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">sqlQuery</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertTagInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO tag_info (tag_info_recid, cassandra_dump_rec_id, tag_serial_num, organization_id,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;device_id, customer_id, hardware_version, wifi_macaddr, tag_config_state_id_enum, hw_peripherals,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;host_firmware_version, wifi_firmware_version, ble_firmware_version, tag_config_version,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;factory_test_time,config_time, created_on, created_by)&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; VALUES (:id, :dmpRecID, :tagSN, :organizationID, :deviceID, :customerID, :hardwareVersion, :wifiMacAddr, :tagConfigState,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; :hwPeripherals, :hostFirmwareVer, :wifiFirmwareVer, :bleFirwareVer, :powerPathConfigVer, :factoryTestTime, :configTime,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; :createdOn, :createdBy)&#39;</span><span class="p">;</span>
+   
+    <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+      <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+      <span class="nx">data</span> <span class="o">:</span> <span class="nx">tagInfo</span><span class="p">,</span>
+      <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">tagInfoID</span> <span class="o">:</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">id</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateTagInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE tag_info SET cassandra_dump_rec_id = :dmpRecID, organization_id = :organizationID, device_id = :deviceID,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; customer_id = :customerID, hardware_version = :hardwareVersion, wifi_macaddr = :wifiMacAddr,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; tag_config_state_id_enum =:tagConfigState, hw_peripherals = :hwPeripherals, host_firmware_version = :hostFirmwareVer,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; wifi_firmware_version = :wifiFirmwareVer, ble_firmware_version = :bleFirwareVer, tag_config_version = :powerPathConfigVer,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; factory_test_time = :factoryTestTime, config_time = :configTime, modified_on = :createdOn, modified_by = :createdBy&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; WHERE tag_serial_num = :tagSN&#39;</span><span class="p">;</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+      <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+      <span class="nx">data</span> <span class="o">:</span> <span class="nx">tagInfo</span><span class="p">,</span>
+      <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">tagInfoID</span> <span class="o">:</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">id</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagByTagSN</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">,</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT cassandra_dump_rec_id AS dmpRecID, organization_id AS organizationID, device_id AS deviceID,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;customer_id AS customerID, hardware_version AS hardwareVersion, wifi_macaddr AS wifiMacAddr,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;tag_config_state_id_enum AS tagConfigState, hw_peripherals AS hwPeripherals, host_firmware_version AS hostFirmwareVer,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;wifi_firmware_version AS wifiFirmwareVer, ble_firmware_version AS bleFirwareVer, tag_config_version AS powerPathConfigVer,&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;factory_test_time AS factoryTestTime, config_time AS configTime &#39;</span>
+    <span class="o">+</span> <span class="s1">&#39;FROM tag_info where tag_serial_num = ?&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+      <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">tagSN</span><span class="p">],</span>
+      <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">queryResult</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="kc">null</span><span class="p">);</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">queryResult</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span> 
+<span class="p">};</span>
+
+<span class="nx">Tag</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultTagInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+      <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+      <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;Node JS&#39;</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Tag</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

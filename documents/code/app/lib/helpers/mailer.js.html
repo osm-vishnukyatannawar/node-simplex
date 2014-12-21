@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mailer.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/lib/helpers/mailer.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>mailer.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">nodemailer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nodemailer&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">smtpTransport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nodemailer-smtp-transport&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">templatesDir</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span><span class="p">,</span> <span class="s1">&#39;templates&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">emailTemplates</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;email-templates&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">transport</span> <span class="o">=</span> <span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">(</span><span class="nx">smtpTransport</span><span class="p">({</span>
+  <span class="s1">&#39;host&#39;</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">server</span><span class="p">,</span>
+  <span class="s1">&#39;port&#39;</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span>
+  <span class="s1">&#39;auth&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">user</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+    <span class="nx">pass</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">password</span>
+  <span class="p">},</span>
+  <span class="nx">maxConnections</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">maxCon</span><span class="p">,</span>
+  <span class="nx">maxMessages</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">maxMsgPerCon</span>
+<span class="p">}));</span>
+<span class="kd">var</span> <span class="nx">mailer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sendMails</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">arrObjEmails</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">allEmailsLen</span> <span class="o">=</span> <span class="nx">arrObjEmails</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">allEmailsLen</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">errMails</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">succMails</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">processResponse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isSuccess</span><span class="p">,</span> <span class="nx">respObj</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">isSuccess</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">succMails</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">respObj</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">errMails</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">respObj</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">allEmailsLen</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="nx">errMails</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">succMails</span><span class="p">.</span><span class="nx">length</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">success</span><span class="o">:</span> <span class="nx">succMails</span><span class="p">,</span>
+          <span class="nx">error</span><span class="o">:</span> <span class="nx">errMails</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="nx">emailTemplates</span><span class="p">(</span><span class="nx">templatesDir</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">),</span>
+              <span class="s1">&#39;There was an error while reading the templates&#39;</span><span class="p">,</span> <span class="p">{}));</span> <span class="p">}</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">allEmailsLen</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arrObjEmails</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">sendNormalMail</span><span class="p">(</span><span class="nx">arrObjEmails</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">processResponse</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>          
+          <span class="nx">sendTemplateMail</span><span class="p">(</span><span class="nx">arrObjEmails</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">template</span><span class="p">,</span> <span class="nx">processResponse</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">sendTemplateMail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">,</span> <span class="nx">template</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="p">{</span>
+      <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+      <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="s1">&#39;No template provided&#39;</span>
+    <span class="p">});</span> <span class="p">}</span>
+    <span class="nx">template</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">templateName</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span>
+            <span class="nx">html</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+        <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="s1">&#39;Couldn\&#39;t load the template file - &#39;</span> <span class="o">+</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">templateName</span>
+      <span class="p">});</span> <span class="p">}</span>
+      <span class="nx">transport</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">({</span>
+        <span class="nx">to</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">toEmail</span><span class="p">,</span>
+        <span class="nx">cc</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">ccEmail</span><span class="p">,</span>
+        <span class="nx">bcc</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">bccEmail</span><span class="p">,</span>
+        <span class="nx">text</span><span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
+        <span class="nx">html</span><span class="o">:</span> <span class="nx">html</span><span class="p">,</span>
+        <span class="nx">subject</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">subject</span><span class="p">,</span>
+        <span class="nx">from</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">fromEmail</span>
+      <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">responseStatus</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+            <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+          <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+            <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">responseStatus</span><span class="p">.</span><span class="nx">message</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">sendNormalMail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">transport</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">({</span>
+      <span class="nx">to</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">toEmail</span><span class="p">,</span>
+      <span class="nx">cc</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">ccEmail</span><span class="p">,</span>
+      <span class="nx">bcc</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">bccEmail</span><span class="p">,</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+      <span class="nx">html</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+      <span class="nx">subject</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">subject</span><span class="p">,</span>
+      <span class="nx">from</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">fromEmail</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">responseStatus</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="p">{</span>
+          <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+          <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="p">{</span>
+          <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">emailID</span><span class="p">,</span>
+          <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">responseStatus</span><span class="p">.</span><span class="nx">message</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">sendMails</span><span class="o">:</span> <span class="nx">sendMails</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">mailer</span><span class="p">();</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
