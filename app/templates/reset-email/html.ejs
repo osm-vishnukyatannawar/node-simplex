@@ -1,14 +1,15 @@
-<p>Hi <%= user.username %>!</p>
+<p>Hi <%= user.emailID %>!</p>
 <p>
 	<%= email.fromName %> received a request to reset the password for your account (<strong><%=user.emailID %></strong>).
 </p>
 <p>Click this link to reset your password:</p>
 <p>
-	<a href="<%= email.baseURL %>reset-email?userID=<%= user.userID %>"><%=
-		email.baseURL %>/reset-email</a>
+	<a href="<%= email.baseURL %>reset-passwordl?token=<%= user.token %>">
+		<%= email.baseURL %>reset-password?token=<%= user.token %>
+	</a>
 </p>
 <p>
-	The link will expire after one day.
+	The link will expire after <%= user.tokenExpire %> hours.
 </p>
 Thanks,
 <br>

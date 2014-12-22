@@ -1,12 +1,12 @@
-Hi <%= user.username %>!
+Hi <%= user.emailID %>!
 
 <%= email.fromName %> received a request to reset the password for your account <%=user.emailID %>.
 
 Click this link to reset your password:
 
-<%= email.baseURL %>confirm-email?userID=<%= user.userID %> 
+<%= email.baseURL %>reset-password?token=<%= user.token %>
 
-The link will expire after one day.
+The link will expire after <%= user.tokenExpire %> hours.
 
 Thanks,
 <%= email.fromName %> 
