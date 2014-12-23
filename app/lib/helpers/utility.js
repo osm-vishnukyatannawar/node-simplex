@@ -20,6 +20,10 @@ var util = {
     }    
     dt.setHours(dt.getHours() + hoursToAdd);
     return dt;
+  },
+  UTCToCurrentTime : function(dt) {
+    var str = dt.toLocaleString() + ' UTC';
+    return new Date(str);
   }
 };
 
