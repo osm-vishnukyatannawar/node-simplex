@@ -18,13 +18,18 @@ global.__CONFIG__ = {
   },
   'maintenance' : {
     'run_maria_on_main' : true,
+    'max_tries' : 2,
+    'default_value_tag_sn': '999',
+    'default_value_org': '999',
+    'default_value_type': 99
     'max_tries' : 2
   },
   'user' : {
     'default_password' : 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
-    'default_organization' : 'an organization',
-    'default_pass_encrypt_rounds' : 10,
-    'default_forgot_pass_time' : 6  // hours
+    'default_organization' : 'an organization', 
+	'default_pass_encrypt_rounds' : 10,		
+	'default_forgot_pass_time' : 6,	// hours
+	'default_created_by' : 'NodeJS'
   },
   'tokenLength' : 16,
   'fwTokenLength' : 16
@@ -32,6 +37,6 @@ global.__CONFIG__ = {
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  ip: "10.0.0.82",
   isProduction : PRODUCTION
 };

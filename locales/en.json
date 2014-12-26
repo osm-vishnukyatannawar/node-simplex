@@ -4,6 +4,14 @@
 		"invalid-uuid": "Please send a valid UUID v4.",
 		"no-user-org": "No user found with that organization ID."
 	},
+	"tags": {
+		"invalid-datatype": "Unknown data type sent by tag.",
+		"failed-set-errorflag": "The data could not be synced and there was an error while updating the error flag on Cassandra.",
+		"failed-set-processedflag": "The data was synced but there was an error while updating the processed flag on Cassandra.",
+		"no-tagdata-toprocess": "No unprocessed tag manitenance data found.",
+		"invalid-record-org": "Please check the record ID or organization ID.",
+		"failed-insert-histogram": "Failed to insert the histogram data. Please check the data and try again."
+	},
 	"users.no-user-org": "No user found with that organization ID.",
 	"users.invalid-creds": "Your username and password are incorrect.",
 	"users.invalid-uuid": "users.invalid-uuid"
