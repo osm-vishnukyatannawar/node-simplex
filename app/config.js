@@ -21,7 +21,7 @@ global.__CONFIG__ = {
     'max_tries' : 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
-    'default_value_type': 99
+    'default_value_type': 99,
     'max_tries' : 2
   },
   'user' : {
@@ -37,6 +37,6 @@ global.__CONFIG__ = {
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.82",
+  ip: "10.0.0.15",
   isProduction : PRODUCTION
 };
