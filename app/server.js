@@ -34,7 +34,8 @@ if (config.express.isProduction && cluster.isMaster) {
     next();
   });
   
-  app.use(bodyParser.json());
+  //app.use(bodyParser.json());
+  app.use(helper.parseBodyType);
   
   app.use(function(err, req, res, next) {    
     if(err) {

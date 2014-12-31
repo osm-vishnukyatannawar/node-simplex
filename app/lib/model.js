@@ -17,6 +17,8 @@ var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
+var csv = require('csv');
+var fs = require('fs');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -265,6 +267,15 @@ Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
     return cb(err, res);
   });
 };
+
+Model.prototype.readCsvFile = function(path,cb){
+	var fileStream=fs.createReadStream(path);
+	var parser = csv.parse({'columns':true}, function(err, data){
+		cb(data);
+		
+	});
+	fileStream.pipe(parser);
+}
 
 
 function getDefaultTagDateObj() {

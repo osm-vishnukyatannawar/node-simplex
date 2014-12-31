@@ -1,4 +1,6 @@
 var __ = require('underscore');
+var formidable = require('formidable'); 
+var bodyParser = require('body-parser');
 var loadApi = require(__CONFIG__.app_code_path +'api.js');
 
 var serverHelper = function() {
@@ -34,6 +36,35 @@ var serverHelper = function() {
     } else {
       console.log('Invalid method type for - ' + url);
     }
+  };
+  
+  var jsonParser = bodyParser.json();
+  
+  var parseBodyTypeValues = function(request, response, next){
+	  //console.log(request);
+	 var contentType =  request.get('content-type');
+	 var type = typeof(contentType);
+	 //console.log(contentType);
+	 if(type != "undefined"){
+		 var isMultipart = contentType.search("multipart/form-data");
+	 }else{
+		 var isMultipart = -1;
+	 }
+	 
+	 if(isMultipart > -1){
+		var form = new formidable.IncomingForm({ uploadDir: __dirname + '/../../uploads/' });
+	     form.parse(request, function(err, fields, files) {
+	          //console.log(JSON.stringify(files));
+	          //var filename = files['uploadFile']['name'];
+	          request.files = files;
+	          next();
+	    });
+		 
+	 }else{
+		 //var form = new formidable.IncomingForm();
+		 jsonParser(request, response, next);
+	 }
+	 
   };
   
   var bindHttpRequest = function(url, route, isPublic, isAdmin, method) {
@@ -95,6 +126,7 @@ var serverHelper = function() {
 
   return {
     parseQueryString: parseQueryStringValues,
+    parseBodyType : parseBodyTypeValues,
     init: init,
   };
 };
