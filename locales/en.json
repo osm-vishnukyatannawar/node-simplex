@@ -2,7 +2,8 @@
 	"users": {
 		"invalid-creds": "Your username and password are incorrect.",
 		"invalid-uuid": "Please send a valid UUID v4.",
-		"no-user-org": "No user found with that organization ID."
+		"no-user-org": "No user found with that organization ID.",
+		"no-user-id": "Please send the user ID."
 	},
 	"tags": {
 		"invalid-datatype": "Unknown data type sent by tag.",
@@ -14,5 +15,5 @@
 	},
 	"users.no-user-org": "No user found with that organization ID.",
 	"users.invalid-creds": "Your username and password are incorrect.",
-	"users.invalid-uuid": "users.invalid-uuid"
+	"users.invalid-uuid": "Please send a valid UUID v4."
 }
