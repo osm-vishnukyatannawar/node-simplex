@@ -12,13 +12,14 @@ var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
 var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
+var csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
+var zip = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 
 var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
-var csv = require('csv');
-var fs = require('fs');
+
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -32,6 +33,8 @@ function Model(mProperties, objToBind, queryModifiers) {
   this.dbUtils = utility;
   this.email = {};
   this.email.mailer = mailer;
+  this.csvHelper = new csv();
+  this.zipper = new zip();
 }
 
 Model.prototype.query = function(objQuery) {
@@ -269,12 +272,13 @@ Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
 };
 
 Model.prototype.readCsvFile = function(path,cb){
-	var fileStream=fs.createReadStream(path);
-	var parser = csv.parse({'columns':true}, function(err, data){
-		cb(data);
-		
+	
+	csvHelper.readCsvHelper(path , function(err , data){
+		if(err){
+			cb(err);
+		}
+		cb(null,data);
 	});
-	fileStream.pipe(parser);
 }
 
 

@@ -41,10 +41,8 @@ var serverHelper = function() {
   var jsonParser = bodyParser.json();
   
   var parseBodyTypeValues = function(request, response, next){
-	  //console.log(request);
 	 var contentType =  request.get('content-type');
 	 var type = typeof(contentType);
-	 //console.log(contentType);
 	 if(type != "undefined"){
 		 var isMultipart = contentType.search("multipart/form-data");
 	 }else{
@@ -54,14 +52,12 @@ var serverHelper = function() {
 	 if(isMultipart > -1){
 		var form = new formidable.IncomingForm({ uploadDir: __dirname + '/../../uploads/' });
 	     form.parse(request, function(err, fields, files) {
-	          //console.log(JSON.stringify(files));
-	          //var filename = files['uploadFile']['name'];
+	          request.fields = fields;
 	          request.files = files;
 	          next();
 	    });
 		 
 	 }else{
-		 //var form = new formidable.IncomingForm();
 		 jsonParser(request, response, next);
 	 }
 	 

@@ -20,7 +20,9 @@ var transport = nodemailer.createTransport(smtpTransport({
 var mailer = function() {
   var sendMails = function(arrObjEmails, cb) {
     var allEmailsLen = arrObjEmails.length;
-    if (!allEmailsLen) { return; }
+    if (!allEmailsLen) {
+      return;
+    }
     var errMails = [];
     var succMails = [];
     var processResponse = function(isSuccess, respObj) {
@@ -36,16 +38,18 @@ var mailer = function() {
         });
       }
     };
-    
+
     emailTemplates(templatesDir, function(err, template) {
-      if (err) { return cb(new AppError(that.getStatusCode('i'),
-              'There was an error while reading the templates', {})); }
+      if (err) {
+        return cb(new AppError(that.getStatusCode('i'),
+          'There was an error while reading the templates', {}));
+      }
       for (var i = 0; i < allEmailsLen; ++i) {
-        processAttachments(arrObjEmails[i], function(err, mailObj){
-          if(err) {
+        processAttachments(arrObjEmails[i], function(err, mailObj) {
+          if (err) {
             return processResponse(false, {
-              'id' : mailObj.emailD,
-              'error' : 'Error while performing file system checks.'
+              'id': mailObj.emailD,
+              'error': 'Error while performing file system checks.'
             });
           }
           if (!mailObj.templateName) {
@@ -53,22 +57,26 @@ var mailer = function() {
           } else {
             sendTemplateMail(mailObj, template, processResponse);
           }
-        });        
+        });
       }
     });
   };
 
   var sendTemplateMail = function(mailObj, template, cb) {
-    if (!mailObj.templateName) { return cb(false, {
-      'id': mailObj.emailID,
-      'error': 'No template provided'
-    }); }
-    template(mailObj.templateName, JSON.parse(mailObj.data), function(err,
-            html, text) {
-      if (err) { return cb(false, {
+    if (!mailObj.templateName) {
+      return cb(false, {
         'id': mailObj.emailID,
-        'error': 'Couldn\'t load the template file - ' + mailObj.templateName
-      }); }
+        'error': 'No template provided'
+      });
+    }
+    template(mailObj.templateName, JSON.parse(mailObj.data), function(err,
+      html, text) {
+      if (err) {
+        return cb(false, {
+          'id': mailObj.emailID,
+          'error': 'Couldn\'t load the template file - ' + mailObj.templateName
+        });
+      }
       transport.sendMail({
         to: mailObj.toEmail,
         cc: mailObj.ccEmail,
@@ -77,7 +85,7 @@ var mailer = function() {
         html: html,
         subject: mailObj.subject,
         from: mailObj.fromEmail,
-        attachments : mailObj.attachments
+        attachments: mailObj.attachments
       }, function(err, responseStatus) {
         if (err) {
           return cb(false, {
@@ -108,7 +116,7 @@ var mailer = function() {
       html: mailObj.data,
       subject: mailObj.subject,
       from: mailObj.fromEmail,
-      attachments : mailObj.attachments,
+      attachments: mailObj.attachments,
     }, function(err, responseStatus) {
       if (err) {
         return cb(false, {
@@ -128,19 +136,24 @@ var mailer = function() {
    * Checks if the attachments are present.
    */
   function processAttachments(mailObj, cb) {
-    if(mailObj.attachments && mailObj.attachments.length === 0) {
+    try {
+      mailObj.attachments = JSON.parse(mailObj.attachments);
+    } catch (err) {
+      return cb(err);
+    }
+    if (mailObj.attachments && mailObj.attachments.length === 0) {
       delete mailObj.attachments;
-      return mailObj;
+      return cb(mailObj);
     }
     async.filter(mailObj.attachments, fs.exists, function(err, results) {
-      if(err) {
+      if (err) {
         return cb(err);
       }
       mailObj.attachments = results;
       return cb(null, mailObj);
-    });    
+    });
   };
-  
+
   return {
     sendMails: sendMails
   };

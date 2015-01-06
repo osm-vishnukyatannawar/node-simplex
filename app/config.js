@@ -14,7 +14,8 @@ global.__CONFIG__ = {
     'fromName' : 'Emanate Wireless',
     'maxCon' : 5,
     'maxMsgPerCon' : 20,
-    'baseURL' : 'http://10.0.0.15:3000/'
+    'baseURL' : 'http://10.0.0.15:3000/',
+    'emailsToSend' :'surendra.b@osmosys.asia'
   },
   'maintenance' : {
     'run_maria_on_main' : true,
@@ -32,11 +33,15 @@ global.__CONFIG__ = {
 	'default_created_by' : 'NodeJS'
   },
   'tokenLength' : 16,
-  'fwTokenLength' : 16
+  'fwTokenLength' : 16,
+  'baseFirmwareFileStrs' : {'bleFw'  :'PowerPath_BLE_FW_' , 
+	  						'wifiFw' :'PowerPath_WIFI_FW_' , 
+	  						'hostFw' :'PowerPath_HOST_FW_'} ,
+  'firmwareFileExtension' : ".zip"
 };
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  ip: "10.0.0.44",
   isProduction : PRODUCTION
 };
