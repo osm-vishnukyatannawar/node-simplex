@@ -48,7 +48,7 @@ var mailer = function() {
         processAttachments(arrObjEmails[i], function(err, mailObj) {
           if (err) {
             return processResponse(false, {
-              'id': mailObj.emailD,
+              'id': mailObj.emailID,
               'error': 'Error while performing file system checks.'
             });
           }
@@ -139,16 +139,15 @@ var mailer = function() {
     try {
       mailObj.attachments = JSON.parse(mailObj.attachments);
     } catch (err) {
-      return cb(err);
+      return cb(err, mailObj);
     }
     if (mailObj.attachments && mailObj.attachments.length === 0) {
       delete mailObj.attachments;
-      return cb(mailObj);
+      return cb(null, mailObj);
     }
-    async.filter(mailObj.attachments, fs.exists, function(err, results) {
-      if (err) {
-        return cb(err);
-      }
+    async.filter(mailObj.attachments, function(attachment, next) {
+      fs.exists(attachment.path, next);
+    }, function(results) {      
       mailObj.attachments = results;
       return cb(null, mailObj);
     });
