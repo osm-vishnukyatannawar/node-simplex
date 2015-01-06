@@ -18,6 +18,10 @@ var transport = nodemailer.createTransport(smtpTransport({
   maxMessages: __CONFIG__.email.maxMsgPerCon
 }));
 var mailer = function() {
+  /**
+   * Public : This is the primary method that is called
+   * from outside to send the mails.
+   */
   var sendMails = function(arrObjEmails, cb) {
     var allEmailsLen = arrObjEmails.length;
     if (!allEmailsLen) {
@@ -62,6 +66,9 @@ var mailer = function() {
     });
   };
 
+  /**
+   * Sends a mail that has a template attached.
+   */
   var sendTemplateMail = function(mailObj, template, cb) {
     if (!mailObj.templateName) {
       return cb(false, {
@@ -102,6 +109,9 @@ var mailer = function() {
     });
   };
 
+  /**
+   * Sends a mail that does not have a template set.
+   */
   var sendNormalMail = function(mailObj, cb) {
     if (!mailObj.data) {
       mailObj.data = '';
@@ -133,7 +143,8 @@ var mailer = function() {
   };
 
   /**
-   * Checks if the attachments are present.
+   * Checks if the attachments are present on the
+   * filesystem.
    */
   function processAttachments(mailObj, cb) {
     try {
