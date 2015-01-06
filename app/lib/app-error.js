@@ -1,5 +1,5 @@
 var logger = require(__CONFIG__.app_base_path + 'logger');
-
+var __ = require('underscore');
 /**
  * A small wrapper around the error object for use within our app.
  * 
@@ -14,11 +14,14 @@ var logger = require(__CONFIG__.app_base_path + 'logger');
  *          This object will be sent if it's a validation error. 
  */
 function AppError(err, respMessage, vObj) {
-  if (typeof (err) === "object" && err instanceof Error) {
+  var objType = typeof (err) ;
+  if (objType === "object" && err instanceof Error) {
     this.stack = err.stack;
     this.message = err.message;
     this.appMessage = respMessage;
     this.isInternalErr = true;
+  } else  if(objType === "object" && err instanceof this) {
+    this.copyError(err, respMessage, vObj);
   } else {
     this.appMessage = respMessage;
     this.status = err;
@@ -39,6 +42,17 @@ AppError.prototype.writeToLog = function() {
 
 AppError.prototype.setAppMessage = function(message) {
   this.appMessage = message;
+};
+
+AppError.prototype.copyError = function(err, respMessage, vObj) {
+  this.isInternalErr = err.isInternalErr;
+  this.stack = err.stack;
+  this.appMessage = respMessage;
+  if(__.isEmpty(respMessage)) {
+    this.appMessage = err.appMessage;
+  }  
+  this.message = err.message;
+  this.validation = __.extend(err.vObj, vObj);
 };
 
 module.exports = AppError;
