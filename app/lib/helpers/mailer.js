@@ -4,6 +4,8 @@ var path = require('path');
 var templatesDir = path.join(__CONFIG__.app_base_path, 'templates');
 var emailTemplates = require('email-templates');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var async = require('async');
+var fs = require('fs');
 
 var transport = nodemailer.createTransport(smtpTransport({
   'host': __CONFIG__.email.server,
@@ -34,15 +36,24 @@ var mailer = function() {
         });
       }
     };
+    
     emailTemplates(templatesDir, function(err, template) {
       if (err) { return cb(new AppError(that.getStatusCode('i'),
               'There was an error while reading the templates', {})); }
       for (var i = 0; i < allEmailsLen; ++i) {
-        if (!arrObjEmails[i].templateName) {
-          sendNormalMail(arrObjEmails[i], processResponse);
-        } else {          
-          sendTemplateMail(arrObjEmails[i], template, processResponse);
-        }
+        processAttachments(arrObjEmails[i], function(err, mailObj){
+          if(err) {
+            return processResponse(false, {
+              'id' : mailObj.emailD,
+              'error' : 'Error while performing file system checks.'
+            });
+          }
+          if (!mailObj.templateName) {
+            sendNormalMail(mailObj, processResponse);
+          } else {
+            sendTemplateMail(mailObj, template, processResponse);
+          }
+        });        
       }
     });
   };
@@ -65,7 +76,8 @@ var mailer = function() {
         text: text,
         html: html,
         subject: mailObj.subject,
-        from: mailObj.fromEmail
+        from: mailObj.fromEmail,
+        attachments : mailObj.attachments
       }, function(err, responseStatus) {
         if (err) {
           return cb(false, {
@@ -95,7 +107,8 @@ var mailer = function() {
       text: mailObj.data,
       html: mailObj.data,
       subject: mailObj.subject,
-      from: mailObj.fromEmail
+      from: mailObj.fromEmail,
+      attachments : mailObj.attachments,
     }, function(err, responseStatus) {
       if (err) {
         return cb(false, {
@@ -111,8 +124,26 @@ var mailer = function() {
     });
   };
 
+  /**
+   * Checks if the attachments are present.
+   */
+  function processAttachments(mailObj, cb) {
+    if(mailObj.attachments && mailObj.attachments.length === 0) {
+      delete mailObj.attachments;
+      return mailObj;
+    }
+    async.filter(mailObj.attachments, fs.exists, function(err, results) {
+      if(err) {
+        return cb(err);
+      }
+      mailObj.attachments = results;
+      return cb(null, mailObj);
+    });    
+  };
+  
   return {
     sendMails: sendMails
   };
 };
+
 module.exports = mailer();

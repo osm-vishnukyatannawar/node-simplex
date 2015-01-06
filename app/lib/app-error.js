@@ -14,12 +14,13 @@ var __ = require('underscore');
  *          This object will be sent if it's a validation error. 
  */
 function AppError(err, respMessage, vObj) {
-  if (typeof (err) === "object" && err instanceof Error) {
+  var objType = typeof (err) ;
+  if (objType === "object" && err instanceof Error) {
     this.stack = err.stack;
     this.message = err.message;
     this.appMessage = respMessage;
     this.isInternalErr = true;
-  } else  if(err instanceof this) {
+  } else  if(objType === "object" && err instanceof this) {
     this.copyError(err, respMessage, vObj);
   } else {
     this.appMessage = respMessage;
