@@ -32,14 +32,25 @@ global.__CONFIG__ = {
     'default_forgot_pass_time': 6, // hours
     'default_created_by': 'NodeJS'
   },
+  'firmware': {
+    'folder': 'firmwares',
+    'baseFirmwareFileStrs': {
+      'ble_fw_version': 'PowerPath_BLE_FW_',
+      'wifi_fw_version': 'PowerPath_WIFI_FW_',
+      'host_fw_version': 'PowerPath_HOST_FW_'
+    },
+    'firmwareFileExtension': ".zip",
+    'baseVersionFolderName' : "Powerpath_FW_version_"
+  },
   'tokenLength': 16,
   'fwTokenLength': 16,
   'baseFirmwareFileStrs': {
-    'bleFw': 'PowerPath_BLE_FW_',
-    'wifiFw': 'PowerPath_WIFI_FW_',
-    'hostFw': 'PowerPath_HOST_FW_'
+    'ble_fw_version': 'PowerPath_BLE_FW_',
+    'wifi_fw_version': 'PowerPath_WIFI_FW_',
+    'host_fw_version': 'PowerPath_HOST_FW_'
   },
-  'firmwareFileExtension': ".zip"
+  'firmwareFileExtension': ".zip",
+  'filesFolderName' : "files"
 };
 
 config.express = {
