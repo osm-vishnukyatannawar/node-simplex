@@ -1,17 +1,21 @@
-<table>
-	<thead>
-	</thead>
-	<tbody>
-		<tr><td>User</td><td><%= ReportProblemData.username %></td></tr>
-		<tr><td>Organization</td><td><%= ReportProblemData.organization %></td></tr>
-		<tr><td>Deployment</td><td><%= ReportProblemData.deployment %></td></tr>
-	</tbody>
-</table>
-<p>Hi</p>
+<p>Hi,</p>
 <p>
-	I had some problems on the Emanate website.
-	Here is some information to help you diagnose and fix the problem.
-	"<strong><%= ReportProblemData.reportDescription %></strong>"
+	I had some problems on the Emanate portal.
+	Here is some information to help you diagnose and fix the problem -
+	<br><br>
+	<table>
+		<thead>
+		</thead>
+		<tbody>
+			<tr><td>User:</td><td><%= ReportProblemData.username %></td></tr>
+			<tr><td>Organization:</td><td><%= ReportProblemData.organization %></td></tr>
+			<tr><td>Deployment:</td><td><%= ReportProblemData.deployment %></td></tr>
+		</tbody>
+	</table>
+	<br>
+	<strong>Description:</strong>
+	<br>
+	<%= ReportProblemData.reportDescription %>
 </p>
 
 
