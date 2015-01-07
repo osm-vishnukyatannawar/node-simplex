@@ -47,9 +47,9 @@ AppError.prototype.setAppMessage = function(message) {
 AppError.prototype.copyError = function(err, respMessage, vObj) {
   this.isInternalErr = err.isInternalErr;
   this.stack = err.stack;
-  this.appMessage = respMessage;
-  if(__.isEmpty(respMessage)) {
-    this.appMessage = err.appMessage;
+  this.appMessage = err.appMessage;
+  if(__.isEmpty(this.appMessage)) {
+    this.appMessage = respMessage;
   }  
   this.message = err.message;
   this.validation = __.extend(err.vObj, vObj);
