@@ -55,7 +55,7 @@ global.__CONFIG__ = {
 };
 
 config.express = {
-  port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  port: process.env.EXPRESS_PORT || 80,
+  ip: "10.0.0.6",
   isProduction: PRODUCTION
 };
