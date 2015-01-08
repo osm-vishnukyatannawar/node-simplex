@@ -44,6 +44,7 @@ global.__CONFIG__ = {
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
+  // TODO: Remove these.
   'baseFirmwareFileStrs': {
     'ble_fw_version': 'PowerPath_BLE_FW_',
     'wifi_fw_version': 'PowerPath_WIFI_FW_',
