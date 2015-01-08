@@ -34,7 +34,6 @@ function Model(mProperties, objToBind, queryModifiers) {
   this.email = {};
   this.email.mailer = mailer;
   this.csvHelper = new csv();
-  this.zipper = new zip();
 }
 
 Model.prototype.query = function(objQuery) {
