@@ -4,7 +4,7 @@ var dbConfig = {
     maxConn : 60,
     minConn : 2,
     idleTimeout : 30000,
-    host: '10.0.0.6',
+    host: '10.0.0.66',
     user: 'osmosys',
     password: 'Change123',
     db: 'dev_emanate_db',
@@ -13,7 +13,7 @@ var dbConfig = {
   },
   'cassandradb': {
 	    name : 'cassandradb',
-	    host: '10.0.0.6',
+	    host: '10.0.0.66',
 	    keyspace: 'emanate',
 	    connTimeout: 10,
   } 
