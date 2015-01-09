@@ -44,18 +44,12 @@ global.__CONFIG__ = {
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
-  // TODO: Remove these.
-  'baseFirmwareFileStrs': {
-    'ble_fw_version': 'PowerPath_BLE_FW_',
-    'wifi_fw_version': 'PowerPath_WIFI_FW_',
-    'host_fw_version': 'PowerPath_HOST_FW_'
-  },
   'firmwareFileExtension': ".zip",
   'filesFolderName' : "files"
 };
 
 config.express = {
-  port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  port: process.env.EXPRESS_PORT || 80,
+  ip: "10.0.0.6",
   isProduction: PRODUCTION
 };
