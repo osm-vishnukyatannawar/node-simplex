@@ -5,8 +5,8 @@ var dbConfig = {
     minConn : 2,
     idleTimeout : 30000,
     host: '10.0.0.6',
-    user: 'root',
-    password: 'Maria123',
+    user: 'osmosys',
+    password: 'Change123',
     db: 'dev_emanate_db',
     connTimeout: 15,
     multiSelect : true

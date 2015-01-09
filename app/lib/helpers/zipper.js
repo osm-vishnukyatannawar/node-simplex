@@ -1,5 +1,6 @@
  var admzip = require('adm-zip');
  var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
+ 
  function zipper(){
 	 
  };
@@ -13,7 +14,7 @@
 	}
 	//zip.extractAllTo( destPath, true);
 	return cb(null,zipEntries);
-}
+};
  
  zipper.prototype.extractFiles = function(sourcePath , destpath , cb){
 	 try{
@@ -22,10 +23,8 @@
 		 return cb(null);
 	 }catch(e){
 		 return cb(e); 
-	 }
-	 
-	 
- }
+	 }	 	 
+ };
  
  
  
