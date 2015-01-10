@@ -42,14 +42,18 @@ global.__CONFIG__ = {
     'firmwareFileExtension': ".zip",
     'baseVersionFolderName' : "Powerpath_FW_version_"
   },
+  'lookup' : {
+	'powerPathAssetType' : 'powerPathAssetType'  
+  },
   'tokenLength': 16,
   'fwTokenLength': 16,
   'firmwareFileExtension': ".zip",
-  'filesFolderName' : "files"
+  'filesFolderName' : "files",
+  'logs' : [{key:'1',value:'dev_col_import'},{key:'2',value:'dev_col_export'}]
 };
 
 config.express = {
-  port: process.env.EXPRESS_PORT || 80,
-  ip: "10.0.0.6",
+  port: process.env.EXPRESS_PORT || 3000,
+  ip: "10.0.0.44",
   isProduction: PRODUCTION
 };
