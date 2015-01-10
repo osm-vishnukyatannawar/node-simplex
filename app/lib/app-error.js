@@ -20,7 +20,7 @@ function AppError(err, respMessage, vObj) {
     this.message = err.message;
     this.appMessage = respMessage;
     this.isInternalErr = true;
-  } else  if(objType === "object" && err instanceof this) {
+  } else  if(objType === "object" && err instanceof AppError) {
     this.copyError(err, respMessage, vObj);
   } else {
     this.appMessage = respMessage;
