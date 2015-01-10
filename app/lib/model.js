@@ -272,7 +272,7 @@ Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
 
 Model.prototype.readCsvFile = function(path,cb){
 	
-	csvHelper.readCsvHelper(path , function(err , data){
+	this.csvHelper.readCsvHelper(path , function(err , data){
 		if(err){
 			cb(err);
 		}

@@ -18,4 +18,14 @@ csvHelper.prototype.readCsvHelper = function(path,cb){
 	fileStream.pipe(parser);
 }
 
+csvHelper.prototype.readObjCreateCsv = function(arrayToRead , cb){
+	csv.stringify(arrayToRead, function(err, output){
+		  if(err){
+			  return cb(err);
+		  }
+		  cb(null,output);
+	});
+}
+
+
 module.exports = csvHelper;
