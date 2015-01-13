@@ -42,6 +42,10 @@ global.__CONFIG__ = {
     'firmwareFileExtension': ".zip",
     'baseVersionFolderName' : "Powerpath_FW_version_"
   },
+  'calibration' :{
+	  'allRecordsCsvFileName' : "allRows.csv",
+	  'failureRecordsFileName' : "failureRecords.csv"
+  },
   'lookup' : {
 	'powerPathAssetType' : 'powerPathAssetType'  
   },
@@ -54,6 +58,6 @@ global.__CONFIG__ = {
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: "10.0.0.15",
+  ip: "localhost",
   isProduction: PRODUCTION
 };
