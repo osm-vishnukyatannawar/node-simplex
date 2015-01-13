@@ -39,7 +39,7 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">emanateApp</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;emanateApp&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ngRoute&#39;</span><span class="p">]);</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">emanateApp</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;emanateApp&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ngRoute&#39;</span><span class="p">,</span> <span class="s1">&#39;angularFileUpload&#39;</span><span class="p">]);</span>
 
 <span class="nx">emanateApp</span><span class="p">.</span><span class="nx">config</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$routeProvider</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -49,29 +49,35 @@
     <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/tags&#39;</span><span class="p">,</span>
     <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;TagsController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/devices&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/devices&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;DevicesController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/devices&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;DevicesController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/overview&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/overview&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;OverviewController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/overview&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;OverviewController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/tag/view/:id&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/tag&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;TagController&#39;</span>   
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/tag&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;TagController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/firmware&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/firmware&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;FirmwareController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/firmware&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;FirmwareController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/my-profile&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/my-profile&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;MyProfileController&#39;</span>   
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/my-profile&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;MyProfileController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/histogram&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/histogram&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;HistogramController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/histogram&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;HistogramController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/plugin&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/pim&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;PIMController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/pim&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PIMController&#39;</span>
   <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/current&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">templateUrl</span> <span class="o">:</span> <span class="s1">&#39;/partials/current&#39;</span><span class="p">,</span>
-    <span class="nx">controller</span> <span class="o">:</span> <span class="s1">&#39;CurrentController&#39;</span>
+    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/current&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;CurrentController&#39;</span>
+  <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/calibration&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/calibration&#39;</span><span class="p">,</span>
+  <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;CalibrationController&#39;</span>
+  <span class="p">}).</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/log&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;/partials/log&#39;</span><span class="p">,</span>
+  <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;LogController&#39;</span>
   <span class="p">});</span>
 <span class="p">});</span>
 
@@ -89,7 +95,7 @@
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">highlightCurrentPanel</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">panelHead</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.panel-heading&quot;</span> <span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">panelHead</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.panel-heading&quot;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -102,8 +108,8 @@
 <p>when hover on sidebar panel heading all its list will be opened</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">$</span><span class="p">(</span><span class="nx">panelHead</span><span class="p">).</span><span class="nx">mouseenter</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;collapsed&#39;</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">panelHead</span><span class="p">).</span><span class="nx">mouseenter</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;collapsed&#39;</span><span class="p">))</span> <span class="p">{</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.panel-collapse&#39;</span><span class="p">).</span><span class="nx">collapse</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">});</span>
@@ -119,7 +125,7 @@
 <p>when mouseleave the sidebar all the panels the are opened will be closed except the current panel</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.side-panel&quot;</span> <span class="p">).</span><span class="nx">mouseleave</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.side-panel&quot;</span><span class="p">).</span><span class="nx">mouseleave</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -132,8 +138,8 @@
 <p>getting all panels</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">var</span> <span class="nx">panels</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span> <span class="s2">&quot;.side-panel&quot;</span> <span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.panel-heading&#39;</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">panels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">panels</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.side-panel&quot;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.panel-heading&#39;</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">panels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -146,8 +152,9 @@
 <p>checking the panel is opened and it is not current panel </p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;collapsed&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> 
-      <span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.list-group-item&#39;</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;current-page&#39;</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;collapsed&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.list-group-item&#39;</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span>
+          <span class="s1">&#39;current-page&#39;</span><span class="p">))</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -160,14 +167,20 @@
 <p>closing all the panels except current panel</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.panel-collapse&#39;</span><span class="p">).</span><span class="nx">collapse</span><span class="p">(</span><span class="s1">&#39;hide&#39;</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">panels</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.panel-collapse&#39;</span><span class="p">).</span><span class="nx">collapse</span><span class="p">(</span>
+          <span class="s1">&#39;hide&#39;</span><span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">}</span> 
+    <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">}</span>
 
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">highlightCurrentPanel</span><span class="p">();</span>  
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">highlightCurrentPanel</span><span class="p">();</span>
+  
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.progress-items&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#underDevelopment&#39;</span><span class="p">).</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">);</span>
+  <span class="p">});</span>
 <span class="p">});</span>
 </pre></div>
         </td>

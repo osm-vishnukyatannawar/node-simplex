@@ -77,7 +77,7 @@
 <p>In integers...</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="kd">var</span> <span class="nx">cryptoLength</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">cryptoLength</span> <span class="o">=</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">tokenLength</span><span class="p">;</span>
 
 <span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkValidity</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">token</span><span class="p">))</span> <span class="p">{</span>
@@ -86,12 +86,12 @@
     <span class="p">}));</span>    
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT user_id AS userID, expires_on AS expiresOn FROM token_m WHERE token_string = ? AND is_active = ?&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT user_id AS userID, expires_on AS expiresOn, is_admin AS isAdmin FROM token_m WHERE token_string = ? AND is_active = ?&#39;</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
     <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
     <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">token</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()],</span>
-    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">tokenData</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">tokenData</span><span class="p">))</span> <span class="p">{</span>
         <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span>
           <span class="s1">&#39;Invalid token &#39;</span> <span class="o">+</span> <span class="nx">token</span><span class="p">,</span> <span class="p">{</span>
             <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="s1">&#39;Invalid token&#39;</span>
@@ -102,28 +102,33 @@
         <span class="k">return</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">currDate</span> <span class="o">&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">expiresOn</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">currDate</span> <span class="o">&gt;</span> <span class="nx">tokenData</span><span class="p">.</span><span class="nx">expiresOn</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span> <span class="s1">&#39;Token has expired.&#39;</span><span class="p">,</span> <span class="p">{</span>
           <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="s1">&#39;Token has expired&#39;</span>
         <span class="p">}));</span>
-        <span class="nx">that</span><span class="p">.</span><span class="nx">invalidateToken</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">userID</span><span class="p">);</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">invalidateToken</span><span class="p">(</span><span class="nx">tokenData</span><span class="p">.</span><span class="nx">userID</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenData</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">};</span>
 
-<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createNewToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">Authorization</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createNewToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">isAdmin</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
   <span class="nx">crypto</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="nx">cryptoLength</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">buf</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">(</span><span class="s1">&#39;internalError&#39;</span><span class="p">),</span> <span class="s1">&#39;Could not generate token&#39;</span><span class="p">,</span> <span class="p">{}));</span>
       <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">isAdmin</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">isAdmin</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">isAdmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
     <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO token_m (token_recid, user_id, token_string, created_on, expires_on) &#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;VALUES (:tokenID, :userID, :token, :tokenTime, :expiryDate)&#39;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO token_m (token_recid, user_id, token_string, created_on, expires_on, is_admin) &#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;VALUES (:tokenID, :userID, :token, :tokenTime, :expiryDate, :isAdmin)&#39;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">expiryDate</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">addHoursToDate</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenDuration</span><span class="p">));</span>
     <span class="kd">var</span> <span class="nx">dataToSend</span> <span class="o">=</span> <span class="p">{</span>
@@ -131,7 +136,8 @@
       <span class="s1">&#39;userID&#39;</span><span class="o">:</span> <span class="nx">userID</span><span class="p">,</span>
       <span class="s1">&#39;token&#39;</span><span class="o">:</span> <span class="nx">token</span><span class="p">,</span>
       <span class="s1">&#39;tokenTime&#39;</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-      <span class="s1">&#39;expiryDate&#39;</span><span class="o">:</span> <span class="nx">expiryDate</span>
+      <span class="s1">&#39;expiryDate&#39;</span><span class="o">:</span> <span class="nx">expiryDate</span><span class="p">,</span>
+      <span class="s1">&#39;isAdmin&#39;</span> <span class="o">:</span> <span class="nx">isAdmin</span>
     <span class="p">};</span>
     <span class="nx">that</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
       <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>

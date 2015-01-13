@@ -58,6 +58,11 @@
     <span class="k">try</span> <span class="p">{</span>
       <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDefaultParams</span><span class="p">();</span>
       <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">attachments</span> <span class="o">&amp;&amp;</span> <span class="nx">mailObj</span><span class="p">.</span><span class="nx">attachments</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">mailObj</span><span class="p">.</span><span class="nx">attachments</span> <span class="o">=</span>  <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">mailObj</span><span class="p">.</span><span class="nx">attachments</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">mailObj</span><span class="p">.</span><span class="nx">attachments</span> <span class="o">=</span> <span class="s2">&quot;[]&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
     <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">getDefaultData</span><span class="p">();</span>
     <span class="p">}</span>
@@ -65,8 +70,8 @@
     <span class="nx">mailObj</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">getDefaultData</span><span class="p">();</span>
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO email_m (`email_recid`, `subject`, `to_email`, `cc_email`, `bcc_email`, `from_email`, `template_name`,&#39;</span>
-          <span class="o">+</span> <span class="s1">&#39;`data`, `created_on`,  `modified_on`, `is_sent`) VALUES(:id, :subject, :toEmail, :ccEmail, :bccEmail, :fromEmail, :templateName,&#39;</span>
-          <span class="o">+</span> <span class="s1">&#39;:data, :createdOn, :modifiedOn, :isSent);&#39;</span><span class="p">;</span>
+          <span class="o">+</span> <span class="s1">&#39;`data`, `created_on`,  `modified_on`, `is_sent`, `attachments`) VALUES(:id, :subject, :toEmail, :ccEmail, :bccEmail, :fromEmail, :templateName,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;:data, :createdOn, :modifiedOn, :isSent, :attachments);&#39;</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
     <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
     <span class="nx">data</span><span class="o">:</span> <span class="nx">mailObj</span><span class="p">,</span>
@@ -82,8 +87,8 @@
     <span class="nx">limit</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT email_recid AS emailID, subject, to_email AS toEmail, cc_email AS ccEmail, &#39;</span>
-          <span class="o">+</span> <span class="s1">&#39; from_email AS fromEmail, template_name AS templateName, data, created_on AS createdOn, modified_on AS modifiedOn&#39;</span>
-          <span class="o">+</span> <span class="s1">&#39; FROM email_m WHERE is_sent = ? ORDER BY created_on ASC LIMIT &#39;</span>
+          <span class="o">+</span> <span class="s1">&#39; from_email AS fromEmail, template_name AS templateName, data, created_on AS createdOn, modified_on AS modifiedOn,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39; attachments AS attachments FROM email_m WHERE is_sent = ? ORDER BY created_on ASC LIMIT &#39;</span>
           <span class="o">+</span> <span class="nx">limit</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
     <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>

@@ -438,10 +438,17 @@
                   <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;&quot;</span> <span class="na">class=</span><span class="s">&quot;col-sm-3 control-label&quot;</span><span class="nt">&gt;</span>New firmware rev:<span class="nt">&lt;/label&gt;</span>
                   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-sm-9&quot;</span><span class="nt">&gt;</span>
                     <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span><span class="nt">&gt;</span>
-                     <span class="nt">&lt;option&gt;</span>Choose a FW file<span class="nt">&lt;/option&gt;</span>
-                     <span class="nt">&lt;option&gt;&lt;/option&gt;</span>
-                     <span class="nt">&lt;option&gt;&lt;/option&gt;</span>
+                     <span class="nt">&lt;option</span> <span class="na">ng-repeat =</span><span class="err"> </span><span class="s">&quot;version in versions&quot;</span> <span class="na">value =</span><span class="err"> </span><span class="s">&quot;{{version.firmwareID}}&quot;</span><span class="nt">&gt;</span>
+                      {{version.overAllVersion}}
+                     <span class="nt">&lt;/option&gt;</span>
                     <span class="nt">&lt;/select&gt;</span>
+                    <span class="nt">&lt;/br&gt;</span>
+                    <span class="nt">&lt;div&gt;</span>
+                      <span class="nt">&lt;p&gt;</span>( WIFI - BLE - Host )<span class="nt">&lt;/p&gt;</span>
+                    <span class="nt">&lt;p&gt;</span> WIFI - WIFI firmware version.<span class="nt">&lt;/p&gt;</span>
+                    <span class="nt">&lt;p&gt;</span> BLE  - BLE firmware version.<span class="nt">&lt;/p&gt;</span>
+                    <span class="nt">&lt;p&gt;</span> Host - Host firmware version.<span class="nt">&lt;/p&gt;</span>
+                  <span class="nt">&lt;/div&gt;</span>
                   <span class="nt">&lt;/div&gt;</span>
                 <span class="nt">&lt;/div&gt;</span>
                 <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
@@ -467,7 +474,7 @@
           <span class="nt">&lt;/div&gt;</span>
           <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group pull-right no-mg-bot&quot;</span><span class="nt">&gt;</span>
             <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span>
-              <span class="na">value=</span><span class="s">&quot;Update 200 tags&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm  btn-default&quot;</span>
+              <span class="na">value=</span><span class="s">&quot;Update {{selectedTagsCount}} tags&quot;</span><span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-sm  btn-default&quot;</span>
               <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">data-dismiss=</span><span class="s">&quot;modal&quot;</span> <span class="na">value=</span><span class="s">&quot;Cancel&quot;</span><span class="nt">&gt;</span>
           <span class="nt">&lt;/div&gt;</span>
         <span class="nt">&lt;/div&gt;</span>

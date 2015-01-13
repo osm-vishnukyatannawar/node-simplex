@@ -91,7 +91,7 @@
   <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="nc">.main-container</span> <span class="p">{</span>
+<span class="nc">.main-container</span><span class="o">,</span><span class="nc">.calibration-controls</span> <span class="p">{</span>
   <span class="k">margin-top</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -273,7 +273,8 @@
 <span class="c">/** Start of JQXGRID **/</span>
 <span class="nc">.dashboard-view</span> <span class="nc">.jqx-widget-content-emanate</span> <span class="p">{</span>
   <span class="k">border</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
-  <span class="k">border-top</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#e5e5e5</span><span class="p">;</span> 
+  <span class="k">border-top</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#e5e5e5</span><span class="p">;</span>
+  <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span>  
 <span class="p">}</span> 
 <span class="nc">.dashboard-view</span> <span class="nc">.jqx-grid-pager-input-emanate</span> <span class="p">{</span>
   <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#cccccc</span><span class="p">;</span>
@@ -312,6 +313,9 @@
 
 <span class="nf">#toolbar1_dvTags</span><span class="p">{</span>
    <span class="k">overflow</span><span class="o">:</span> <span class="k">visible</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.jqx-scrollbar-emanate</span> <span class="p">{</span>
+  <span class="k">z-index</span> <span class="o">:</span> <span class="m">25</span> <span class="cp">!important</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="nc">.jqx-rc-all-emanate</span> <span class="nc">.jqx-fill-state-normal-emanate</span> <span class="p">{</span>
   <span class="k">z-index</span> <span class="o">:</span> <span class="m">1000</span> <span class="cp">!important</span><span class="p">;</span>
@@ -375,7 +379,6 @@
 <span class="p">}</span>
 <span class="nc">.forgotPass-block</span> <span class="nt">h4</span><span class="o">,</span> <span class="nc">.reset-pass-block</span> <span class="nt">h4</span><span class="p">{</span>
   <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span> <span class="m">12px</span> <span class="m">0px</span> <span class="m">12px</span><span class="p">;</span>
-  <span class="c">/** font-weight:bold; **/</span>
   <span class="k">font-size</span><span class="o">:</span> <span class="m">18px</span><span class="p">;</span>
   <span class="k">line-height</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
   <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Sans</span><span class="o">-</span><span class="n">Serif</span><span class="p">;</span>
@@ -392,19 +395,6 @@
 <span class="nc">.panel-heading</span> <span class="nt">a</span><span class="p">{</span>
   <span class="k">font-size</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
   <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
-</div>
-<p>-webkit-transition: background .2s;
-transition: background .2s;  </p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
 <span class="p">}</span>
 <span class="nc">.top-header-ctrls</span> <span class="nc">.btn</span><span class="p">{</span>
   <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span> <span class="m">10px</span><span class="p">;</span>
@@ -545,19 +535,6 @@ transition: background .2s;  </p>
   <span class="k">display</span><span class="o">:</span> <span class="k">block</span><span class="p">;</span>
   <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span> <span class="m">7px</span> <span class="m">5px</span><span class="p">;</span>
   <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">2px</span><span class="p">;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
-</div>
-<p>-webkit-transition: color .2s, background .2s;
-transition: color .2s, background .2s;  </p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
 <span class="p">}</span>
 
 <span class="nc">.panel-heading.collapsed</span> <span class="p">{</span>
@@ -608,62 +585,27 @@ transition: color .2s, background .2s;  </p>
 <span class="nt">select</span><span class="o">:</span><span class="nd">:-ms-expand</span> <span class="o">:</span><span class="nd">:hover</span> <span class="p">{</span>
   <span class="k">background</span><span class="o">:</span><span class="m">#ccc</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="c">/** + button click **/</span>
-<span class="nc">.details_heading</span> <span class="p">{</span>
-  <span class="k">margin-top</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
-  <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
-  <span class="k">text-align</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
-  <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">5px</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span>
-  <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nc">.dropdown-widget</span><span class="p">{</span>
-  <span class="k">padding</span><span class="o">:</span> <span class="m">12px</span> <span class="m">16px</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nc">.drag_heading</span> <span class="p">{</span>
-  <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
-  <span class="k">text-align</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
-  <span class="k">padding-bottom</span><span class="o">:</span> <span class="m">8px</span><span class="p">;</span>
-  <span class="k">border-bottom</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#CECECE</span><span class="p">;</span>
-  <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="m">0</span> <span class="m">5px</span> <span class="m">5px</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="o">:</span> <span class="m">11px</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nf">#dropdown-menu</span> <span class="nt">ul</span> <span class="p">{</span>
+<span class="c">/** + button click for grid **/</span>
+<span class="nc">.dropdown-menu</span> <span class="p">{</span>
   <span class="k">list-style</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+  <span class="k">top</span> <span class="o">:</span> <span class="m">110</span><span class="o">%</span><span class="p">;</span>
   <span class="k">text-align</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
   <span class="k">padding</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
   <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
   <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="nf">#dropdown-menu</span> <span class="nt">label</span><span class="p">{</span>
+<span class="nc">.dropdown-menu</span> <span class="nt">label</span><span class="p">{</span>
   <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
   <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
   <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="nc">.double-column</span> <span class="p">{</span>
-  <span class="k">padding</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span> 
+
+<span class="nc">.dropdown-menu</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="s2">&quot;checkbox&quot;</span><span class="o">]</span><span class="p">{</span>
+  <span class="k">margin-right</span><span class="o">:</span><span class="m">4px</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="nf">#dropdown-menu</span> <span class="nc">.left</span><span class="p">{</span>
-  <span class="k">padding-right</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span>
+<span class="nc">.btn-add-grid-col</span> <span class="nc">.dropdown</span> <span class="p">{</span>
+  <span class="k">margin-left</span><span class="o">:</span><span class="m">3px</span><span class="p">;</span>  
 <span class="p">}</span>
-<span class="nc">.right</span><span class="p">{</span>
-  <span class="k">padding-left</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nf">#dropdown-menu</span> <span class="nt">table</span><span class="p">{</span>
-  <span class="k">border-spacing</span><span class="o">:</span> <span class="m">2px</span><span class="p">;</span>
-  <span class="k">border-collapse</span><span class="o">:</span> <span class="k">separate</span><span class="p">;</span>
-  <span class="k">border-color</span><span class="o">:</span> <span class="nb">gray</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nf">#dropdown-menu</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="nt">checkbox</span><span class="o">]</span> <span class="p">{</span>
-  <span class="k">margin</span><span class="o">:</span> <span class="m">4px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
-  <span class="k">margin-top</span><span class="o">:</span> <span class="m">1px</span> <span class="err">\</span><span class="m">9</span><span class="p">;</span>
-  <span class="k">line-height</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
-  <span class="k">margin</span><span class="o">:</span> <span class="m">3px</span> <span class="m">0.5ex</span><span class="p">;</span>
-<span class="p">}</span>
- <span class="nc">.single-column</span> <span class="nt">div</span><span class="nd">:first-child</span> <span class="nt">h3</span><span class="o">,</span><span class="nc">.right</span> <span class="nt">div</span><span class="nd">:first-child</span> <span class="nt">h3</span><span class="o">,</span> <span class="nc">.left</span> <span class="nt">div</span><span class="nd">:first-child</span> <span class="nt">h3</span><span class="p">{</span>
-  <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
- <span class="p">}</span>
 <span class="c">/** End **/</span>
 
 <span class="c">/** My profile styling **/</span>
@@ -679,7 +621,66 @@ transition: color .2s, background .2s;  </p>
 <span class="nc">.inline</span> <span class="p">{</span>
   <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
 <span class="p">}</span>
+<span class="c">/*** Styling of alert-danger **/</span>
+<span class="nc">.modal-body</span> <span class="nc">.alert-danger</span> <span class="p">{</span>
+  <span class="k">font-size</span> <span class="o">:</span><span class="m">12px</span><span class="p">;</span>
+  <span class="k">padding</span><span class="o">:</span><span class="m">8px</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="c">/** END **/</span>
+
+<span class="c">/** Overview**/</span>
+<span class="nf">#dashPieChart</span>
+<span class="p">{</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">350px</span><span class="p">;</span>
+  <span class="k">height</span><span class="o">:</span> <span class="m">175px</span><span class="p">;</span> 
+  <span class="k">position</span> <span class="o">:</span> <span class="k">absolute</span> <span class="p">;</span>
+  <span class="k">left</span> <span class="o">:</span> <span class="m">67px</span> <span class="p">;</span> 
+  <span class="k">top</span><span class="o">:</span><span class="m">15px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/** Dropdown Menu **/</span> 
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.dropdown-menu</span> <span class="p">{</span>
+    <span class="k">display</span><span class="o">:</span> <span class="k">block</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">static</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">:</span> <span class="k">none</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="k">none</span> <span class="cp">!important</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.dashboardCanvas</span><span class="p">{</span>
+  <span class="k">margin-top</span><span class="o">:</span><span class="m">4px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.dropdown-menu.multi-column</span>  <span class="nc">.col-sm-6</span><span class="o">,</span>
+<span class="nc">.dropdown-menu.multi-column</span>  <span class="nc">.col-sm-12</span><span class="o">,</span>
+<span class="nc">.dropdown-menu.multi-column</span>  <span class="nc">.col-sm-4</span> <span class="p">{</span>
+  <span class="k">padding-left</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.type-title</span> <span class="p">{</span>
+  <span class="k">font-weight</span><span class="o">:</span><span class="k">bold</span><span class="p">;</span>
+  <span class="k">margin-top</span><span class="o">:</span> <span class="m">7px</span><span class="p">;</span>
+  <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">1px</span><span class="p">;</span>
+  <span class="k">display</span><span class="o">:</span><span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.container-fluid</span> <span class="nt">h4</span><span class="o">,</span>
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.container-fluid</span> <span class="nt">h6</span><span class="p">{</span>
+  <span class="k">margin-top</span><span class="o">:</span><span class="m">8px</span><span class="p">;</span>
+  <span class="k">margin-bottom</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.row-fluid</span> <span class="p">{</span>
+  <span class="k">border-top</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#CECECE</span><span class="p">;</span>
+  <span class="k">margin-top</span><span class="o">:</span><span class="m">8px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.clear-fix</span> <span class="p">{</span>
+  <span class="k">clear</span><span class="o">:</span><span class="k">both</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.dropdown-menu.multi-column</span> <span class="nc">.dropdown-menu</span> <span class="p">{</span>
+  <span class="k">min-width</span><span class="o">:</span><span class="m">140px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#firmwareGridColContainer</span><span class="p">{</span>
+  <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0.4em</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
         </td>
       </tr>

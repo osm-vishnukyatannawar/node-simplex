@@ -43,35 +43,66 @@
 <span class="kd">var</span> <span class="nx">PRODUCTION</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="s2">&quot;production&quot;</span><span class="p">;</span>
 <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s1">&#39;app_base_path&#39;</span><span class="o">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;app_code_path&#39;</span> <span class="o">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/code/&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;app_code_path&#39;</span><span class="o">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/code/&#39;</span><span class="p">,</span>
   <span class="s1">&#39;app_base_url&#39;</span><span class="o">:</span> <span class="s1">&#39;/api/v1/&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;app_base_url_token&#39;</span> <span class="o">:</span> <span class="s1">&#39;/api/v1/:token/&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;app_transaction_prop&#39;</span> <span class="o">:</span> <span class="s1">&#39;transactionID&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;email&#39;</span> <span class="o">:</span> <span class="p">{</span>
-    <span class="s1">&#39;server&#39;</span> <span class="o">:</span> <span class="s1">&#39;mail.osmosys.asia&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;username&#39;</span> <span class="o">:</span> <span class="s1">&#39;emanate@osmosys.asia&#39;</span><span class="p">,</span>    
-    <span class="s1">&#39;password&#39;</span> <span class="o">:</span> <span class="s1">&#39;Emanat3!1&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;port&#39;</span> <span class="o">:</span> <span class="mi">587</span><span class="p">,</span>
-    <span class="s1">&#39;fromName&#39;</span> <span class="o">:</span> <span class="s1">&#39;Emanate Wireless&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;maxCon&#39;</span> <span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;maxMsgPerCon&#39;</span> <span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
-    <span class="s1">&#39;baseURL&#39;</span> <span class="o">:</span> <span class="s1">&#39;http://10.0.0.15:3000/&#39;</span>
+  <span class="s1">&#39;app_base_url_token&#39;</span><span class="o">:</span> <span class="s1">&#39;/api/v1/:token/&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;app_transaction_prop&#39;</span><span class="o">:</span> <span class="s1">&#39;transactionID&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;email&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;server&#39;</span><span class="o">:</span> <span class="s1">&#39;mail.osmosys.asia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;username&#39;</span><span class="o">:</span> <span class="s1">&#39;emanate@osmosys.asia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;password&#39;</span><span class="o">:</span> <span class="s1">&#39;Emanat3!1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;port&#39;</span><span class="o">:</span> <span class="mi">587</span><span class="p">,</span>
+    <span class="s1">&#39;fromName&#39;</span><span class="o">:</span> <span class="s1">&#39;Emanate Wireless&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;maxCon&#39;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;maxMsgPerCon&#39;</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s1">&#39;baseURL&#39;</span><span class="o">:</span> <span class="s1">&#39;http://10.0.0.15:3000/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;emailsToSend&#39;</span><span class="o">:</span> <span class="s1">&#39;abijeet.p@osmosys.asia&#39;</span>
   <span class="p">},</span>
-  <span class="s1">&#39;maintenance&#39;</span> <span class="o">:</span> <span class="p">{</span>
-    <span class="s1">&#39;run_maria_on_main&#39;</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="s1">&#39;max_tries&#39;</span> <span class="o">:</span> <span class="mi">2</span>
+  <span class="s1">&#39;maintenance&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;run_maria_on_main&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s1">&#39;max_tries&#39;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;default_value_tag_sn&#39;</span><span class="o">:</span> <span class="s1">&#39;999&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;default_value_org&#39;</span><span class="o">:</span> <span class="s1">&#39;999&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;default_value_type&#39;</span><span class="o">:</span> <span class="mi">99</span><span class="p">,</span>
+    <span class="s1">&#39;max_tries&#39;</span><span class="o">:</span> <span class="mi">2</span>
   <span class="p">},</span>
-  <span class="s1">&#39;user&#39;</span> <span class="o">:</span> <span class="p">{</span>
-    <span class="s1">&#39;default_password&#39;</span> <span class="o">:</span> <span class="s1">&#39;cb8da6a0-776f-4f2e-acba-9055b7bcb3a5&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;default_organization&#39;</span> <span class="o">:</span> <span class="s1">&#39;an organization&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;default_pass_encrypt_rounds&#39;</span> <span class="o">:</span> <span class="mi">10</span>
-  <span class="p">}</span>  
+  <span class="s1">&#39;user&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;default_password&#39;</span><span class="o">:</span> <span class="s1">&#39;cb8da6a0-776f-4f2e-acba-9055b7bcb3a5&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;default_organization&#39;</span><span class="o">:</span> <span class="s1">&#39;an organization&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;default_pass_encrypt_rounds&#39;</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s1">&#39;default_forgot_pass_time&#39;</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span> <span class="c1">// hours</span>
+    <span class="s1">&#39;default_created_by&#39;</span><span class="o">:</span> <span class="s1">&#39;NodeJS&#39;</span>
+  <span class="p">},</span>
+  <span class="s1">&#39;firmware&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;folder&#39;</span><span class="o">:</span> <span class="s1">&#39;firmwares&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;baseFirmwareFileStrs&#39;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;ble_fw_version&#39;</span><span class="o">:</span> <span class="s1">&#39;PowerPath_BLE_FW_&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;wifi_fw_version&#39;</span><span class="o">:</span> <span class="s1">&#39;PowerPath_WIFI_FW_&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;host_fw_version&#39;</span><span class="o">:</span> <span class="s1">&#39;PowerPath_HOST_FW_&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;firmwareFileExtension&#39;</span><span class="o">:</span> <span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;baseVersionFolderName&#39;</span> <span class="o">:</span> <span class="s2">&quot;Powerpath_FW_version_&quot;</span>
+  <span class="p">},</span>
+  <span class="s1">&#39;calibration&#39;</span> <span class="o">:</span><span class="p">{</span>
+    <span class="s1">&#39;allRecordsCsvFileName&#39;</span> <span class="o">:</span> <span class="s2">&quot;allRows.csv&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;failureRecordsFileName&#39;</span> <span class="o">:</span> <span class="s2">&quot;failureRecords.csv&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;exportCsvFileDownloadName&#39;</span> <span class="o">:</span> <span class="s2">&quot;EmanateDevices.csv&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;unExportedLogFileName&#39;</span> <span class="o">:</span> <span class="s2">&quot;UnexportedDevicesLog.csv&quot;</span>
+  <span class="p">},</span>
+  <span class="s1">&#39;lookup&#39;</span> <span class="o">:</span> <span class="p">{</span>
+  <span class="s1">&#39;powerPathAssetType&#39;</span> <span class="o">:</span> <span class="s1">&#39;powerPathAssetType&#39;</span>  
+  <span class="p">},</span>
+  <span class="s1">&#39;tokenLength&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+  <span class="s1">&#39;fwTokenLength&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+  <span class="s1">&#39;firmwareFileExtension&#39;</span><span class="o">:</span> <span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
+  <span class="s1">&#39;filesFolderName&#39;</span> <span class="o">:</span> <span class="s2">&quot;files&quot;</span><span class="p">,</span>
+  <span class="s1">&#39;logs&#39;</span> <span class="o">:</span> <span class="p">[{</span><span class="nx">key</span><span class="o">:</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="nx">value</span><span class="o">:</span><span class="s1">&#39;dev_col_import&#39;</span><span class="p">},{</span><span class="nx">key</span><span class="o">:</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="nx">value</span><span class="o">:</span><span class="s1">&#39;dev_col_export&#39;</span><span class="p">}]</span>
 <span class="p">};</span>
 
 <span class="nx">config</span><span class="p">.</span><span class="nx">express</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">port</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EXPRESS_PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">,</span>
-  <span class="nx">ip</span><span class="o">:</span> <span class="s2">&quot;10.0.0.15&quot;</span><span class="p">,</span>
-  <span class="nx">isProduction</span> <span class="o">:</span> <span class="nx">PRODUCTION</span>
+  <span class="nx">ip</span><span class="o">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+  <span class="nx">isProduction</span><span class="o">:</span> <span class="nx">PRODUCTION</span>
 <span class="p">};</span>
 </pre></div>
         </td>

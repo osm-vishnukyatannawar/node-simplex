@@ -20,6 +20,9 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h2">
+        <a href="#get%20user%20id%20by%20email.">Get user ID by email.</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -81,7 +84,7 @@
 <span class="p">};</span>
 
 <span class="kd">var</span> <span class="nx">selectCols</span> <span class="o">=</span>
-  <span class="s1">&#39;SELECT u.user_recid AS userID, u.user_name AS username, u.contact_Number AS contactNumber, u.email_ID AS emailID,&#39;</span> <span class="o">+</span>
+  <span class="s1">&#39;SELECT u.user_recid AS userID, u.is_admin AS isAdmin, u.user_name AS username, u.contact_Number AS contactNumber, u.email_ID AS emailID,&#39;</span> <span class="o">+</span>
   <span class="s1">&#39;u.user_TimeZone AS userTimeZone, u.created_On AS createdOn, u.modified_On AS modifiedOn&#39;</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">fromTable</span> <span class="o">=</span> <span class="s1">&#39;FROM user_m AS u&#39;</span><span class="p">;</span>
@@ -382,8 +385,7 @@ deployment and roles.</p>
   <span class="p">}</span>
   
   <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">sqlQuery</span><span class="p">,</span> <span class="nx">innerWhereClause</span><span class="p">,</span> <span class="nx">outerWhereClause</span><span class="p">);</span>
-  <span class="nx">sqlQuery</span> <span class="o">+=</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sqlQuery</span><span class="p">);</span>
+  <span class="nx">sqlQuery</span> <span class="o">+=</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>  
   <span class="k">return</span> <span class="nx">sqlQuery</span><span class="p">;</span>
 <span class="p">};</span>
 
@@ -393,19 +395,18 @@ deployment and roles.</p>
       <span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;Please send the email address&#39;</span><span class="p">,</span> <span class="p">{}));</span>
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT COUNT(email_id) AS numOfRecords  FROM user_m WHERE email_id = ?&#39;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
     <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
     <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">emailID</span><span class="p">],</span>
     <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
-          <span class="s1">&#39;No user found with that email.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="nx">responseData</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
       <span class="p">}</span>
-      <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">};</span>
@@ -546,29 +547,6 @@ deployment and roles.</p>
   <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">contactNumber</span><span class="o">:</span> <span class="s1">&#39;000-000-0000&#39;</span><span class="p">,</span>
-    <span class="nx">userTimeZone</span><span class="o">:</span> <span class="s1">&#39;Asia/Anadyr&#39;</span><span class="p">,</span>
-    <span class="nx">password</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_password</span><span class="p">,</span>
-    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">isActive</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">(),</span>
-    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">()</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-
-<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultMappingObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">isActive</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">(),</span>
-    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">()</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-
 <span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">userObj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;transactionID&#39;</span><span class="p">))</span> <span class="p">{</span>
@@ -663,6 +641,133 @@ deployment and roles.</p>
 <span class="p">};</span>
 
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="get%20user%20id%20by%20email.">
+  <h2>
+    <a href="#get%20user%20id%20by%20email." name="get%20user%20id%20by%20email." class="pilcrow">&#182;</a>
+    Get user ID by email.
+  </h2>
+</div>
+
+
+<p>Fetches the user's record ID based on his email address</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">emailID</span>
+      <span class="dox_type">string</span>
+      <span>of the user whose record ID has to be fetched.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span>{object} Callback method - it's passed false if user with email address
+could not be found, else returns the userID.</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span>false</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getUserIDByEmail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">emailID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isEmail</span><span class="p">(</span><span class="nx">emailID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span>
+      <span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span>
+      <span class="s1">&#39;Please provide a valid email address.&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">emailID</span><span class="o">:</span> <span class="s1">&#39;Please provide a valid email address.&#39;</span>
+      <span class="p">}));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT `user_recid` AS userID FROM user_m AS u WHERE u.email_id = ? AND is_active = ?&#39;</span><span class="p">;</span>  
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="p">[</span><span class="nx">emailID</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()],</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">er</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">userID</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">invalidateForgotPWTokens</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isUUID4</span><span class="p">(</span><span class="nx">userID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">vObj</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE `user_forgot_password` SET `is_valid` = 0 WHERE user_recid = ? AND is_valid = 1&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="p">[</span><span class="nx">userID</span><span class="p">],</span>
+    <span class="nx">validate</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertForgotPWToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fwObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO `user_forgot_password` (`user_fpass_recid`, `user_recid`, `str_token`, \</span>
+<span class="s1">            `created_on`, `is_valid`) VALUES \</span>
+<span class="s1">          (:id, :userID, :token, :createdOn, :isValid);&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">validate</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="nx">fwObj</span><span class="p">,</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getForgotPasswordToken</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">token</span> <span class="o">||</span> <span class="nx">token</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;Please send a valid token.&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT created_on AS createdOn, user_recid AS userID FROM `user_forgot_password` WHERE str_token = ? AND is_valid = 1 ORDER BY created_on DESC LIMIT 1;&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="p">[</span><span class="nx">token</span><span class="p">],</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">pwData</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">pwData</span> <span class="o">&amp;&amp;</span> <span class="nx">pwData</span><span class="p">.</span><span class="nx">createdOn</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">pwData</span><span class="p">.</span><span class="nx">createdOn</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toJSDateTime</span><span class="p">(</span><span class="nx">pwData</span><span class="p">.</span><span class="nx">createdOn</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">pwData</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updatePassword</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">newPassword</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE user_m SET user_password = :password WHERE user_recid = :userID&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">currData</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">userID</span> <span class="o">:</span> <span class="nx">userID</span><span class="p">,</span>
+    <span class="nx">password</span> <span class="o">:</span> <span class="nx">newPassword</span>
+  <span class="p">};</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span> <span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span> <span class="o">:</span> <span class="nx">currData</span><span class="p">,</span>
+    <span class="nx">before</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">beforeInsertUpdate</span><span class="p">(</span><span class="nx">currData</span><span class="p">),</span>
+    <span class="nx">validate</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">cb</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
 <span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">beforeInsertUpdate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userObj</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
   <span class="k">return</span> <span class="p">[</span>
@@ -676,6 +781,40 @@ deployment and roles.</p>
       <span class="p">});</span>
     <span class="p">}];</span>
 <span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">contactNumber</span><span class="o">:</span> <span class="s1">&#39;000-000-0000&#39;</span><span class="p">,</span>
+    <span class="nx">userTimeZone</span><span class="o">:</span> <span class="s1">&#39;Asia/Anadyr&#39;</span><span class="p">,</span>
+    <span class="nx">password</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_password</span><span class="p">,</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">isActive</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">(),</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">()</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultMappingObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">isActive</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">(),</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">()</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">User</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultForgotPassObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span> <span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">token</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="nx">createdOn</span> <span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">isValid</span> <span class="o">:</span> <span class="mi">1</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">User</span><span class="p">;</span>
 </pre></div>
         </td>

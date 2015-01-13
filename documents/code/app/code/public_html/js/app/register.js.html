@@ -155,9 +155,10 @@
         <span class="nx">emailID</span><span class="o">:</span> <span class="nx">emailID</span>
       <span class="p">}</span>
     <span class="p">},</span> <span class="nx">cbProcess</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-    <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">jqXHR</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">404</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span> <span class="p">}</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">response</span> <span class="o">&amp;&amp;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>      
+    <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>      
       <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
     <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
