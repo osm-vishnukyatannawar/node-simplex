@@ -44,7 +44,9 @@ global.__CONFIG__ = {
   },
   'calibration' :{
 	  'allRecordsCsvFileName' : "allRows.csv",
-	  'failureRecordsFileName' : "failureRecords.csv"
+	  'failureRecordsFileName' : "failureRecords.csv",
+	  'exportCsvFileDownloadName' : "EmanateDevices.csv",
+	  'unExportedLogFileName' : "UnexportedDevicesLog.csv"
   },
   'lookup' : {
 	'powerPathAssetType' : 'powerPathAssetType'  
