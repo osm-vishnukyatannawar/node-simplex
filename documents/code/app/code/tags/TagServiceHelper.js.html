@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TagServiceHelper.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/tags/TagServiceHelper.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#format%20tag%20configuration%20details">Format Tag configuration details</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>TagServiceHelper.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>START OF HELPER METHODS</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">TagServiceHelper</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="format%20tag%20configuration%20details">
+  <h2>
+    <a href="#format%20tag%20configuration%20details" name="format%20tag%20configuration%20details" class="pilcrow">&#182;</a>
+    Format Tag configuration details
+  </h2>
+</div>
+
+
+<p>Formats the tag configuration object, groups the details.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">data</span>
+      <span>{object} tag configuration object to be formatted
+returns formatted tag configuration object</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="kd">var</span> <span class="nx">formatTagConfigDetails</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">formattedData</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">wifiParams</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;serverIPAddr&#39;</span><span class="p">,</span><span class="s1">&#39;numDNS_Servers&#39;</span><span class="p">,</span><span class="s1">&#39;DNS_IP_Addr1&#39;</span><span class="p">,</span><span class="s1">&#39;DNS_IP_Addr2&#39;</span><span class="p">,</span><span class="s1">&#39;networkName&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;networkSSID&#39;</span><span class="p">,</span><span class="s1">&#39;passphrase&#39;</span><span class="p">,</span><span class="s1">&#39;networkSecurity&#39;</span><span class="p">,</span><span class="s1">&#39;addrtype&#39;</span><span class="p">,</span><span class="s1">&#39;tagStaticIPAddr&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">bleElements</span>   <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bleEnable&#39;</span><span class="p">,</span><span class="s1">&#39;bleGapRoleMinConnIntervalms&#39;</span><span class="p">,</span><span class="s1">&#39;bleGapRoleMaxConnIntervalms&#39;</span><span class="p">,</span><span class="s1">&#39;bleGapRoleSlaveLatency&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;bleLimitedAdvertOnTimeSec&#39;</span><span class="p">,</span><span class="s1">&#39;bleLimitedAdvertIntervalTimems&#39;</span><span class="p">,</span><span class="s1">&#39;bleGeneralAdvertIntervalTimems&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;bleLowBattAdvertIntervalTimems&#39;</span><span class="p">,</span><span class="s1">&#39;bleDesiredConnectionTimeoutms&#39;</span><span class="p">,</span><span class="s1">&#39;advertOffTimems&#39;</span><span class="p">,</span><span class="s1">&#39;blePasskey&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">devParam</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;buzzerFreqHz&#39;</span><span class="p">,</span><span class="s1">&#39;buzzerOnTime_msec&#39;</span><span class="p">,</span><span class="s1">&#39;buzzerOffTime_msec&#39;</span><span class="p">,</span><span class="s1">&#39;buzzerCnt&#39;</span><span class="p">,</span><span class="s1">&#39;ledOnTime_msec&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;ledOffTime_msec&#39;</span><span class="p">,</span><span class="s1">&#39;ledCnt&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">currentValues</span>   <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;threshOff&#39;</span><span class="p">,</span><span class="s1">&#39;threshInact&#39;</span><span class="p">,</span><span class="s1">&#39;threshActive&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">histValues</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;histResetRule&#39;</span><span class="p">,</span><span class="s1">&#39;histThresh&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">pimValues</span>     <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;elapsedTime_10ms&#39;</span><span class="p">,</span><span class="s1">&#39;iirFilt_mHz&#39;</span><span class="p">,</span><span class="s1">&#39;rmsDiffThresh_mA&#39;</span><span class="p">,</span><span class="s1">&#39;trigDly_10ms&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;sampRateHz&#39;</span><span class="p">,</span><span class="s1">&#39;measDur_10ms&#39;</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">batteryLevels</span>   <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;batteryRechargeLevelPercent&#39;</span><span class="p">,</span><span class="s1">&#39;batteryChargeLevelPercent&#39;</span><span class="p">,</span><span class="s1">&#39;batteryThreshLowAlert&#39;</span><span class="p">,</span><span class="s1">&#39;batteryThreshCriticalAlert&#39;</span><span class="p">];</span>
+    
+    
+    <span class="nx">formattedData</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">main</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="nx">formattedData</span><span class="p">.</span><span class="nx">tagConfigParamsRecId</span><span class="p">;</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">wifiNetworkParams</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">wifiParams</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">wifiNetworkParams</span><span class="p">[</span><span class="nx">wifiParams</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">wifiParams</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>  
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">bleConfig</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bleElements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">bleConfig</span><span class="p">[</span><span class="nx">bleElements</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">bleElements</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">devFindParam</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">devParam</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">devFindParam</span><span class="p">[</span><span class="nx">devParam</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">devParam</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">currentMeasThresh</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">currentValues</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">currentMeasThresh</span><span class="p">[</span><span class="nx">currentValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">currentValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">histConfig</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">histConfig</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">.</span><span class="nx">histEnable</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">histValues</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">histConfig</span><span class="p">[</span><span class="nx">histValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">histValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">pimConfig</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">pimConfig</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">.</span><span class="nx">pimEnable</span><span class="p">;</span>
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">pimConfig</span><span class="p">.</span><span class="nx">trigger</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">.</span><span class="nx">pimTrigger</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">pimValues</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">pimConfig</span><span class="p">[</span><span class="nx">pimValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">pimValues</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+    
+    <span class="nx">formattedData</span><span class="p">.</span><span class="nx">batteryConfig</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">batteryLevels</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">batteryConfig</span><span class="p">[</span><span class="nx">batteryLevels</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secondary</span><span class="p">[</span><span class="nx">batteryLevels</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+      <span class="p">}</span>
+      
+     <span class="k">return</span> <span class="nx">formattedData</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">formatTagConfigDetails</span> <span class="o">:</span> <span class="nx">formatTagConfigDetails</span>   
+  <span class="p">};</span>
+<span class="p">};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>END OF HELPER METHODS</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">TagServiceHelper</span><span class="p">();</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

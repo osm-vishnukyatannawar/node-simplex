@@ -67,7 +67,7 @@
 <p>TODO : Any validations?</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="kd">var</span> <span class="nx">mCurrent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">current</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">mCurrent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Current</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
   
   <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span><span class="nx">mCurrent</span><span class="p">.</span><span class="nx">beginTransaction</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">mCurrent</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tID</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>

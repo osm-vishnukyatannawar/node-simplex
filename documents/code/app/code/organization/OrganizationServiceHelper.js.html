@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OrganizationServiceHelper.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/organization/OrganizationServiceHelper.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#format%20organization%20details">Format organization details</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>OrganizationServiceHelper.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>START OF HELPER METHODS</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">OrganizationServiceHelper</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="format%20organization%20details">
+  <h2>
+    <a href="#format%20organization%20details" name="format%20organization%20details" class="pilcrow">&#182;</a>
+    Format organization details
+  </h2>
+</div>
+
+
+<p>Formats the organization object, groups the country and license details.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">data</span>
+      <span>{object} organization object to be formatted
+returns formatted organization object</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="kd">var</span> <span class="nx">formatOrganizationDetails</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">singleElement</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">formattedData</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">deleteElements</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;countryRecId&#39;</span><span class="p">,</span><span class="s1">&#39;countryName&#39;</span><span class="p">,</span><span class="s1">&#39;licenseRecId&#39;</span><span class="p">,</span><span class="s1">&#39;licenseName&#39;</span><span class="p">,</span><span class="s1">&#39;maxTags&#39;</span><span class="p">,</span><span class="s1">&#39;maxUsers&#39;</span><span class="p">];</span>
+    
+     <span class="k">while</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        
+        <span class="nx">singleElement</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="nx">singleElement</span><span class="p">.</span><span class="nx">country</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">countryRecId</span><span class="p">,</span>
+          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">countryName</span>
+        <span class="p">};</span>
+        <span class="nx">singleElement</span><span class="p">.</span><span class="nx">license</span> <span class="o">=</span> <span class="p">{</span>
+              <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">licenseRecId</span><span class="p">,</span>
+              <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">licenseName</span><span class="p">,</span>
+              <span class="s2">&quot;maxTags&quot;</span> <span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">maxTags</span><span class="p">,</span>
+              <span class="s2">&quot;maxUsers&quot;</span> <span class="o">:</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">maxUsers</span>
+          <span class="p">};</span>
+        <span class="nx">singleElement</span><span class="p">.</span><span class="nx">organizationURL</span> <span class="o">=</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_url</span> <span class="o">+</span> <span class="nx">singleElement</span><span class="p">.</span><span class="nx">organizationURL</span><span class="p">;</span>
+        
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">deleteElements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+          <span class="k">delete</span> <span class="nx">singleElement</span><span class="p">[</span><span class="nx">deleteElements</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="p">}</span>
+   
+        <span class="nx">formattedData</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">singleElement</span><span class="p">);</span>
+     <span class="p">}</span>
+     <span class="k">return</span> <span class="nx">formattedData</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="k">return</span> <span class="p">{</span>
+      <span class="nx">formatOrganizationDetails</span> <span class="o">:</span> <span class="nx">formatOrganizationDetails</span>   
+  <span class="p">};</span>
+<span class="p">};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>END OF HELPER METHODS</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">OrganizationServiceHelper</span><span class="p">();</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

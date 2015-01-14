@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FirmwareService.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/firmware/FirmwareService.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>FirmwareService.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Service</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/service&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Firmware</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;firmware/Firmware&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">MaintProcPath</span> <span class="o">=</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;cmd_console/maint-proc.js&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">getStatus</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/status&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">FirmwareServiceHelper</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;firmware/FirmwareServiceHelper&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fse</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs-extra&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">FirmwareService</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Service</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Firmware</span><span class="p">();</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">shFirmwareServiceHelper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FirmwareServiceHelper</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">FirmwareService</span><span class="p">,</span> <span class="nx">Service</span><span class="p">);</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This method is used to upload the firmware files
+It follows <strong>async waterfall model</strong>.
+It takes the folder names and stuff from the <code>global.__CONFIG__.firmware</code></p>
+  </div>
+  <div class="body"><p>Flow of the function </p>
+
+<ol>
+<li>It will get all the details of the files in the zip file.</li>
+<li>It will check if the version exists in the database or not.(Version should be unique)</li>
+<li>It will split the details of that we got in the 1st step and extracts versions numbers of each file and name of each file</li>
+<li>Next it will extract all the files to the destination folder</li>
+<li>Next it will check if all the three files exists in the zip file if not it will take the latest 
+firmware version and move it to the destination folder.</li>
+<li>Next it will insert all the details into the database.</li>
+</ol>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">:</span>
+      <span>dataObj 
+        -This is contains path , version , changeLog , userId</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">:</span>
+      <span>cb
+        -Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">uploadFirmwareFiles</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dataObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">dataObj</span><span class="p">.</span><span class="nx">path</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">dataObj</span><span class="p">.</span><span class="nx">version</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">changeLog</span> <span class="o">=</span> <span class="nx">dataObj</span><span class="p">.</span><span class="nx">version</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getDetailsFromZip</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">NoOfFiles</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">fileNameArray</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">NoOfFiles</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">firmwareName</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">entryName</span><span class="p">;</span>
+      <span class="nx">fileNameArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">firmwareName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">wfcb</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">that</span><span class="p">.</span><span class="nx">checkIfVersionExists</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="nx">wfcb</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">wfCb</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">that</span><span class="p">.</span><span class="nx">shFirmwareServiceHelper</span><span class="p">.</span><span class="nx">getPropertiesArray</span><span class="p">(</span><span class="nx">fileNameArray</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">propArray</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">that</span><span class="p">.</span><span class="nx">shFirmwareServiceHelper</span><span class="p">.</span><span class="nx">extactFilesTofolder</span><span class="p">({</span>
+            <span class="s1">&#39;propArray&#39;</span><span class="o">:</span> <span class="nx">propArray</span><span class="p">,</span>
+            <span class="s1">&#39;clientObj&#39;</span><span class="o">:</span> <span class="nx">dataObj</span>
+          <span class="p">},</span> <span class="nx">wfCb</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">FirmwareObj</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">that</span><span class="p">.</span><span class="nx">getAllFilesForZip</span><span class="p">(</span><span class="nx">FirmwareObj</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="kd">function</span><span class="p">(</span><span class="nx">FirmwareObj</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">that</span><span class="p">.</span><span class="nx">insertFirmwareToDb</span><span class="p">(</span><span class="nx">FirmwareObj</span><span class="p">,</span> <span class="nx">wfCb</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+      <span class="p">});</span>
+
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This is a wrapper method that make call to the model to check if version exists in the database or not.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">version
+</span>
+      <span>-version that you want to check</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+      <span>-Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkIfVersionExists</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span><span class="p">.</span><span class="nx">checkForOverallVersionInDb</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This function is used to check if all the files are there after unzip if not exists it will get the latest firmware from the database</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">FirmwareObjMethod</span>
+      <span>-It contains properties object and User entered details object</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+      <span>-Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllFilesForZip</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">FirmwareObjMethod</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">completObj</span> <span class="o">=</span> <span class="nx">FirmwareObjMethod</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">propObj</span> <span class="o">=</span> <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">clientObj</span> <span class="o">=</span> <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">clientObj</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">propLength</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">size</span><span class="p">(</span><span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">propLength</span> <span class="o">===</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">FirmwareObjMethod</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span><span class="p">.</span><span class="nx">getLatestFirmware</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">overallVersionOld</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">overall_version</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">filesFolder</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">filesFolderName</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">firmwareFolder</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">folder</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">oldPath</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s2">&quot;../&quot;</span> <span class="o">+</span> <span class="nx">filesFolder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">firmwareFolder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span>
+      <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseVersionFolderName</span> <span class="o">+</span>
+      <span class="nx">overallVersionOld</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">newPath</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s2">&quot;../&quot;</span> <span class="o">+</span> <span class="nx">filesFolder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">firmwareFolder</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span>
+      <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseVersionFolderName</span> <span class="o">+</span>
+      <span class="nx">clientObj</span><span class="p">.</span><span class="nx">version</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">globalFirmwareObj</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseFirmwareFileStrs</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">globalFirmwareObj</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">propObj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="k">continue</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">oldVersion</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+        <span class="kd">var</span> <span class="nx">oldFolderName</span> <span class="o">=</span> <span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+</span> <span class="nx">oldVersion</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">oldPathFolderName</span> <span class="o">=</span> <span class="nx">oldPath</span> <span class="o">+</span> <span class="nx">oldFolderName</span> <span class="o">+</span> <span class="s1">&#39;.zip&#39;</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">newPathFolderName</span> <span class="o">=</span> <span class="nx">newPath</span> <span class="o">+</span> <span class="nx">oldFolderName</span> <span class="o">+</span> <span class="s1">&#39;.zip&#39;</span><span class="p">;</span>
+        <span class="k">try</span> <span class="p">{</span>
+          <span class="nx">fse</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">oldPathFolderName</span><span class="p">,</span> <span class="nx">newPathFolderName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+              <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">getStatus</span><span class="p">(</span><span class="s2">&quot;internalError&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;There was an error on the server while processing the firmwares.&quot;</span><span class="p">,</span> <span class="p">{}));</span>
+            <span class="p">}</span>
+            <span class="kd">var</span> <span class="nx">firmwareName</span> <span class="o">=</span> <span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+</span> <span class="nx">oldVersion</span> <span class="o">+</span> <span class="s1">&#39;.zip&#39;</span><span class="p">;</span>
+            <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">[</span><span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">[</span><span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">firmwareName</span><span class="p">;</span>
+            <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">[</span><span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">oldVersion</span><span class="p">;</span>
+            <span class="nx">FirmwareObjMethod</span><span class="p">.</span><span class="nx">propArray</span><span class="p">[</span><span class="nx">globalFirmwareObj</span><span class="p">[</span><span class="nx">key</span><span class="p">]][</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span>
+              <span class="p">.</span><span class="nx">baseVersionFolderName</span> <span class="o">+</span>
+              <span class="nx">clientObj</span><span class="p">.</span><span class="nx">version</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">firmwareName</span><span class="p">;</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">FirmwareObjMethod</span><span class="p">)</span>
+          <span class="p">});</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">getStatus</span><span class="p">(</span><span class="s2">&quot;internalError&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;There was an error on the server while processing the firmwares.&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This is wrapper method that is used to call a function in the model to insert firmware detils into the database.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">fwUploadPropObj</span>
+      <span>-It contains all the properties that are need to insert inthe database.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+      <span>-Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertFirmwareToDb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fwUploadPropObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span><span class="p">.</span><span class="nx">insertFirmwareDets</span><span class="p">(</span><span class="nx">fwUploadPropObj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This methods is a wrapper method that will call a method in the model to get all the active firmware details</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">:</span>
+      <span>cb
+      -Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllFirmwares</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span><span class="p">.</span><span class="nx">getAllFirmwareDetsFormDb</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">normalizeFirmwareData</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">normalizeData</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">normalizeData</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This function is used to process the that is returned from getAllFirmwares and sends it to the controller</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">dataToNormalize</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">normalizeFirmwareData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dataToNormalize</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">baseFirmwareFolder</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">folder</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">totalVersionFolderName</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseVersionFolderName</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">filesFolderName</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">filesFolderName</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">baseURL</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">baseURL</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">fileExt</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">firmwareFileExtension</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">finalURL</span> <span class="o">=</span> <span class="nx">baseURL</span> <span class="o">+</span> <span class="nx">filesFolderName</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">baseFirmwareFolder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">totalVersionFolderName</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">element</span> <span class="k">in</span> <span class="nx">dataToNormalize</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">overAllVersion</span> <span class="o">=</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span><span class="s1">&#39;overAllVersion&#39;</span><span class="p">];</span>
+    <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span><span class="s1">&#39;hostURL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">finalURL</span> <span class="o">+</span> <span class="nx">overAllVersion</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span>
+      <span class="s1">&#39;hostPath&#39;</span>
+    <span class="p">];</span>
+    <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span><span class="s1">&#39;bleURL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">finalURL</span> <span class="o">+</span> <span class="nx">overAllVersion</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span>
+      <span class="s1">&#39;blePath&#39;</span>
+    <span class="p">];</span>
+    <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span><span class="s1">&#39;wifiURL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">finalURL</span> <span class="o">+</span> <span class="nx">overAllVersion</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span>
+      <span class="s1">&#39;wifiPath&#39;</span>
+    <span class="p">];</span>
+    <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">][</span><span class="s1">&#39;overAllURL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">finalURL</span> <span class="o">+</span> <span class="nx">overAllVersion</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">].</span><span class="nx">hostPath</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">].</span><span class="nx">blePath</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="nx">dataToNormalize</span><span class="p">[</span><span class="nx">element</span><span class="p">].</span><span class="nx">wifiPath</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">dataToNormalize</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This function is used to fetch the firmware types from model and sends them to the controller.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFirwareVersions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">mFirmware</span><span class="p">.</span><span class="nx">getFirwareVersions</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">FirmwareService</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
