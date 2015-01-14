@@ -14,13 +14,14 @@ var __ = require('underscore');
  *          This object will be sent if it's a validation error. 
  */
 function AppError(err, respMessage, vObj) {
-  var objType = typeof (err) ;
-  if (objType === "object" && err instanceof Error) {
+  'use strict';
+  var objType = typeof (err) ;  
+  if (objType === 'object' && err instanceof Error) {
     this.stack = err.stack;
     this.message = err.message;
     this.appMessage = respMessage;
     this.isInternalErr = true;
-  } else  if(objType === "object" && err instanceof AppError) {
+  } else  if(objType === 'object' && err instanceof AppError) {
     this.copyError(err, respMessage, vObj);
   } else {
     this.appMessage = respMessage;
@@ -31,6 +32,7 @@ function AppError(err, respMessage, vObj) {
 }
 
 AppError.prototype.writeToLog = function() {
+  'use strict';
   var strError = 'AppMessage : ' + this.appMessage + ' \n';
   if (this.isInternalErr) {
     strError += 'StackTrace : ' + this.stack + ' \n';
@@ -41,10 +43,12 @@ AppError.prototype.writeToLog = function() {
 };
 
 AppError.prototype.setAppMessage = function(message) {
+  'use strict';
   this.appMessage = message;
 };
 
 AppError.prototype.copyError = function(err, respMessage, vObj) {
+  'use strict';
   this.isInternalErr = err.isInternalErr;
   this.stack = err.stack;
   this.appMessage = err.appMessage;

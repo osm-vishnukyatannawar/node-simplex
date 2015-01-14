@@ -1,7 +1,6 @@
 {
     "indent": 2,
     "node": true,
-    "globalstrict": true,
     "unused": true,
     "undef": true,
     "newcap": true,
