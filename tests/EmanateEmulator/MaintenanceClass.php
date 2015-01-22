@@ -6,10 +6,8 @@ require_once 'config.php';
 class Maintenance {
 
     public $dataToSend;
-    public $customerID;
-    public $serialNum;
-    public $type;
     public $data;
+    public $type;
     public $currentTimeStamp;
     public $currentTimeStamp_tm_sec;
     public $currentTimeStamp_tm_min;
@@ -79,72 +77,71 @@ class Maintenance {
     public $numBleDevFind;
 
     public function __construct() {
-
-        $this->customerID = '1001';
-        $this->serialNum = '9273';
+        
         $this->type = MAINTENANCE_TYPE;
-        $this->currentTimeStamp_tm_sec = 12;
-        $this->currentTimeStamp_tm_min = 10;
-        $this->currentTimeStamp_tm_hour = 2;
-        $this->currentTimeStamp_tm_mday = 12;
-        $this->currentTimeStamp_tm_mon = 1;
-        $this->currentTimeStamp_tm_year = 2014;
-        $this->batteryInfo_batteryLevelPercent = 100;
-        $this->batteryInfo_predictedBatteryCapacity = 100;
-        $this->batteryInfo_totalNumBatteryCharges = 43690;
-        $this->maintReason = 1;
-        $this->powerPathUsageState = 1;
-        $this->nearestAPMACAddr = 0;
-        $this->nearestAPRSSIdBm = 0;
-        $this->numBatteryCharges = 0;
-        $this->numMotionDet = 12;
-        $this->currentUtil_util5min = 1;
-        $this->currentUtil_util1hr = 12;
-        $this->currentUtil_util1day = 24;
-        $this->currentUtil_util1week = 140;
-        $this->currentUtil_util1month = 1200;
-        $this->currentUtil_util6months = 1000;
-        $this->batteryChargeTimestamp_tm_sec = 0;
-        $this->batteryChargeTimestamp_tm_min = 0;
-        $this->batteryChargeTimestamp_tm_hour = 10;
-        $this->batteryChargeTimestamp_tm_mday = 10;
-        $this->batteryChargeTimestamp_tm_mon = 10;
-        $this->batteryChargeTimestamp_tm_year = 2014;
-        $this->motionDetStartTimestamp_tm_sec = 12;
-        $this->motionDetStartTimestamp_tm_min = 12;
-        $this->motionDetStartTimestamp_tm_hour = 12;
-        $this->motionDetStartTimestamp_tm_mday = 11;
-        $this->motionDetStartTimestamp_tm_mon = 11;
-        $this->motionDetStartTimestamp_tm_year = 2014;
-        $this->numChokePointDet = 1;
-        $this->chokepointType = 2;
-        $this->timestamp_tm_sec = 18;
-        $this->timestamp_tm_min = 0;
-        $this->timestamp_tm_hour = 12;
-        $this->timestamp_tm_mday = 12;
-        $this->timestamp_tm_mon = 6;
-        $this->timestamp_tm_year = 2013;
-        $this->numBleConnect = 12;
-        $this->bleConnectTimestamps1_tm_sec = 12;
-        $this->bleConnectTimestamps1_tm_min = 0;
-        $this->bleConnectTimestamps1_tm_hour = 12;
-        $this->bleConnectTimestamps1_tm_mday = 20;
-        $this->bleConnectTimestamps1_tm_mon = 5;
-        $this->bleConnectTimestamps1_tm_year = 2013;
-        $this->bleConnectTimestamps2_tm_sec = 45;
-        $this->bleConnectTimestamps2_tm_min = 6;
-        $this->bleConnectTimestamps2_tm_hour = 15;
-        $this->bleConnectTimestamps2_tm_mday = 12;
-        $this->bleConnectTimestamps2_tm_mon = 6;
-        $this->bleConnectTimestamps2_tm_year = 2014;
+        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->batteryInfo_batteryLevelPercent = DEFAULT_VALUES;
+        $this->batteryInfo_predictedBatteryCapacity = DEFAULT_VALUES;
+        $this->batteryInfo_totalNumBatteryCharges = DEFAULT_VALUES;
+        $this->maintReason = DEFAULT_VALUES;
+        $this->powerPathUsageState = DEFAULT_VALUES;
+        $this->nearestAPMACAddr = DEFAULT_VALUES;
+        $this->nearestAPRSSIdBm = DEFAULT_VALUES;
+        $this->numBatteryCharges = DEFAULT_VALUES;
+        $this->numMotionDet = DEFAULT_VALUES;
+        $this->currentUtil_util5min = DEFAULT_VALUES;
+        $this->currentUtil_util1hr = DEFAULT_VALUES;
+        $this->currentUtil_util1day = DEFAULT_VALUES;
+        $this->currentUtil_util1week = DEFAULT_VALUES;
+        $this->currentUtil_util1month = DEFAULT_VALUES;
+        $this->currentUtil_util6months = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_sec = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_min = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_hour = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_mday = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_mon = DEFAULT_VALUES;
+        $this->batteryChargeTimestamp_tm_year = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_sec = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_min = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_hour = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_mday = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_mon = DEFAULT_VALUES;
+        $this->motionDetStartTimestamp_tm_year = DEFAULT_VALUES;
+        $this->numChokePointDet = DEFAULT_VALUES;
+        $this->chokepointType = DEFAULT_VALUES;
+        $this->timestamp_tm_sec = DEFAULT_VALUES;
+        $this->timestamp_tm_min = DEFAULT_VALUES;
+        $this->timestamp_tm_hour = DEFAULT_VALUES;
+        $this->timestamp_tm_mday = DEFAULT_VALUES;
+        $this->timestamp_tm_mon = DEFAULT_VALUES;
+        $this->timestamp_tm_year = DEFAULT_VALUES;
+        $this->numBleConnect = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_sec = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_min = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_hour = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_mday = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_mon = DEFAULT_VALUES;
+        $this->bleConnectTimestamps1_tm_year = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_sec = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_min = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_hour = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_mday = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_mon = DEFAULT_VALUES;
+        $this->bleConnectTimestamps2_tm_year = DEFAULT_VALUES;
         $this->btPhoneMacAddr = [
-            "101: 899: 102: 456: 234: 345",
-            "10: 010: 11: 333: 36: 119"
+            "Maintenance".DEFAULT_VALUES
         ];
         $this->numBleDevFind = 1;
     }
 
     public function getMntceDataFormat() {
+        
+        $baseObj = new Base();
 
         $this->currentTimeStamp = (object) ['tm_sec' => $this->currentTimeStamp_tm_sec,
                     'tm_min' => $this->currentTimeStamp_tm_min,
@@ -224,8 +221,8 @@ class Maintenance {
                     'chokePointInfo' => $this->chokePointInfo,
                     'bleEvents' => $this->bleEvents];
 
-        $this->dataToSend = (object) ['customerID' => $this->customerID,
-                    'serialNum' => $this->serialNum,
+        $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
+                    'serialNum' => $baseObj->serialNum,
                     'type' => $this->type,
                     'data' => $this->data];
 

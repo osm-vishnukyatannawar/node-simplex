@@ -6,9 +6,7 @@ class Histogram {
 
     public $dataToSend;
     public $data;
-    public $orgID;
     public $type;
-    public $SN;
     public $startTimeStamp;
     public $startTimeStamp_tm_sec;
     public $startTimeStamp_tm_min;
@@ -20,19 +18,19 @@ class Histogram {
 
     public function __construct() {
 
-        $this->orgID = '3';
-        $this->SN = '3';
         $this->type = HISTOGRAM_TYPE;
-        $this->startTimeStamp_tm_sec = 10;
-        $this->startTimeStamp_tm_min = 18;
-        $this->startTimeStamp_tm_hour = 10;
-        $this->startTimeStamp_tm_mday = 10;
-        $this->startTimeStamp_tm_mon = 10;
-        $this->startTimeStamp_tm_year = 2014;
-        $this->histData = '12,203,345';
+        $this->startTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->histData = 'Histogram'.DEFAULT_VALUES;
     }
 
     public function getHistogramDataFormat() {
+        
+        $baseObj = new Base();
 
         $this->startTimeStamp = (object) ['tm_sec' => $this->startTimeStamp_tm_sec,
                     'tm_min' => $this->startTimeStamp_tm_min,
@@ -44,8 +42,8 @@ class Histogram {
         $this->data = (object) ['startTimeStamp' => $this->startTimeStamp,
                     'histData' => $this->histData];
 
-        $this->dataToSend = (object) ['orgID' => $this->orgID,
-                    'SN' => $this->SN,
+        $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
+                    'serialNum' => $baseObj->serialNum,
                     'type' => $this->type,
                     'data' => $this->data];
 

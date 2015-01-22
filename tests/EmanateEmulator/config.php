@@ -24,4 +24,4 @@ define('TAG_SN', 8271);
 define('ORG_ID', 1001);
 
 // Default values
-define('DEFAULT_VALUES', '123');
+define('DEFAULT_VALUES', 123);

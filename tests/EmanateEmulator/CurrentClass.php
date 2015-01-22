@@ -6,8 +6,6 @@ class Current {
 
     public $dataToSend;
     public $data;
-    public $orgID;
-    public $SN;
     public $type;
     public $CurrentData;
     public $CurrentData_startTimestamp;
@@ -24,21 +22,21 @@ class Current {
 
     public function __construct() {
 
-        $this->orgID = '3';
-        $this->SN = '3';
         $this->type = CURRENT_TYPE;
-        $this->CurrentData_startTimestamp = 12;
-        $this->CurrentData_numSamples = 23;
-        $this->CurrentDataUtil1_currentRms = 45;
-        $this->CurrentDataUtil1_utilVal = 2;
-        $this->CurrentDataUtil1_usageState = 2;
-        $this->CurrentDataUtil2_currentRms = 20;
-        $this->CurrentDataUtil2_utilVal = 12;
-        $this->CurrentDataUtil2_usageState = 3;
+        $this->CurrentData_startTimestamp = DEFAULT_VALUES;
+        $this->CurrentData_numSamples = DEFAULT_VALUES;
+        $this->CurrentDataUtil1_currentRms = DEFAULT_VALUES;
+        $this->CurrentDataUtil1_utilVal = DEFAULT_VALUES;
+        $this->CurrentDataUtil1_usageState = DEFAULT_VALUES;
+        $this->CurrentDataUtil2_currentRms = DEFAULT_VALUES;
+        $this->CurrentDataUtil2_utilVal = DEFAULT_VALUES;
+        $this->CurrentDataUtil2_usageState = DEFAULT_VALUES;
     }
 
     public function getCurrentDataFormat() {
 
+        $baseObj = new Base();
+        
         $this->CurrentDataUtil1 = (object) ['currentRms' => $this->CurrentDataUtil1_currentRms,
                     'utilVal' => $this->CurrentDataUtil1_utilVal,
                     'usageState' => $this->CurrentDataUtil1_usageState];
@@ -55,8 +53,8 @@ class Current {
         $this->data = (object) ['CurrentData' => $this->CurrentData,
                     'CurrentDataUtil' => $this->CurrentDataUtil];
 
-        $this->dataToSend = (object) ['orgID' => $this->orgID,
-                    'SN' => $this->SN,
+        $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
+                    'serialNum' => $baseObj->serialNum,
                     'type' => $this->type,
                     'data' => $this->data];
 

@@ -6,8 +6,6 @@ class TagInfo {
 
     public $dataToSend;
     public $data;
-    public $orgID;
-    public $serialNum;
     public $type;
     public $deviceID;
     public $customerID;
@@ -36,35 +34,34 @@ class TagInfo {
 
     public function __construct() {
 
-        $this->orgID = '3';
-        $this->serialNum = '3';
         $this->type = TAGINFO_TYPE;
-        $this->deviceID = 676676;
-        $this->customerID = ORG_ID;
-        $this->hardwareVersion = 'a1';
-        $this->wifiMacAddr = '12:34:23:45:34:28';
-        $this->tagConfigState = 2;
-        $this->hwPeripherals = 'a';
-        $this->hostFirmwareVer = 'ab';
-        $this->wifiFirmwareVer = 'a1';
-        $this->bleFirwareVer = '12';
-        $this->powerPathConfigVer = '23';
-        $this->factoryTestTime_tm_sec = 10;
-        $this->factoryTestTime_tm_min = 12;
-        $this->factoryTestTime_tm_hour = 17;
-        $this->factoryTestTime_tm_mday = 8;
-        $this->factoryTestTime_tm_mon = 10;
-        $this->factoryTestTime_tm_year = 2014;
-        $this->configTime_tm_sec = 20;
-        $this->configTime_tm_min = 12;
-        $this->configTime_tm_hour = 8;
-        $this->configTime_tm_mday = 21;
-        $this->configTime_tm_mon = 4;
-        $this->configTime_tm_year = 2014;
+        $this->deviceID = DEFAULT_VALUES;
+        $this->hardwareVersion = 'Tag - '.DEFAULT_VALUES;
+        $this->wifiMacAddr = 'Tag - '.DEFAULT_VALUES;
+        $this->tagConfigState = DEFAULT_VALUES;
+        $this->hwPeripherals = 'Tag - '.DEFAULT_VALUES;
+        $this->hostFirmwareVer = 'Tag - '.DEFAULT_VALUES;
+        $this->wifiFirmwareVer = 'Tag - '.DEFAULT_VALUES;
+        $this->bleFirwareVer = 'Tag - '.DEFAULT_VALUES;
+        $this->powerPathConfigVer = 'Tag - '.DEFAULT_VALUES;
+        $this->factoryTestTime_tm_sec = DEFAULT_VALUES;
+        $this->factoryTestTime_tm_min = DEFAULT_VALUES;
+        $this->factoryTestTime_tm_hour = DEFAULT_VALUES;
+        $this->factoryTestTime_tm_mday = DEFAULT_VALUES;
+        $this->factoryTestTime_tm_mon = DEFAULT_VALUES;
+        $this->factoryTestTime_tm_year = DEFAULT_VALUES;
+        $this->configTime_tm_sec = DEFAULT_VALUES;
+        $this->configTime_tm_min = DEFAULT_VALUES;
+        $this->configTime_tm_hour = DEFAULT_VALUES;
+        $this->configTime_tm_mday = DEFAULT_VALUES;
+        $this->configTime_tm_mon = DEFAULT_VALUES;
+        $this->configTime_tm_year = DEFAULT_VALUES;
     }
 
     public function getTagInfoDataFormat() {
 
+        $baseObj = new Base();
+        
         $this->factoryTestTime = (object) ['tm_sec' => $this->factoryTestTime_tm_sec,
                     'tm_min' => $this->factoryTestTime_tm_min,
                     'tm_hour' => $this->factoryTestTime_tm_hour,
@@ -80,7 +77,7 @@ class TagInfo {
                     'tm_year' => $this->configTime_tm_year];
 
         $this->data = (object) ['deviceID' => $this->deviceID,
-                    'customerID' => $this->customerID,
+                    'customerID' => $baseObj->customerID,
                     'hardwareVersion' => $this->hardwareVersion,
                     'wifiMacAddr' => $this->wifiMacAddr,
                     'tagConfigState' => $this->tagConfigState,
@@ -92,8 +89,8 @@ class TagInfo {
                     'factoryTestTime' => $this->factoryTestTime,
                     'configTime' => $this->configTime];
 
-        $this->dataToSend = (object) ['customerID' => $this->orgID,
-                    'serialNum' => $this->serialNum,
+        $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
+                    'serialNum' => $baseObj->serialNum,
                     'type' => $this->type,
                     'data' => $this->data];
 

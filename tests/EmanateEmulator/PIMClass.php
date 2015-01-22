@@ -6,8 +6,6 @@ class PIM {
 
     public $dataToSend;
     public $data;
-    public $customerID;
-    public $serialNum;
     public $type;
     public $PimHeader;
     public $currentTimeStamp;
@@ -52,46 +50,46 @@ class PIM {
 
     public function __construct() {
 
-        $this->orgID = '3';
-        $this->SN = '3';
         $this->type = PIM_TYPE;
-        $this->currentTimeStamp_tm_sec = 12;
-        $this->currentTimeStamp_tm_min = 10;
-        $this->currentTimeStamp_tm_hour = 2;
-        $this->currentTimeStamp_tm_mday = 12;
-        $this->currentTimeStamp_tm_mon = 1;
-        $this->currentTimeStamp_tm_year = 2014;
-        $this->numACPlugins = 53;
-        $this->numPimBlocks = 62;
-        $this->numSamplesInBlock = 68;
-        $this->PimData1_trig = 2;
-        $this->PimData1_plugInTimeStamp_tm_sec = 12;
-        $this->PimData1_plugInTimeStamp_tm_min = 10;
-        $this->PimData1_plugInTimeStamp_tm_hour = 2;
-        $this->PimData1_plugInTimeStamp_tm_mday = 12;
-        $this->PimData1_plugInTimeStamp_tm_mon = 1;
-        $this->PimData1_plugInTimeStamp_tm_year = 2014;
-        $this->PimData1_plugInDur_min = 280;
-        $this->PimData1_plugInToMeasDelay_msec = 53792;
-        $this->PimData1_rmsCurrent = 53794;
-        $this->PimData1_peakToRms = 796;
-        $this->PimData1_stdDev = 536;
-        $this->PimData2_trig = 1;
-        $this->PimData2_plugInTimeStamp_tm_sec = 20;
-        $this->PimData2_plugInTimeStamp_tm_min = 10;
-        $this->PimData2_plugInTimeStamp_tm_hour = 12;
-        $this->PimData2_plugInTimeStamp_tm_mday = 1;
-        $this->PimData2_plugInTimeStamp_tm_mon = 10;
-        $this->PimData2_plugInTimeStamp_tm_year = 2014;
-        $this->PimData2_plugInDur_min = 240;
-        $this->PimData2_plugInToMeasDelay_msec = 32792;
-        $this->PimData2_rmsCurrent = 23794;
-        $this->PimData2_peakToRms = 45768;
-        $this->PimData2_stdDev = 798;
+        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->numACPlugins = DEFAULT_VALUES;
+        $this->numPimBlocks = DEFAULT_VALUES;
+        $this->numSamplesInBlock = DEFAULT_VALUES;
+        $this->PimData1_trig = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->PimData1_plugInTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->PimData1_plugInDur_min = DEFAULT_VALUES;
+        $this->PimData1_plugInToMeasDelay_msec = DEFAULT_VALUES;
+        $this->PimData1_rmsCurrent = DEFAULT_VALUES;
+        $this->PimData1_peakToRms = DEFAULT_VALUES;
+        $this->PimData1_stdDev = DEFAULT_VALUES;
+        $this->PimData2_trig = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->PimData2_plugInTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->PimData2_plugInDur_min = DEFAULT_VALUES;
+        $this->PimData2_plugInToMeasDelay_msec = DEFAULT_VALUES;
+        $this->PimData2_rmsCurrent = DEFAULT_VALUES;
+        $this->PimData2_peakToRms = DEFAULT_VALUES;
+        $this->PimData2_stdDev = DEFAULT_VALUES;
     }
 
     public function getPIMDataFormat() {
 
+        $baseObj = new Base();
+        
         $this->PlugInTimeStamp1 = (object) ['tm_sec' => $this->PimData1_plugInTimeStamp_tm_sec,
                     'tm_min' => $this->PimData1_plugInTimeStamp_tm_min,
                     'tm_hour' => $this->PimData1_plugInTimeStamp_tm_hour,
@@ -139,8 +137,8 @@ class PIM {
         $this->data = (object) ['PimHeader' => $this->PimHeader,
                     'PimData' => $this->PimData];
 
-        $this->dataToSend = (object) ['orgID' => $this->orgID,
-                    'SN' => $this->SN,
+        $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
+                    'serialNum' => $baseObj->serialNum,
                     'type' => $this->type,
                     'data' => $this->data];
 
