@@ -47,6 +47,9 @@ global.__CONFIG__ = {
 	  'exportCsvFileDownloadName' : 'EmanateDevices.csv',
 	  'unExportedLogFileName' : 'UnexportedDevicesLog.csv'
   },
+  'tags' : {
+	'tagsCsvFileName' : 'EmanateTags.csv'  
+  },
   'lookup' : {
 	'powerPathAssetType' : 'powerPathAssetType'  
   },
@@ -60,6 +63,6 @@ global.__CONFIG__ = {
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: 'localhost',
   isProduction: PRODUCTION
 };
