@@ -1,9 +1,5 @@
 // NodeJS includes
-var cluster = require("cluster");
-
-// Third Party Includes
-var bodyParser = require('body-parser');
-var __ = require('underscore');
+var cluster = require('cluster');
 
 // Osm Includes
 var config = require('./config');
@@ -28,13 +24,21 @@ if (config.express.isProduction && cluster.isMaster) {
     cluster.fork();
   }
 } else {
+  var j = 0;
+  app.use(function(req, res, next) { 
+    ++j;
+    console.log('Received a request...' + j);
+    console.log('Request URL - ' + req.originalUrl);
+    next();
+  });
+  
+  
   // A worker process
   app.use(function(req, res, next) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     next();
   });
   
-  //app.use(bodyParser.json());
   app.use(helper.parseBodyType);
   
   app.use(function(err, req, res, next) {    
@@ -67,6 +71,6 @@ if (config.express.isProduction && cluster.isMaster) {
       process.exit(10);
     }
     logger.logAppInfo('Express is listening on http://' + config.express.ip
-            + ":" + config.express.port);
+            + ':' + config.express.port);
   });
-};
+}

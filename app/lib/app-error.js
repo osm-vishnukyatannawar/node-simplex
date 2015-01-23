@@ -15,6 +15,7 @@ var __ = require('underscore');
  */
 function AppError(err, respMessage, vObj) {
   'use strict';
+  this.vObj = {};
   var objType = typeof (err) ;  
   if (objType === 'object' && err instanceof Error) {
     this.stack = err.stack;
@@ -56,6 +57,9 @@ AppError.prototype.copyError = function(err, respMessage, vObj) {
     this.appMessage = respMessage;
   }  
   this.message = err.message;
+  if(!err.vObj) {
+    err.vObj = {};
+  }
   this.validation = __.extend(err.vObj, vObj);
 };
 
