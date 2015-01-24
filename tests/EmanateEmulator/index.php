@@ -1,5 +1,5 @@
 <?php
-ini_set('error_reporting', 1);
+//ini_set('error_reporting', 1);
 require_once 'config.php'
 ?>
 <!DOCTYPE HTML>
@@ -94,6 +94,31 @@ require_once 'config.php'
             body {
                 font-family : Arial, Helvetica, sans-serif
             }
+            .pure-button {
+                font-family: inherit;
+                font-size: 13px;
+                padding: .3em .7em;
+                color: #444;
+                color: rgba(0,0,0,.8);
+                border: 1px solid #999;                
+                background-color: #E6E6E6;
+                text-decoration: none;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            .pure-button:hover{
+                background-color: #d1d1d1;
+            }
+            .pure-text {
+                padding: .4em .5em;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-shadow: inset 0 1px 3px #ddd;
+                border-radius: 4px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
         </style>
     </head>
     <body>
@@ -130,13 +155,13 @@ require_once 'config.php'
         <hr>
         <h2>Communicator</h2>
         <form method ="POST" enctype="multipart/form-data">
-            <input type="text" value = "1" name="callsNmber" placeholder="Number of calls">
+            <input class="pure-text" type="text" value = "1" name="callsNmber" placeholder="Number of calls">
             <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="1">
-            <button type="submit" name="submit" onclick="changeDataType(this.value)" value="1">Maintenance</button>
-            <button type="submit" name="submit" onclick="changeDataType(this.value)" value="2">Histogram</button>
-            <button type="submit" name="submit" onclick="changeDataType(this.value)" value="3">PIM</button>
-            <button type="submit" name="submit" onclick="changeDataType(this.value)" value="4">Current</button>
-            <button type="submit" name="submit" onclick="changeDataType(this.value)" value="5">TagInfo</button>            
+            <button class="pure-button" type="submit" name="submit" onclick="changeDataType(this.value)" value="1">Maintenance</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="2">Histogram</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="3">PIM</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="4">Current</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="5">TagInfo</button>            
         </form>
         <?php
         require_once 'powertag-classes/BaseClass.php';
@@ -150,7 +175,7 @@ require_once 'config.php'
         $allOutput = array();
         if (isset($_POST['submit'])) {
             $ch = curl_init('http://10.0.0.15:3000/api/v1/tag/maintenance/');
-            
+
             function sendRequiredData($dataToSend) {
                 global $ch;
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -160,10 +185,10 @@ require_once 'config.php'
                     'Content-Type: application/json',
                     'Content-Length: ' . strlen($dataToSend))
                 );
-                sleep(0.75);
-                $resultObj = curl_exec($ch);                  
+                sleep(1);
+                $resultObj = curl_exec($ch);
                 $respObj = new Response();
-                $respObj->statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);                      
+                $respObj->statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 try {
                     $resultObj = json_decode($resultObj);
                     $respObj->status = $resultObj->status;
@@ -177,29 +202,29 @@ require_once 'config.php'
 
             function sendDataBasedOnDataType($dataType) {
                 switch ($dataType) {
-                    case 1 : 
+                    case 1 :
                         $mainObj = new Maintenance();
                         $mntnceData = json_encode($mainObj->getMntceDataFormat());
                         $finalResult = sendRequiredData($mntnceData);
                         break;
-                    case 2 : 
+                    case 2 :
                         $histogramObj = new Histogram();
                         $histogramData = json_encode($histogramObj->getHistogramDataFormat());
                         $finalResult = sendRequiredData($histogramData);
                         break;
-                    case 3 : 
+                    case 3 :
                         $pimObj = new PIM();
                         $pimData = json_encode($pimObj->getPIMDataFormat());
                         $finalResult = sendRequiredData($pimData);
                         break;
-                    case 4 : 
+                    case 4 :
                         $currentObj = new Current();
                         $currentData = json_encode($currentObj->getCurrentDataFormat());
                         $finalResult = sendRequiredData($currentData);
                         break;
-                    case 5 : 
+                    case 5 :
                         $tagObj = new TagInfo();
-                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat()); 
+                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat());
                         $finalResult = sendRequiredData($tagInfoData);
                         break;
                 }
@@ -208,8 +233,8 @@ require_once 'config.php'
             }
 
             $type = $_POST['dataType'];
-            $nmbrOfCalls = $_POST['callsNmber'];
-            if (intval($nmbrOfCalls) > 0) {
+            $nmbrOfCalls = intval($_POST['callsNmber']);
+            if ($nmbrOfCalls > 0) {
                 for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                     $finalResult = sendDataBasedOnDataType($type);
                     foreach ($finalResult['data'] AS $key => $value) {
@@ -226,15 +251,17 @@ require_once 'config.php'
         ?>
         <?php if (!empty($allOutput)) { ?>
             <h2>Output</h2>
-            <?php $i = 1; foreach($allOutput as $output) { ?>
+            <?php $i = 1;
+            foreach ($allOutput as $output) { ?>
                 <ul class="output-list">
                     <li><strong>#<?php echo $i ?></strong>
-                    <hr>
+                        <hr>
                     <li><strong>HTTP</strong> : <?php echo $output->statusCode ?></li>
                     <li><strong>Status</strong> : <?php echo $output->status ?></li>
                     <li><strong>Data</strong> : <?php echo json_encode($output->data) ?></li>
                 </ul>                
-            <?php ++$i; } ?>
-        <?php } ?>
+                <?php ++$i;
+            } ?>
+<?php } ?>
     </body>
 </html>
