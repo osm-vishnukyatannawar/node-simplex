@@ -76,8 +76,7 @@ class Maintenance {
     public $btPhoneMacAddr;
     public $numBleDevFind;
 
-    public function __construct() {
-        
+    public function __construct() {        
         $this->type = MAINTENANCE_TYPE;
         $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
         $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
@@ -134,14 +133,15 @@ class Maintenance {
         $this->bleConnectTimestamps2_tm_mon = DEFAULT_VALUES;
         $this->bleConnectTimestamps2_tm_year = DEFAULT_VALUES;
         $this->btPhoneMacAddr = [
+            "Maintenance".DEFAULT_VALUES,
             "Maintenance".DEFAULT_VALUES
         ];
         $this->numBleDevFind = 1;
     }
 
-    public function getMntceDataFormat() {
+    public function getMntceDataFormat($tagSN, $orgID) {
         
-        $baseObj = new Base();
+        $baseObj = new Base($tagSN, $orgID);
 
         $this->currentTimeStamp = (object) ['tm_sec' => $this->currentTimeStamp_tm_sec,
                     'tm_min' => $this->currentTimeStamp_tm_min,
