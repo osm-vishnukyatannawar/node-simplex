@@ -7,12 +7,9 @@ class Base {
     public $serialNum;
     
     
-    public function __construct() {
-        
-        $this->customerID = ORG_ID;
-        $this->serialNum = TAG_SN;
-        
-    }
-    
+    public function __construct($tagSN, $orgID) {        
+        $this->customerID = $orgID;
+        $this->serialNum = $tagSN;        
+    }   
 }
 

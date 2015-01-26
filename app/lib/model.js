@@ -1,6 +1,6 @@
 var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
-var cassandraDb = require(__CONFIG__.app_base_path
-        + 'lib/db-connector/cassandradb');
+var cassandraDb = require(__CONFIG__.app_base_path +
+  'lib/db-connector/cassandradb');
 
 var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
 var logger = require(__CONFIG__.app_base_path + 'logger');
@@ -41,7 +41,7 @@ Model.prototype.query = function(objQuery) {
   if (objQuery.validate === true || objQuery.validate === undefined) {
     if (!this.validator.isValid(objQuery.data)) {
       objQuery.cb(new AppError(this.getStatusCode("badRequest"),
-              "Validation error.", this.validator.getErrors()));
+        "Validation error.", this.validator.getErrors()));
       return;
     }
   }
@@ -73,8 +73,7 @@ Model.prototype.getResults = function(objQuery) {
     this.csDb.getResults(objQuery, cbProcess);
   } else {
     this.db.getResults(objQuery, cbProcess);
-  }
-  ;
+  };
 };
 
 Model.prototype.getResult = function(objQuery) {
@@ -90,9 +89,11 @@ Model.prototype.getResult = function(objQuery) {
 };
 
 Model.prototype.buildObject = function(properties, objToBind) {
-  if (!objToBind) { return; }
+  if (!objToBind) {
+    return;
+  }
   var propValue = null;
-  for ( var propertyName in properties) {
+  for (var propertyName in properties) {
     propValue = objToBind[propertyName];
     if (propValue) {
       this[propertyName] = propValue;
@@ -101,14 +102,18 @@ Model.prototype.buildObject = function(properties, objToBind) {
 };
 
 Model.prototype.validateProp = function(obj, propsToValidate) {
-  if (!this.validator.isValid(obj, propsToValidate)) { return this.validator
-          .getErrors(); }
+  if (!this.validator.isValid(obj, propsToValidate)) {
+    return this.validator
+      .getErrors();
+  }
   return false;
 };
 
 Model.prototype.validate = function(obj) {
-  if (!this.validator.isValid(obj, this.properties)) { return this.validator
-          .getErrors(); }
+  if (!this.validator.isValid(obj, this.properties)) {
+    return this.validator
+      .getErrors();
+  }
   return false;
 };
 
@@ -119,31 +124,31 @@ Model.prototype.processGridQuery = function(selectQuery) {
     // Columns
     if (this.queryModifiers.sortCol) {
       finalQueryParams.sortCol = __
-              .isEmpty(this.properties[this.queryModifiers.sortCol].dbName)
-              ? finalQueryParams.sortCol
-              : this.properties[this.queryModifiers.sortCol].dbName;
-      finalQueryParams.sortBy = __.isEmpty(this.queryModifiers.sortBy)
-              ? finalQueryParams.sortBy : this.queryModifiers.sortBy;
+        .isEmpty(this.properties[this.queryModifiers.sortCol].dbName) ?
+        finalQueryParams.sortCol : this.properties[this.queryModifiers.sortCol]
+        .dbName;
+      finalQueryParams.sortBy = __.isEmpty(this.queryModifiers.sortBy) ?
+        finalQueryParams.sortBy : this.queryModifiers.sortBy;
       finalQueryParams.sortBy = finalQueryParams.sortBy.toUpperCase();
     }
 
     // Records - Limit
     var intLimit = parseInt(this.queryModifiers.limit, 10);
 
-    finalQueryParams.limit = isNaN(intLimit) ? finalQueryParams.limit
-            : intLimit;
+    finalQueryParams.limit = isNaN(intLimit) ? finalQueryParams.limit :
+      intLimit;
     var intStart = parseInt(this.queryModifiers.startRecord, 10);
-    finalQueryParams.startRecord = isNaN(intStart)
-            ? finalQueryParams.startRecord : this.queryModifiers.startRecord;
+    finalQueryParams.startRecord = isNaN(intStart) ? finalQueryParams.startRecord :
+      this.queryModifiers.startRecord;
   }
   if (finalQueryParams.sortBy !== 'ASC' && finalQueryParams.sortBy !== 'DESC') {
     finalQueryParams.sortBy = 'ASC';
   }
 
   if (selectQuery) {
-    selectQuery += ' ORDER BY ' + finalQueryParams.sortCol + ' '
-            + finalQueryParams.sortBy + ' LIMIT '
-            + finalQueryParams.startRecord + ', ' + finalQueryParams.limit;
+    selectQuery += ' ORDER BY ' + finalQueryParams.sortCol + ' ' +
+      finalQueryParams.sortBy + ' LIMIT ' + finalQueryParams.startRecord +
+      ', ' + finalQueryParams.limit;
   }
   this.defaultSelectProps = finalQueryParams;
   return selectQuery;
@@ -166,16 +171,18 @@ Model.prototype.commitTransaction = function(transactionID, cb) {
 Model.prototype.rollbackTransaction = function(transactionID, cb) {
   this.db.rollbackTransaction(transactionID, function(err, data) {
     processError(err);
-    if(cb) {
+    if (cb) {
       return cb(err, data);
-    }    
+    }
   });
 };
 
 Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
   if (err) {
     this.rollbackTransaction(transactionID, function(rollBackErr) {
-      if (rollBackErr) { return cb(rollBackErr); }
+      if (rollBackErr) {
+        return cb(rollBackErr);
+      }
       return cb(err);
     });
     return;
@@ -186,6 +193,20 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
   }
 };
 
+/**
+ *
+ * @param objQueryDetails Information about the query to be generated
+ * @param objQueryDetails.initialQuery string Initial part of the query 
+ * @param objQueryDetails.staticData object or array Static data, data that will stay the same for all the 
+ * queries.
+ * @param objQueryDetails.staticCols array Static columns. They should be in the same order as
+ * present in the query.
+ * @param objQueryDetails.hasPrimary boolean True if there is a primary key column.
+ * @param objQueryDetails.data
+ * @param objQueryDetails.propNames
+ * @param objQueryDetails.defaultVals
+ * @returns 
+ */
 Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var initialQuery = objQueryDetails.initialQuery;
   var finalData = objQueryDetails.staticData;
@@ -195,8 +216,8 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var hasPrimaryKey = objQueryDetails.hasPrimary;
   var defaultVals = objQueryDetails.defaultVals;
   var valuesQueryArr = [];
-  var valuesQuery = ''; 
-  if(__.isArray(dataToBind)) {
+  var valuesQuery = '';
+  if (__.isArray(dataToBind)) {
     // It's an array.
     for (var i = 0, len = dataToBind.length; i < len; ++i) {
       var dynamicCols = [];
@@ -206,7 +227,7 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
         dynamicCols.push(':' + idCol);
         finalData[idCol] = uuid.v4();
       }
-  
+
       // Now adding the data itself.
       var currData = dataToBind[i];
       for (var j = 0, len2 = propNames.length; j < len2; ++j) {
@@ -214,36 +235,36 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
         dynamicCols.push(':' + currColName);
         finalData[currColName] = currData[propNames[j]];
       }
-      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
-              + ')');
+      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() +
+        ')');
     }
     valuesQuery = valuesQueryArr.join();
   } else {
     // It's an object.
-    for(var i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
+    for (var i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
       var dynamicCols = [];
-      if(hasPrimaryKey) {
+      if (hasPrimaryKey) {
         var idCol = 'id_' + i.toString();
         dynamicCols.push(':' + idCol);
         finalData[idCol] = uuid.v4();
       }
-      for(var j = 0, len2 = propNames.length; j < len2; ++j) {
+      for (var j = 0, len2 = propNames.length; j < len2; ++j) {
         var currColName = propNames[j] + '_' + i.toString();
         dynamicCols.push(':' + currColName);
-        if(dataToBind[propNames[j]] && dataToBind[propNames[j]][i]) {
+        if (dataToBind[propNames[j]] && dataToBind[propNames[j]][i]) {
           finalData[currColName] = dataToBind[propNames[j]][i];
         } else if (defaultVals[propNames[j]]) {
           finalData[currColName] = defaultVals[propNames[j]];
         } else {
           finalData[currColName] = '';
-        }        
+        }
       }
-      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join()
-              + ')');
+      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() +
+        ')');
     }
     valuesQuery = valuesQueryArr.join();
   }
-  
+
   return {
     query: initialQuery + valuesQuery + ';',
     data: finalData
@@ -253,15 +274,15 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
 Model.prototype.convertTagTimeStamp = function(timeStamp) {
   timeStamp = __.defaults(timeStamp, getDefaultTagDateObj());
   var convDate = new Date(timeStamp.tm_year, timeStamp.tm_mon,
-          timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
-          timeStamp.tm_sec, 0);
+    timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
+    timeStamp.tm_sec, 0);
   return convDate.toISOString().slice(0, 19).replace('T', ' ');
 };
 
-Model.prototype.getBcryptHash = function(stringToHash, noOfRounds, cb) {  
+Model.prototype.getBcryptHash = function(stringToHash, noOfRounds, cb) {
   bcrypt.hash(stringToHash, noOfRounds, function(err, hash) {
-      return cb(err, hash);
-  });  
+    return cb(err, hash);
+  });
 };
 
 Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
@@ -270,15 +291,15 @@ Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
   });
 };
 
-Model.prototype.readCsvFile = function(path,cb){
-	
-	this.csvHelper.readCsvHelper(path , function(err , data){
-		if(err){
-			cb(err);
-		}
-		cb(null,data);
-	});
-}
+Model.prototype.readCsvFile = function(path, cb) {
+
+  this.csvHelper.readCsvHelper(path, function(err, data) {
+    if (err) {
+      cb(err);
+    }
+    cb(null, data);
+  });
+};
 
 
 function getDefaultTagDateObj() {

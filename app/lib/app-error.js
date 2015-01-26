@@ -51,7 +51,11 @@ AppError.prototype.setAppMessage = function(message) {
 AppError.prototype.copyError = function(err, respMessage, vObj) {
   'use strict';
   this.isInternalErr = err.isInternalErr;
-  this.stack = err.stack;
+  if(this.isInternalErr) {
+	  this.stack = err.stack;
+  } else {
+	  this.status = err.status;
+  }
   this.appMessage = err.appMessage;
   if(__.isEmpty(this.appMessage)) {
     this.appMessage = respMessage;

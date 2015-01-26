@@ -6,7 +6,7 @@ require_once 'config.php'
 <html>
     <head>
         <title>
-            Maintenance Call            
+            Emanate Emulator
         </title>
         <style>
             table {
@@ -130,6 +130,11 @@ require_once 'config.php'
         <h1>Emanate Simulator</h1>
         <hr>
         <h2>Tag Info</h2>
+        <?php 
+            $tagSN = empty($_POST['tagSN']) || empty(intval($_POST['tagSN'])) ? TAG_SN : intval($_POST['tagSN']);
+            $orgID = empty($_POST['orgID']) || empty(intval($_POST['orgID']))? ORG_ID : intval($_POST['orgID']);
+        ?>
+        <form method ="POST" enctype="multipart/form-data">
         <table class="zebra">
             <thead>
                 <tr>
@@ -140,11 +145,11 @@ require_once 'config.php'
             <tbody>
                 <tr>
                     <td>Tag Serial Number</td>
-                    <td><?php echo TAG_SN ?></td>
+                    <td><input class="pure-text" type='text' value="<?php echo $tagSN ?>" name="tagSN"></td>
                 </tr>
                 <tr>
                     <td>Organization ID</td>
-                    <td><?php echo ORG_ID ?></td>
+                    <td><input class="pure-text" type='text' value="<?php echo $orgID ?>" name="orgID"></td>
                 </tr>
                 <tr>
                     <td>Default Data</td>
@@ -153,8 +158,7 @@ require_once 'config.php'
             </tbody>
         </table>
         <hr>
-        <h2>Communicator</h2>
-        <form method ="POST" enctype="multipart/form-data">
+        <h2>Communicator</h2>        
             <input class="pure-text" type="text" value = "1" name="callsNmber" placeholder="Number of calls">
             <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="1">
             <button class="pure-button" type="submit" name="submit" onclick="changeDataType(this.value)" value="1">Maintenance</button>
@@ -174,7 +178,7 @@ require_once 'config.php'
 
         $allOutput = array();
         if (isset($_POST['submit'])) {
-            $ch = curl_init('http://10.0.0.15:3000/api/v1/tag/maintenance/');
+            $ch = curl_init('http://localhost:3000/api/v1/tag/maintenance/');
 
             function sendRequiredData($dataToSend) {
                 global $ch;
@@ -193,6 +197,9 @@ require_once 'config.php'
                     $resultObj = json_decode($resultObj);
                     $respObj->status = $resultObj->status;
                     $respObj->data = $resultObj->data;
+                    if(!empty($resultObj->message)) {
+                        $respObj->message = $resultObj->message;
+                    }
                 } catch (Exception $ex) {
                     $respObj->status = 'Error';
                     $respObj->status = 'There was an error while parsing the data.';
@@ -201,10 +208,11 @@ require_once 'config.php'
             }
 
             function sendDataBasedOnDataType($dataType) {
+                global $tagSN, $orgID;
                 switch ($dataType) {
                     case 1 :
                         $mainObj = new Maintenance();
-                        $mntnceData = json_encode($mainObj->getMntceDataFormat());
+                        $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
                         $finalResult = sendRequiredData($mntnceData);
                         break;
                     case 2 :
@@ -237,9 +245,9 @@ require_once 'config.php'
             if ($nmbrOfCalls > 0) {
                 for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                     $finalResult = sendDataBasedOnDataType($type);
-                    foreach ($finalResult['data'] AS $key => $value) {
+                    /*foreach ($finalResult['data'] AS $key => $value) {
                         sendDataBasedOnDataType($key);
-                    }
+                    }*/
                 }
             } else {
                 $finalResult = sendDataBasedOnDataType($type);
@@ -259,6 +267,9 @@ require_once 'config.php'
                     <li><strong>HTTP</strong> : <?php echo $output->statusCode ?></li>
                     <li><strong>Status</strong> : <?php echo $output->status ?></li>
                     <li><strong>Data</strong> : <?php echo json_encode($output->data) ?></li>
+                    <?php if(!empty($output->message)) { ?>
+                        <li><strong>Message</strong> : <?php echo $output->message ?></li>
+                    <?php } ?>
                 </ul>                
                 <?php ++$i;
             } ?>
