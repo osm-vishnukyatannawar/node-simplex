@@ -58,7 +58,7 @@ class TagInfo {
         $this->configTime_tm_year = DEFAULT_VALUES;
     }
 
-    public function getTagInfoDataFormat() {
+    public function getTagInfoDataFormat($tagSN, $orgID) {
 
         $baseObj = new Base($tagSN, $orgID);
         
