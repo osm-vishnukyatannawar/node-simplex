@@ -16,5 +16,6 @@
 	"users.no-user-org": "No user found with that organization ID.",
 	"users.invalid-creds": "Your username and password are incorrect.",
 	"users.invalid-uuid": "Please send a valid UUID v4.",
-	"tags.failed-set-errorflag": "tags.failed-set-errorflag"
+	"tags.failed-set-errorflag": "tags.failed-set-errorflag",
+	"tags.failed-set-processedflag": "tags.failed-set-processedflag"
 }

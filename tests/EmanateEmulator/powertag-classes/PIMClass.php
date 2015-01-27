@@ -86,9 +86,9 @@ class PIM {
         $this->PimData2_stdDev = DEFAULT_VALUES;
     }
 
-    public function getPIMDataFormat() {
+    public function getPIMDataFormat($tagSN, $orgID) {
 
-        $baseObj = new Base();
+        $baseObj = new Base($tagSN, $orgID);
         
         $this->PlugInTimeStamp1 = (object) ['tm_sec' => $this->PimData1_plugInTimeStamp_tm_sec,
                     'tm_min' => $this->PimData1_plugInTimeStamp_tm_min,

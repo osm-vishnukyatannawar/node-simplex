@@ -1,7 +1,8 @@
 <?php
 //ini_set('error_reporting', 1);
 set_time_limit(0);
-require_once 'config.php'
+require_once 'config.php';
+require_once 'ws-call.php';
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -125,7 +126,7 @@ require_once 'config.php'
     <body>
         <script type="text/javascript">
             function changeDataType(value) {
-              document.getElementById('hdnDataType').value = value;
+                document.getElementById('hdnDataType').value = value;
             }
         </script>
         <h1>Emanate Simulator</h1>
@@ -178,68 +179,44 @@ require_once 'config.php'
         require_once 'response.php';
 
         $allOutput = array();
-        if (isset($_POST['submit'])) {
-            $ch = curl_init('http://localhost:3000/api/v1/tag/maintenance/');
-
-            function sendRequiredData($dataToSend) {
-                global $ch;
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataToSend);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 45);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Content-Type: application/json',
-                    'Content-Length: ' . strlen($dataToSend))
-                );
-                sleep(1);
-                $resultObj = curl_exec($ch);
-                $respObj = new Response();
-                $respObj->statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                try {
-                    $resultObj = json_decode($resultObj);
-                    $respObj->status = $resultObj->status;
-                    $respObj->data = $resultObj->data;
-                    if (!empty($resultObj->message)) {
-                        $respObj->message = $resultObj->message;
-                    }
-                } catch (Exception $ex) {
-                    $respObj->status = 'Error';
-                    $respObj->status = 'There was an error while parsing the data.';
-                }
-                return $respObj;
-            }
-
-            function sendDataBasedOnDataType($dataType) {
+        if (isset($_POST['submit'])) {            
+            function sendDataBasedOnDataType($dataType, $url = NULL) {
                 global $tagSN, $orgID;
+                $finalResult = false;
                 switch ($dataType) {
                     case MAINTENANCE_TYPE :
                         $mainObj = new Maintenance();
                         $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
-                        $finalResult = sendRequiredData($mntnceData);
+                        $finalResult = makeCallToMaintURL($mntnceData);
                         break;
                     case HISTOGRAM_TYPE :
                         $histogramObj = new Histogram();
                         $histogramData = json_encode($histogramObj->getHistogramDataFormat());
-                        $finalResult = sendRequiredData($histogramData);
+                        $finalResult = makeCallToMaintURL($histogramData);
                         break;
                     case PIM_TYPE :
                         $pimObj = new PIM();
-                        $pimData = json_encode($pimObj->getPIMDataFormat());
-                        $finalResult = sendRequiredData($pimData);
+                        $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
+                        $finalResult = makeCallToMaintURL($pimData);
                         break;
                     case CURRENT_TYPE :
                         $currentObj = new Current();
                         $currentData = json_encode($currentObj->getCurrentDataFormat());
-                        $finalResult = sendRequiredData($currentData);
+                        $finalResult = makeCallToMaintURL($currentData);
                         break;
                     case TAGINFO_TYPE :
                         $tagObj = new TagInfo();
-                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat());
-                        $finalResult = sendRequiredData($tagInfoData);
+                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
+                        $finalResult = makeCallToMaintURL($tagInfoData);
                         break;
-                }
-                global $allOutput;
-                $allOutput[] = $finalResult;
+                    case POWERPATH_UPDATE_CONFIG_PARAM :
+                        $finalResult = makeGETRequest($url);
+                        break;
+                }                
+                if($finalResult) {
+                    global $allOutput;
+                    $allOutput[] = $finalResult;
+                }                
                 return $finalResult;
             }
 
@@ -252,7 +229,7 @@ require_once 'config.php'
                     if (intval($type) === MAINTENANCE_TYPE) {
                         if (!empty($respObj->data)) {
                             foreach ($respObj->data AS $key => $value) {
-                                sendDataBasedOnDataType(intval($key));
+                                sendDataBasedOnDataType(intval($key), $value);
                             }
                         }
                     }
@@ -276,7 +253,7 @@ require_once 'config.php'
                         <hr>
                     <li><strong>HTTP</strong> : <?php echo $output->statusCode ?></li>
                     <li><strong>Status</strong> : <?php echo $output->status ?></li>
-                    <li><strong>Data</strong> : <?php echo json_encode($output->data) ?></li>
+                    <li><strong>Data</strong> : <pre><?php echo json_encode($output->data, JSON_PRETTY_PRINT) ?></pre></li>
                     <?php if (!empty($output->message)) { ?>
                         <li><strong>Message</strong> : <?php echo $output->message ?></li>
                     <?php } ?>
@@ -285,6 +262,6 @@ require_once 'config.php'
                 ++$i;
             }
             ?>
-<?php } ?>
+        <?php } ?>
     </body>
 </html>

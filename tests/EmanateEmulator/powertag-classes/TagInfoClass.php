@@ -60,7 +60,7 @@ class TagInfo {
 
     public function getTagInfoDataFormat() {
 
-        $baseObj = new Base();
+        $baseObj = new Base($tagSN, $orgID);
         
         $this->factoryTestTime = (object) ['tm_sec' => $this->factoryTestTime_tm_sec,
                     'tm_min' => $this->factoryTestTime_tm_min,
