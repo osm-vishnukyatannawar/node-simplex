@@ -69,4 +69,35 @@ Controller.prototype.determineSuccess = function(data) {
   this.success.statusCode = this.getStatusCode('success');
 };
 
+Controller.prototype.download = function(response , fileNameToShow , folderPath, fileToDownload){
+	var that = this;
+	response.attachment(fileNameToShow);
+    var options = {
+      root: folderPath,
+      dotfiles: 'deny',
+      headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+      }
+    };
+    response.sendFile(fileToDownload,
+      options,
+      function(err) {
+        if (err) {
+        	that.sendResponse(err,null,response);
+        }
+      });
+};
+Controller.prototype.getDateStamp = function(){
+	var d = new Date();
+    var year = d.getFullYear();
+    var date = d.getDate();
+    var month = d.getMonth()+1;
+    var hours = d.getHours();
+    var mins = d.getMinutes();
+    var dateString = year+''+month+''+date+'_'+hours+mins+'_';
+    return dateString;
+};
+
+
 module.exports = Controller;

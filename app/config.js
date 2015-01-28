@@ -78,11 +78,14 @@ global.__CONFIG__ = {
   'calibration': {
     'allRecordsCsvFileName': 'allRows.csv',
     'failureRecordsFileName': 'failureRecords.csv',
-    'exportCsvFileDownloadName': 'EmanateDevices.csv',
+    'exportCsvFileDownloadName': 'PowerPathDevices.csv',
     'unExportedLogFileName': 'UnexportedDevicesLog.csv'
   },
+  'pim' : {
+	  'pimCsvFileName' : 'PowerPathPIM.csv'
+  },
   'tags': {
-    'tagsCsvFileName': 'EmanateTags.csv'
+    'tagsCsvFileName': 'PowerPathTags.csv'
   },
   'lookup': {
     'powerPathAssetType': 'powerPathAssetType'
@@ -106,6 +109,6 @@ __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CO
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: 'localhost',
   isProduction: PRODUCTION
 };
