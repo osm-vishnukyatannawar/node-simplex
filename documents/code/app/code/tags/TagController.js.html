@@ -47,8 +47,9 @@
 <span class="kd">function</span> <span class="nx">TagController</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">Controller</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">sTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TagService</span><span class="p">();</span>
-  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;tag/config&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;tag/:id/:org/config&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getConfig</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">true</span><span class="p">);</span>
   <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;tag/:id&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getTag</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpPost</span><span class="p">(</span><span class="s1">&#39;upload&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getFile</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -68,8 +69,8 @@
 
 <span class="nx">TagController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getConfig</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">sn</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">orgID</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sn</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">orgID</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">org</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">sTag</span><span class="p">.</span><span class="nx">getTagConfig</span><span class="p">(</span><span class="nx">sn</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
   <span class="p">});</span>
@@ -93,6 +94,23 @@
   <span class="k">this</span><span class="p">.</span><span class="nx">sTag</span><span class="p">.</span><span class="nx">getTagWithId</span><span class="p">(</span><span class="nx">id</span> <span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span> <span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
   <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">,</span><span class="nx">response</span><span class="p">);</span>
   <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">TagController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span> <span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>this.sTag.uploadFile();</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="p">};</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">TagController</span><span class="p">;</span>

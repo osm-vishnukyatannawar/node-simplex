@@ -11,7 +11,6 @@
     "datatables" : "1.10.4",
     "Chart.js" : "1.0.1-beta.4",
     "bootstrap-vertical-tabs" : "1.2.1",
-    "ng-file-upload" : "2.0.5",
-    "jquery.fileDownload": "1.4.2"
+    "ng-file-upload" : "2.0.5"    
   }
 }

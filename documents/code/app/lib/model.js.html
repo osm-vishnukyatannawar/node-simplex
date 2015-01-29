@@ -53,11 +53,14 @@
 <span class="kd">var</span> <span class="nx">utility</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/utility&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">mailer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/mailer&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">validator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/validator&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">csv</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/csvHelper&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">zip</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/zipper&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">bcrypt</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bcrypt&#39;</span><span class="p">);</span>
+
 
 <span class="kd">function</span> <span class="nx">Model</span><span class="p">(</span><span class="nx">mProperties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">queryModifiers</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">config</span> <span class="o">=</span> <span class="nx">dbConfig</span><span class="p">[</span><span class="s1">&#39;mariadb&#39;</span><span class="p">];</span>
@@ -71,6 +74,7 @@
   <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span> <span class="o">=</span> <span class="nx">utility</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="p">{};</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">mailer</span> <span class="o">=</span> <span class="nx">mailer</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">csvHelper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">csv</span><span class="p">();</span>
 <span class="p">}</span>
 
 <span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">query</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">)</span> <span class="p">{</span>
@@ -372,6 +376,16 @@
     <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">readCsvFile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="nx">cb</span><span class="p">){</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">csvHelper</span><span class="p">.</span><span class="nx">readCsvHelper</span><span class="p">(</span><span class="nx">path</span> <span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span> <span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
 
 
 <span class="kd">function</span> <span class="nx">getDefaultTagDateObj</span><span class="p">()</span> <span class="p">{</span>

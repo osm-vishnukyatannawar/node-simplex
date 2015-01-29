@@ -44,9 +44,13 @@
         <span class="o">+</span> <span class="s1">&#39;authorization/Authorization&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">Controller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/controller&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">S</span> <span class="o">=</span>  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;i18n&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;i18n&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">appObj</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">api</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">appObj</span> <span class="o">=</span> <span class="nx">app</span><span class="p">;</span>
   <span class="nx">i18n</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span>
     <span class="nx">locales</span> <span class="o">:</span> <span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">],</span>
     <span class="nx">defaultLocale</span><span class="o">:</span> <span class="s1">&#39;en&#39;</span><span class="p">,</span>
@@ -71,8 +75,9 @@
   <span class="kd">var</span> <span class="nx">ObjController</span><span class="p">;</span>
   <span class="p">[</span><span class="s1">&#39;organization/OrganizationController&#39;</span><span class="p">,</span> <span class="s1">&#39;users/UserController&#39;</span><span class="p">,</span>
       <span class="s1">&#39;roles/RoleController&#39;</span><span class="p">,</span><span class="s1">&#39;countries/CountryController&#39;</span><span class="p">,</span><span class="s1">&#39;tags/TagController&#39;</span><span class="p">,</span> <span class="s1">&#39;pim/PIMController&#39;</span><span class="p">,</span> 
-      <span class="s1">&#39;maintenance/MaintenanceController&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram/HistogramController&#39;</span><span class="p">,</span> 
-      <span class="s1">&#39;current/CurrentController&#39;</span><span class="p">].</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">routePath</span><span class="p">)</span> <span class="p">{</span>
+      <span class="s1">&#39;maintenance/MaintenanceController&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram/HistogramController&#39;</span> <span class="p">,</span> <span class="s1">&#39;devices/DevicesController&#39;</span><span class="p">,</span> 
+      <span class="s1">&#39;current/CurrentController&#39;</span> <span class="p">,</span> <span class="s1">&#39;firmware/FirmwareController&#39;</span><span class="p">,</span> <span class="s1">&#39;deployment/DeploymentController&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;report_problem/ReportProblemController&#39;</span><span class="p">,</span> <span class="s1">&#39;log/LogController&#39;</span><span class="p">].</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">routePath</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">ObjController</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="nx">routePath</span><span class="p">);</span>
     <span class="k">new</span> <span class="nx">ObjController</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
   <span class="p">});</span>
@@ -81,13 +86,24 @@
 <span class="nx">api</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">authObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Authorization</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">cntrlObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Controller</span><span class="p">();</span>
+  
   <span class="nx">authObj</span><span class="p">.</span><span class="nx">checkValidity</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">cntrlObj</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">request</span><span class="p">.</span><span class="nx">currToken</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
       <span class="nx">next</span><span class="p">();</span>
     <span class="p">}</span>
   <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">api</span><span class="p">.</span><span class="nx">checkIfAdmin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">currToken</span><span class="p">.</span><span class="nx">isAdmin</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cntrlObj</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">getStatus</span><span class="p">(</span><span class="s1">&#39;noPermission&#39;</span><span class="p">),</span> 
+            <span class="s1">&#39;You do not have permissions to access that URL&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+  <span class="p">}</span>
 <span class="p">};</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">api</span><span class="p">;</span>

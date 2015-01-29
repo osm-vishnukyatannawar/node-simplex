@@ -72,6 +72,10 @@
     <span class="p">}</span>    
     <span class="nx">dt</span><span class="p">.</span><span class="nx">setHours</span><span class="p">(</span><span class="nx">dt</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span> <span class="o">+</span> <span class="nx">hoursToAdd</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">dt</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">UTCToCurrentTime</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="nx">dt</span><span class="p">.</span><span class="nx">toLocaleString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; UTC&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">};</span>
 

@@ -81,7 +81,7 @@
     <span class="nx">transactionID</span> <span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
     <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span>
       <span class="p">}</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
         <span class="nx">currentDataID</span> <span class="o">:</span> <span class="nx">currentData</span><span class="p">.</span><span class="nx">id</span>
@@ -102,7 +102,7 @@
     <span class="nx">data</span> <span class="o">:</span> <span class="nx">queryObj</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
     <span class="nx">transactionID</span> <span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
     <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span> <span class="p">}</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="nx">data</span><span class="p">.</span><span class="nx">affectedRows</span><span class="p">)</span> <span class="p">{</span>
           <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
             <span class="nx">success</span> <span class="o">:</span> <span class="kc">true</span>          
@@ -121,7 +121,7 @@
       <span class="o">+</span> <span class="s1">&#39; VALUES &#39;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">finalData</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">currentDataID</span><span class="o">:</span> <span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">currentDataID</span><span class="p">,</span>
+        <span class="nx">currentDataID</span><span class="o">:</span> <span class="nx">currentDataUtil</span><span class="p">.</span><span class="nx">currentDataID</span><span class="p">,</span>
       <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
       <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;NodeJS&#39;</span>
     <span class="p">};</span>
@@ -153,10 +153,14 @@
 
 <span class="nx">CurrentData</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultCurrentData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">timeNow</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+  
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
     <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;Node JS&#39;</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span><span class="p">,</span>
+    <span class="nx">startTimestamp</span><span class="o">:</span> <span class="nx">timeNow</span><span class="p">,</span>
+    <span class="nx">numSamples</span><span class="o">:</span> <span class="mi">0</span>
   <span class="p">};</span>
 <span class="p">};</span>
 
@@ -165,7 +169,10 @@
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
     <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
-    <span class="nx">createdBy</span><span class="o">:</span> <span class="s1">&#39;Node JS&#39;</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span><span class="p">,</span>
+    <span class="nx">currentRms</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">utilVal</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">usageState</span><span class="o">:</span> <span class="mi">99</span>
   <span class="p">};</span>
 <span class="p">};</span>
 

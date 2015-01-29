@@ -39,8 +39,13 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;OrganizationService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">function</span> <span class="nx">getOrganizationsByUserID</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;OrganizationController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$document</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">,</span>
+    <span class="nx">OrganizationsService</span><span class="p">)</span> <span class="p">{</span>
+  
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;OrganizationService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">getOrganizationsByUserID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
       <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;user/&#39;</span> <span class="o">+</span> <span class="nx">userID</span> <span class="o">+</span> <span class="s1">&#39;/organization/&#39;</span>
@@ -56,10 +61,56 @@
     <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">}</span>
-
+  <span class="p">};</span>
+  
+  <span class="kd">var</span> <span class="nx">getAllOrganizationsForUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userID</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span><span class="o">+</span><span class="s1">&#39;user/&#39;</span><span class="o">+</span><span class="nx">userID</span><span class="o">+</span><span class="s1">&#39;/organizations&#39;</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cbProcess</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  
+  <span class="kd">var</span> <span class="nx">getOrganizationByID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">organizationID</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span><span class="o">+</span><span class="s1">&#39;organization/&#39;</span><span class="o">+</span><span class="nx">organizationID</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cbProcess</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  
   <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">getOrganizationByUser</span><span class="o">:</span> <span class="nx">getOrganizationsByUser</span>
+    <span class="nx">getOrganizationsByUserID</span><span class="o">:</span> <span class="nx">getOrganizationsByUserID</span><span class="p">,</span>
+    <span class="nx">getAllOrganizationsForUser</span><span class="o">:</span> <span class="nx">getAllOrganizationsForUser</span><span class="p">,</span>
+    <span class="nx">getOrganizationByID</span><span class="o">:</span> <span class="nx">getOrganizationByID</span>
   <span class="p">};</span>
 <span class="p">});</span>
 </pre></div>

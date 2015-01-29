@@ -67,15 +67,17 @@
 <span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Histogram</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
 
 <span class="nx">Histogram</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertHistogramData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span> 
-  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO tag_hist_data (`tag_hist_data_recid`,`cassandra_dump_rec_id`, `tag_srno`, &#39;</span> 
-    <span class="o">+</span> <span class="s1">&#39;`organization_id`, `start_timestamp`,  `hist_data`, `created_on`, `created_by`) &#39;</span>
-    <span class="o">+</span> <span class="s1">&#39; VALUES(:id, :dmpRecID,:tagSN, :organizationID, :startTimestamp, :histData, :createdOn, :createdBy);&#39;</span><span class="p">;</span>  
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO emanate.tag_hist_data (tag_hist_data_recid,cassandra_dump_rec_id, tag_srno, &#39;</span> 
+    <span class="o">+</span> <span class="s1">&#39;organization_id, tag_hist_json, created_on, created_by)&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; VALUES(:id, :dmpRecID,:tagSN, :organizationID, :histData, :createdOn, :createdBy);&#39;</span><span class="p">;</span>  
   <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
-    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
-    <span class="nx">data</span> <span class="o">:</span> <span class="nx">histogramData</span><span class="p">,</span> 
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>  
+    <span class="nx">data</span> <span class="o">:</span> <span class="p">[</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">histogramData</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">,</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">,</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">strData</span><span class="p">,</span>
+            <span class="nx">histogramData</span><span class="p">.</span><span class="nx">createdOn</span><span class="p">,</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">createdBy</span><span class="p">],</span>
+    <span class="nx">isCassandra</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span>
       <span class="p">}</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
         <span class="nx">histogramID</span> <span class="o">:</span> <span class="nx">histogramData</span><span class="p">.</span><span class="nx">id</span>
@@ -96,14 +98,14 @@
 <span class="p">};</span>
 
 <span class="nx">Histogram</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultHistogramData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
     <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>    
     <span class="nx">dmpRecID</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
     <span class="nx">organizationID</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
     <span class="nx">tagSN</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="nx">createdBy</span> <span class="o">:</span> <span class="s1">&#39;NodeJS&#39;</span>
+    <span class="nx">createdBy</span> <span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span>
   <span class="p">};</span>
 <span class="p">};</span>
 

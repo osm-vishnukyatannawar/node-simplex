@@ -68,18 +68,21 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="kd">var</span> <span class="nx">mHistogram</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Histogram</span><span class="p">();</span>  
-  
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
   <span class="nx">histogramData</span><span class="p">.</span><span class="nx">startTimestamp</span> <span class="o">=</span> <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">startTimeStamp</span><span class="p">);</span>
   <span class="nx">histogramData</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span> <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">getDefaultHistogramData</span><span class="p">());</span>
-  <span class="nx">histogramData</span><span class="p">.</span><span class="nx">createdOn</span> <span class="o">=</span> <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
   <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">insertHistogramData</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">};</span>
 
 <span class="nx">HistogramService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllHistoData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">mHistorgram</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Histogram</span><span class="p">();</span>
-  <span class="nx">mHistorgram</span><span class="p">.</span><span class="nx">getHistogramData</span><span class="p">(</span><span class="nx">cb</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">mHistogram</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Histogram</span><span class="p">();</span>
+  <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">getHistogramData</span><span class="p">(</span><span class="nx">cb</span><span class="p">);</span>
 <span class="p">};</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">HistogramService</span><span class="p">;</span>

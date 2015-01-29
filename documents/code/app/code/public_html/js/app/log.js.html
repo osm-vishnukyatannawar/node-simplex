@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>log.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/log.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>log.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;LogController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$document</span><span class="p">,</span> <span class="nx">LogService</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="kd">var</span> <span class="nx">$jqxLogs</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  
+  <span class="kd">var</span> <span class="nx">logsGridClass</span> <span class="o">=</span> <span class="p">{};</span>
+  
+  <span class="kd">var</span> <span class="nx">logsGridConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Username&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">},{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Log type&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;logType&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">},{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Log Description&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;logDescription&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">300</span>
+        <span class="p">},</span> <span class="p">{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Created on&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;createdOn&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">},{</span>
+          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Log Id&#39;</span><span class="p">,</span>
+          <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;LogID&#39;</span><span class="p">,</span>
+          <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+          <span class="nx">hidden</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">}]</span>  
+  <span class="p">};</span>
+  
+  <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    
+    <span class="nx">$jqxLogs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#43_dvLog&#39;</span><span class="p">);</span>
+    
+    <span class="nx">logsGridClass</span> <span class="o">=</span> <span class="nx">getInitializedGrid</span><span class="p">({</span>
+        <span class="nx">config</span><span class="o">:</span> <span class="nx">logsGridConfig</span><span class="p">,</span>
+        <span class="nx">element</span><span class="o">:</span> <span class="nx">$jqxLogs</span><span class="p">,</span>
+        <span class="nx">ddlColContainer</span><span class="o">:</span> <span class="s1">&#39;#logGridColContainer&#39;</span><span class="p">,</span>
+        <span class="nx">ngScope</span><span class="o">:</span> <span class="nx">$scope</span>
+      <span class="p">});</span>
+    
+    <span class="nx">logsGridClass</span><span class="p">.</span><span class="nx">initializeGrid</span><span class="p">();</span>
+    
+    <span class="nx">LogService</span><span class="p">.</span><span class="nx">getLogTypes</span><span class="p">(</span><span class="nx">bindLogs</span><span class="p">);</span>
+    
+    <span class="kd">function</span> <span class="nx">bindLogs</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">logs</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">logType</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span><span class="p">;</span>
+    <span class="nx">LogService</span><span class="p">.</span><span class="nx">getLogsBasedOnType</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">logType</span><span class="p">,</span> <span class="nx">logsGridClass</span><span class="p">.</span><span class="nx">refreshGridData</span><span class="p">);</span>
+    
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">filterLog</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">LogService</span><span class="p">.</span><span class="nx">getLogsBasedOnType</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">logType</span><span class="p">,</span> <span class="nx">logsGridClass</span><span class="p">.</span><span class="nx">refreshGridData</span><span class="p">);</span>
+    <span class="p">};</span>
+    
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;LogService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  
+  <span class="kd">var</span> <span class="nx">getLogsBasedOnType</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">logType</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span><span class="o">+</span><span class="s1">&#39;log/&#39;</span><span class="o">+</span> <span class="nx">logType</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cbProcess</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  
+  <span class="kd">var</span> <span class="nx">getLogTypes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbProcess</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span><span class="o">+</span><span class="s1">&#39;logTypes/&#39;</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+    
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">getLogsBasedOnType</span><span class="o">:</span> <span class="nx">getLogsBasedOnType</span><span class="p">,</span>
+    <span class="nx">getLogTypes</span><span class="o">:</span> <span class="nx">getLogTypes</span>
+  <span class="p">}</span>
+  
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

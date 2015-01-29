@@ -39,7 +39,7 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;OrganizationService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;DeploymentService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
   <span class="kd">function</span> <span class="nx">getDeployments</span><span class="p">(</span><span class="nx">organizationId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;organization/&#39;</span> <span class="o">+</span> <span class="nx">organizationId</span>
@@ -49,10 +49,21 @@
           <span class="nx">callback</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
         <span class="p">}</span>
       <span class="p">});</span>
-    <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="kd">function</span> <span class="nx">getCurrentDeployment</span><span class="p">(</span><span class="nx">deploymentId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;deployment/&#39;</span> <span class="o">+</span> <span class="nx">deploymentId</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+  <span class="p">}</span>
   
   <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">getDeployments</span> <span class="o">:</span> <span class="nx">getDeployments</span>
+    <span class="nx">getDeployments</span> <span class="o">:</span> <span class="nx">getDeployments</span><span class="p">,</span>
+    <span class="nx">getCurrentDeployment</span> <span class="o">:</span> <span class="nx">getCurrentDeployment</span>
   <span class="p">};</span>
 <span class="p">});</span>
 </pre></div>

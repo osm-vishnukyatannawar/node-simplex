@@ -20,6 +20,9 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h2">
+        <a href="#creates%20a%20tag">Creates a tag</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -43,7 +46,9 @@
 <span class="kd">var</span> <span class="nx">Tag</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;tags/Tag&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">MaintProcPath</span> <span class="o">=</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;cmd_console/maint-proc.js&#39;</span><span class="p">;</span>
-
+<span class="kd">var</span> <span class="nx">TagServiceHelper</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span>
+  <span class="s1">&#39;tags/TagServiceHelper&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Organization</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;organization/Organization&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
@@ -54,23 +59,8 @@
 
 <span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">TagService</span><span class="p">,</span> <span class="nx">Service</span><span class="p">);</span>
 
-<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagConfig</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
-  <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagConfig</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">};</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">TagService</span><span class="p">;</span>
 
-<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagWithId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
-      <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagById</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-    <span class="p">});</span>
-  <span class="p">};</span>
-
-
-
-<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processTagInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -80,17 +70,16 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
-<p>TODO : Any validations?</p>
+<p><a href='https://coderwall.com/p/myzvmg/circular-dependencies-in-node-js'>https://coderwall.com/p/myzvmg/circular-dependencies-in-node-js</a></p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;dmpRecID&#39;</span><span class="p">))</span> <span class="p">{</span>
-      <span class="nx">tagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-      <span class="k">delete</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">tagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span><span class="nx">mTag</span><span class="p">.</span><span class="nx">getDefaultTagInfo</span><span class="p">());</span>
-    <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">factoryTestTime</span> <span class="o">=</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">factoryTestTime</span><span class="p">);</span>
-    <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">configTime</span> <span class="o">=</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">configTime</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">PendingEventService</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;pending_events/PendingEventService&#39;</span><span class="p">);</span>
+
+<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagConfig</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
+
+  <span class="nx">async</span><span class="p">.</span><span class="nx">parallel</span><span class="p">({</span>
+    <span class="nx">main</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -100,37 +89,235 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
-<div class="dox">
-  <div class="summary"><p>if (!this.validator.isUUID4(userID)) { return cb(new AppError(this
-.getStatusCode('badRequest'), i18n.<strong>('users.invalid-uuid'), {
-userID: i18n.</strong>('users.invalid-uuid')
-})); }   </p>
+<p>Get the details from the tag_config_params table</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagConfig</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">secondary</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>Get the details from other tables linked to tag_config_params table</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagConfigSecondaryDetails</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>format the tag configuration details JSON as required by the tag</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">TagServiceHelper</span><span class="p">.</span><span class="nx">formatTagConfigDetails</span><span class="p">(</span><span class="nx">results</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getTagWithId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
+  <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagById</span><span class="p">(</span><span class="nx">serialNum</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processTagInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>TODO : Any validations?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;dmpRecID&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">tagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">tagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">getDefaultTagInfo</span><span class="p">());</span>
+  <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">factoryTestTime</span> <span class="o">=</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">factoryTestTime</span><span class="p">);</span>
+  <span class="nx">tagInfo</span><span class="p">.</span><span class="nx">configTime</span> <span class="o">=</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">configTime</span><span class="p">);</span>
+  <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagByTagSN</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">mTag</span><span class="p">.</span><span class="nx">insertTagInfo</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+        <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">updatedTagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+        <span class="nx">mTag</span><span class="p">.</span><span class="nx">updateTagInfo</span><span class="p">(</span><span class="nx">updatedTagInfo</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+      <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkIfTagBelongsToOrg</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">,</span> <span class="nx">orgID</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">)</span> <span class="o">||</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">orgID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> 
+            <span class="s1">&#39;Please provide the tag serial number and the organization ID.&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">belongsToOrg</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">exists</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagOrgID</span><span class="p">(</span><span class="nx">tagSN</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">data</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">exists</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">data</span> <span class="o">===</span> <span class="nx">orgID</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">exists</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">belongsToOrg</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">exists</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">belongsToOrg</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">exists</span> <span class="o">:</span> <span class="nx">exists</span><span class="p">,</span>
+      <span class="nx">belongsToOrg</span> <span class="o">:</span> <span class="nx">belongsToOrg</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="creates%20a%20tag">
+  <h2>
+    <a href="#creates%20a%20tag" name="creates%20a%20tag" class="pilcrow">&#182;</a>
+    Creates a tag
+  </h2>
+</div>
+
   </div>
-  <div class="body">
+  <div class="body"><p>Creates a tag if it doesn't exist, during the maintenance call.</p>
+
+<ol>
+<li>Checks if the organization ID is present. If organization is not present, 
+does no further processing.</li>
+<li>Check if the tag belongs to the organization. If the tag exists, or belongs to 
+another organization an error message is sent to the caller.</li>
+<li>Creates a new tag.</li>
+<li>Creates a tag info pending event.</li>
+</ol>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">serviceObj</span>
+      <span>serviceObj containing the tag maintenance data</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cntrlCb</span>
+      <span>Callback function</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span>null</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">mTag</span><span class="p">.</span><span class="nx">getTagByTagSN</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
-          <span class="nx">mTag</span><span class="p">.</span><span class="nx">insertTagInfo</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-              <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-          <span class="p">});</span>  
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">updatedTagInfo</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">tagInfo</span><span class="p">,</span><span class="nx">data</span><span class="p">);</span>
-          <span class="nx">mTag</span><span class="p">.</span><span class="nx">updateTagInfo</span><span class="p">(</span><span class="nx">updatedTagInfo</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-              <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-          <span class="p">});</span>  
-        <span class="p">}</span>
-        <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="kc">null</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">});</span>
-<span class="p">};</span>
+<span class="nx">TagService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createNewTagViaMaint</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">serviceObj</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">serviceObj</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">)</span> <span class="o">||</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> 
+            <span class="s1">&#39;Please provide the tag serial number and the organization ID.&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">mOrg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Organization</span><span class="p">();</span>  
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span><span class="kd">function</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">mOrg</span><span class="p">.</span><span class="nx">checkIfOrgExists</span><span class="p">(</span><span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">orgRecID</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">orgRecID</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">next</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> 
+              <span class="s1">&#39;The organization with the given ID does not exists&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+    <span class="p">}</span>
+    <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationRecID</span> <span class="o">=</span> <span class="nx">orgRecID</span><span class="p">;</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">checkIfTagBelongsToOrg</span><span class="p">(</span><span class="nx">serviceObj</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">existsObj</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">exists</span> <span class="o">=</span>  <span class="nx">existsObj</span><span class="p">.</span><span class="nx">exists</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">belongsToOrg</span> <span class="o">=</span> <span class="nx">existsObj</span><span class="p">.</span><span class="nx">belongsToOrg</span><span class="p">;</span>      
+    <span class="k">if</span><span class="p">(</span><span class="nx">exists</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">belongsToOrg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;The tag is already present but belongs to a different organization.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">exists</span><span class="p">){</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span> <span class="s1">&#39;The tag is already present.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">mTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tag</span><span class="p">();</span>
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">TagService</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>Now inserting a new tag.    </p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">var</span> <span class="nx">tagObj</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">({</span>
+      <span class="nx">tagSN</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span>
+      <span class="nx">organizationID</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">,</span>
+      <span class="nx">dmpRecID</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">,</span>
+      <span class="nx">nearestAPMacAddr</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">nearestAPMACAddr</span><span class="p">,</span>
+      <span class="nx">nearestAPRSSIdBm</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">nearestAPRSSIdBm</span><span class="p">,</span>
+      <span class="nx">organizationRecID</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationRecID</span>
+    <span class="p">},</span> <span class="nx">mTag</span><span class="p">.</span><span class="nx">getDefaultMaintInsertObj</span><span class="p">());</span>    
+    
+    <span class="nx">mTag</span><span class="p">.</span><span class="nx">createNewTagViaMaint</span><span class="p">(</span><span class="nx">tagObj</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Now creating the tag info pending event...</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">var</span> <span class="nx">sPendingEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PendingEventService</span><span class="p">();</span>  
+    <span class="kd">var</span> <span class="nx">eventObj</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">tagSN</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">,</span>
+      <span class="nx">organizationID</span> <span class="o">:</span> <span class="nx">serviceObj</span><span class="p">.</span><span class="nx">organizationID</span>
+    <span class="p">};</span>
+    <span class="nx">sPendingEvent</span><span class="p">.</span><span class="nx">insertTagInfoEvent</span><span class="p">(</span><span class="nx">eventObj</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+  <span class="p">}],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
 </pre></div>
         </td>
       </tr>

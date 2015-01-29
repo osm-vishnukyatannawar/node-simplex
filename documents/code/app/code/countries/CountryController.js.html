@@ -46,7 +46,7 @@
 
 <span class="kd">function</span> <span class="nx">CountryController</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">Controller</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-  <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_url</span> <span class="o">+</span> <span class="s1">&#39;country/list&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCountries</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;country/list&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCountries</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">true</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">CountryController</span><span class="p">,</span> <span class="nx">Controller</span><span class="p">);</span>

@@ -46,19 +46,16 @@
             <span class="p">.</span><span class="nx">logOutUser</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span> <span class="p">}</span>
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span> <span class="o">=</span> <span class="nx">CurrentUserService</span><span class="p">.</span><span class="nx">getUser</span><span class="p">();</span>
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currDeployment</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currOrganization</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">organizations</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">id</span><span class="p">;</span>    
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
-</div>
-<p>$scope.currUser.currDeployment = $scope.currUser.organizations[0].id;</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">var</span> <span class="nx">currOrgID</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">organizations</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">id</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currOrganization</span> <span class="o">=</span> <span class="nx">currOrgID</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">allUserDeps</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">deployments</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">allUserDeps</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">allUserDeps</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">organizationID</span> <span class="o">===</span> <span class="nx">currOrgID</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">currDeployment</span> <span class="o">=</span> <span class="nx">allUserDeps</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>    
+    
     <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">=</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPI</span> <span class="o">+</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">currUser</span><span class="p">.</span><span class="nx">token</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">;</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.body-class&#39;</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
@@ -88,7 +85,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>When url changes remove current class to previously highlighted element and add current 
@@ -180,9 +177,18 @@ class to current panel item based on changed url.   </p>
   <span class="kd">var</span> <span class="nx">updateUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
 
   <span class="p">};</span>
-
+  
+  <span class="kd">var</span> <span class="nx">isAdmin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getUser</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">isAdmin</span> <span class="o">===</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">};</span>
+  
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">loadUser</span><span class="o">:</span> <span class="nx">loadUser</span><span class="p">,</span>
+    <span class="nx">isAdmin</span> <span class="o">:</span> <span class="nx">isAdmin</span><span class="p">,</span>
     <span class="nx">clearUser</span><span class="o">:</span> <span class="nx">clearUser</span><span class="p">,</span>
     <span class="nx">getUser</span><span class="o">:</span> <span class="nx">getUser</span><span class="p">,</span>
     <span class="nx">logoutUser</span><span class="o">:</span> <span class="nx">logoutUser</span><span class="p">,</span>

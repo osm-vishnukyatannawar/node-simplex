@@ -40,7 +40,7 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;logger&#39;</span><span class="p">);</span>
-
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -83,11 +83,14 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="kd">function</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">respMessage</span><span class="p">,</span> <span class="nx">vObj</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span> <span class="k">instanceof</span> <span class="nb">Error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">objType</span> <span class="o">=</span> <span class="k">typeof</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">objType</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span> <span class="k">instanceof</span> <span class="nb">Error</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">stack</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span> <span class="o">=</span> <span class="nx">respMessage</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">isInternalErr</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span>  <span class="k">if</span><span class="p">(</span><span class="nx">objType</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span> <span class="k">instanceof</span> <span class="nx">AppError</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">copyError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">respMessage</span><span class="p">,</span> <span class="nx">vObj</span><span class="p">);</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span> <span class="o">=</span> <span class="nx">respMessage</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">err</span><span class="p">;</span>
@@ -108,6 +111,17 @@
 
 <span class="nx">AppError</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setAppMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span> <span class="o">=</span> <span class="nx">message</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">AppError</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">copyError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">respMessage</span><span class="p">,</span> <span class="nx">vObj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">isInternalErr</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">isInternalErr</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">stack</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">appMessage</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">appMessage</span> <span class="o">=</span> <span class="nx">respMessage</span><span class="p">;</span>
+  <span class="p">}</span>  
+  <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">validation</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">vObj</span><span class="p">,</span> <span class="nx">vObj</span><span class="p">);</span>
 <span class="p">};</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">AppError</span><span class="p">;</span>
