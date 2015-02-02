@@ -1,5 +1,6 @@
 var config = module.exports;
-var PRODUCTION = process.env.NODE_ENV === 'production';
+var PRODUCTION = false;
+
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
@@ -104,11 +105,12 @@ global.__CONFIG__ = {
   }]
 };
 
+__CONFIG__.isProduction = PRODUCTION;
 __CONFIG__.email.baseURL = __CONFIG__.app_http_base_url;
 __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CONFIG__.app_base_url;
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: 'localhost',
+  ip: '10.0.0.15',
   isProduction: PRODUCTION
 };
