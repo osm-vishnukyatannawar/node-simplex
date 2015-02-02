@@ -39,8 +39,9 @@ global.__CONFIG__ = {
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
       'host_fw_version': 'PowerPath_HOST_FW_'
     },
-    'firmwareFileExtension': '.zip',
+    'firmwareFileExtension': '.bin',
     'baseVersionFolderName': 'Powerpath_FW_version_'
+    
   },
   'tagConfigDefaults': {
     'minMaintIntervalSec': 0,
@@ -86,7 +87,8 @@ global.__CONFIG__ = {
 	  'pimCsvFileName' : 'PowerPathPIM.csv'
   },
   'tags': {
-    'tagsCsvFileName': 'PowerPathTags.csv'
+    'tagsCsvFileName': 'PowerPathTags.csv',
+    'defaultSerialNumber' : 'DEFAULT-'
   },
   'lookup': {
     'powerPathAssetType': 'powerPathAssetType'
@@ -111,6 +113,6 @@ __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CO
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: 'localhost',
   isProduction: PRODUCTION
 };
