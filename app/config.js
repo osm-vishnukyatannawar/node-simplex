@@ -83,7 +83,7 @@ global.__CONFIG__ = {
     'unExportedLogFileName': 'UnexportedDevicesLog.csv'
   },
   'pim' : {
-	  'pimCsvFileName' : 'PowerPathPIM.csv'
+    'pimCsvFileName' : 'PowerPathPIM.csv'
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv'
