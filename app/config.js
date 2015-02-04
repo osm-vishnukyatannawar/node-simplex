@@ -3,7 +3,7 @@ var PRODUCTION = false;
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
-  'app_code_path': __dirname + '/code/',
+  'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': 'http://10.0.0.15:3000/',
@@ -18,19 +18,19 @@ global.__CONFIG__ = {
     'maxMsgPerCon': 20,
     'emailsToSend': 'abijeet.p@osmosys.asia'
   },
-  'maintenance': {
-    'run_maria_on_main': true,
-    'max_tries': 2,
+  'maintenance' : {
+    'run_maria_on_main' : true,
+    'max_tries' : 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99
   },
-  'user': {
-    'default_password': 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
-    'default_organization': 'an organization',
-    'default_pass_encrypt_rounds': 10,
-    'default_forgot_pass_time': 6, // hours
-    'default_created_by': 'NodeJS'
+  'user' : {
+    'default_password' : 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
+    'default_organization' : 'an organization', 
+	'default_pass_encrypt_rounds' : 10,		
+	'default_forgot_pass_time' : 6,	// hours
+	'default_created_by' : 'NodeJS'
   },
   'firmware': {
     'folder': 'firmwares',
@@ -43,39 +43,33 @@ global.__CONFIG__ = {
     'baseVersionFolderName': 'Powerpath_FW_version_'
     
   },
-  'tagConfigDefaults': {
-    'minMaintIntervalSec': 0,
-    'minMaintLowBattSec': 0,
-    'unPluggedAction': '',
-    'ccxVendorID': 0,
-    'ccxChannels': '',
-    'ccxBatteryReport': 1,
-    'ccxReportEnable_t': 0,
-    'wifiNumPktsperChan': 3,
-    'wifiTxPowerdBm': 12,
-    'accelEnable': 0,
-    'accelMotionTimeSec': 1,
-    'irEnable': 0,
-    'lfEnable': 0,
-    'tamperDetEnable': 0,
-    'pktSpacingMs': 120,
-    'currentMeasEn': 0,
-    'maxCurrentSamples': 100,
-    'histConfigEnable': 0,
-    'histThresh1': 100,
-    'histThresh2': 100,
-    'histThresh3': 100,
-    'maxPimCurrentSamples': 100,
-    'versionNum': 1
+  'organizationBleConfig': {
+	  'bleEnable': 0,
+	  'bleGapRoleMinConnIntervalms': 10,
+	  'bleGapRoleMaxConnIntervalms': 10,
+	  'bleGapRoleSlaveLatency': 9,
+	  'bleLimitedAdvertOnTimeSec': 120,
+	  'bleLimitedAdvertIntervalTimems': 1000,
+	  'bleGeneralAdvertIntervalTimems': 3000,
+	  'bleLowBattAdvertIntervalTimems': 5000,
+	  'bleDesiredConnectionTimeoutms': 1000,
+	  'advertOffTimems': 300,
+	  'blePasskey': 19655
   },
-  'wifiParams': {
-    'serverURL': '',
-    'numDnsServer': 1,
-    'dnsIpAddress': '',
-    'networkSSID': '',
-    'passphrase': '',
-    'networkSecurity': 1,
-    'addrType': 1
+  'organizationFindParams': {
+	  'buzzerFreqHz': 40,
+	  'buzzerOnTime_msec': 100,
+	  'buzzerOffTime_msec': 100,
+	  'buzzerCnt': 1000,
+	  'ledOnTime_msec': 100,
+	  'ledOffTime_msec': 100,
+	  'ledCnt': 1000
+  },
+  'organizationBatteryConfig': {
+	  'batteryRechargeLevelPercent': 5,
+	  'batteryChargeLevelPercent': 90,
+	  'batteryThreshLowAlert': 10,
+	  'batteryThreshCriticalAlert': 3
   },
   'calibration': {
     'allRecordsCsvFileName': 'allRows.csv',
@@ -88,8 +82,11 @@ global.__CONFIG__ = {
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv',
-    'defaultSerialNumber' : 'DEFAULT-'
+    'defaultSerialNumber' : 'DEFAULT-',
+    'factorySerialNumber' : '0000000000',
+    'factoryOrgId': '0000000000'
   },
+  'currentSampleTime': 5, // in minutes
   'lookup': {
     'powerPathAssetType': 'powerPathAssetType'
   },

@@ -89,6 +89,13 @@ Service.prototype.getTimePeriod = function(timePeriod) {
   return obj;
 };
 
+Service.prototype.getDateInYMDFormate = function(dateObj){
+	var date = dateObj.getDate();
+	var month = dateObj.getMonth() + 1;
+	var year = dateObj.getFullYear();
+	return year+'-'+month+'-'+date;
+}; 
+
 function getPrevDateTime(isPrevDay) {
   var dt = new Date();
   if (isPrevDay) {
@@ -96,5 +103,7 @@ function getPrevDateTime(isPrevDay) {
   }
   return dt;
 }
+
+
 
 module.exports = Service;
