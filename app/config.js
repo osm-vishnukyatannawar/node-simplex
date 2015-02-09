@@ -112,6 +112,7 @@ global.__CONFIG__ = {
 __CONFIG__.isProduction = PRODUCTION;
 __CONFIG__.email.baseURL = __CONFIG__.app_http_base_url;
 __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CONFIG__.app_base_url;
+__CONFIG__.app_api_maint_url = __CONFIG__.app_api_url + 'tag/maintenance';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,

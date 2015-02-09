@@ -14,6 +14,8 @@ var app = express();
 var helper = require('./lib/server-helper');
 helper.init(app);
 
+app.set('json spaces', 0);
+
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster) {
   // Count the machine's CPUs
