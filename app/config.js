@@ -6,7 +6,7 @@ global.__CONFIG__ = {
   'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': 'http://10.0.0.159:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -16,7 +16,7 @@ global.__CONFIG__ = {
     'fromName': 'Emanate Wireless',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'abijeet.p@osmosys.asia'
+    'emailsToSend': 'vamsi.m@osmosys.asia'
   },
   'maintenance' : {
     'run_maria_on_main' : true,
@@ -87,6 +87,9 @@ global.__CONFIG__ = {
     'factoryOrgId': '0000000000'
   },
   'currentSampleTime': 5, // in minutes
+  'maintMajorError' : 'POWERPATH_MAINT_MAJOR_ERROR' ,
+  'maintMinorError' : 'POWERPATH_MAINT_MINOR_ERROR',
+  'dateFormat' : 'MMMM Do YYYY, h:mm:ss a',
   'lookup': {
     'powerPathAssetType': 'powerPathAssetType'
   },
@@ -116,6 +119,6 @@ __CONFIG__.app_api_maint_url = __CONFIG__.app_api_url + 'tag/maintenance';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: 'localhost',
+  ip: '10.0.0.159',
   isProduction: PRODUCTION
 };
