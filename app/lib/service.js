@@ -67,7 +67,7 @@ Service.prototype.getTimePeriod = function(timePeriod) {
   var iterations = 7;
   if (timePeriod === 'month') {
     interval = 7;
-    iterations = 4;
+    iterations = 5;
   } else if (timePeriod === 'year') {
     interval = 30;
     iterations = 12;
@@ -78,7 +78,7 @@ Service.prototype.getTimePeriod = function(timePeriod) {
     dt.setDate(dt.getDate() - (interval * i));
     dtArr.push(dt);
   }
-  var startDate = dtArr[dtArr.length - 1];
+  var startDate = dtArr[dtArr.length-1];
   var obj = {
     interval: interval,
     iterations: iterations,

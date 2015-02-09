@@ -10,7 +10,7 @@ require_once 'ws-call.php';
         <title>
             Emanate Emulator
         </title>
-        <style>
+        <style> 
             table {
                 *border-collapse: collapse; /* IE7 and lower */
                 border-spacing: 0;
@@ -133,8 +133,8 @@ require_once 'ws-call.php';
         <hr>
         <h2>Tag Info</h2>
         <?php
-        $tagSN = empty($_POST['tagSN']) || empty(intval($_POST['tagSN'])) ? TAG_SN : intval($_POST['tagSN']);
-        $orgID = empty($_POST['orgID']) || empty(intval($_POST['orgID'])) ? ORG_ID : intval($_POST['orgID']);
+        $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
+        $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
         ?>
         <form method ="POST" enctype="multipart/form-data">
             <table class="zebra">
@@ -187,27 +187,27 @@ require_once 'ws-call.php';
                     case MAINTENANCE_TYPE :
                         $mainObj = new Maintenance();
                         $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($mntnceData);
+                        $finalResult = makeCallToMaintURL($mntnceData, $url);
                         break;
                     case HISTOGRAM_TYPE :
                         $histogramObj = new Histogram();
                         $histogramData = json_encode($histogramObj->getHistogramDataFormat());
-                        $finalResult = makeCallToMaintURL($histogramData);
+                        $finalResult = makeCallToMaintURL($histogramData, $url);
                         break;
                     case PIM_TYPE :
                         $pimObj = new PIM();
                         $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($pimData);
+                        $finalResult = makeCallToMaintURL($pimData, $url);
                         break;
                     case CURRENT_TYPE :
                         $currentObj = new Current();
                         $currentData = json_encode($currentObj->getCurrentDataFormat());
-                        $finalResult = makeCallToMaintURL($currentData);
+                        $finalResult = makeCallToMaintURL($currentData, $url);
                         break;
                     case TAGINFO_TYPE :
                         $tagObj = new TagInfo();
                         $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($tagInfoData);
+                        $finalResult = makeCallToMaintURL($tagInfoData, $url);
                         break;
                     case POWERPATH_UPDATE_CONFIG_PARAM :
                         $finalResult = makeGETRequest($url);
@@ -229,15 +229,23 @@ require_once 'ws-call.php';
                     if (intval($type) === MAINTENANCE_TYPE) {
                         if (!empty($respObj->data)) {
                             foreach ($respObj->data AS $key => $value) {
-                                sendDataBasedOnDataType(intval($key), $value);
+                                if(filter_var($value, FILTER_VALIDATE_URL)) {
+                                    sendDataBasedOnDataType(intval($key), $value);
+                                }
                             }
                         }
                     }
                 }
             } else {
-                $finalResult = sendDataBasedOnDataType($type);
-                foreach ($finalResult['data'] AS $key => $value) {
-                    sendDataBasedOnDataType($key);
+                $respObj = sendDataBasedOnDataType($type);
+                if (intval($type) === MAINTENANCE_TYPE) {
+                    if (!empty($respObj->data)) {
+                        foreach ($respObj->data AS $key => $value) {
+                            if(filter_var($value, FILTER_VALIDATE_URL)) {
+                                sendDataBasedOnDataType(intval($key), $value);
+                            }
+                        }
+                    }
                 }
             }
         }

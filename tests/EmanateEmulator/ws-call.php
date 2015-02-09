@@ -13,8 +13,9 @@ function getCurlObj($url) {
     return $curlRes[$url];
 }
 
-function makeCallToMaintURL($dataToSend) {
-    $ch = getCurlObj(WS_URL);
+function makeCallToMaintURL($dataToSend, $url) {
+    $reqUrl = empty($url) ? WS_URL : $url;
+    $ch = getCurlObj($reqUrl);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $dataToSend);

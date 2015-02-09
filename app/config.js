@@ -90,6 +90,11 @@ global.__CONFIG__ = {
   'lookup': {
     'powerPathAssetType': 'powerPathAssetType'
   },
+  'tagDebugLog' : {
+	  'writenFileName' : 'tagDebugLog.txt',
+	  'downloadFileName' : 'PowerPathDebugLog.txt',
+	  'debugFolderName' : 'debugLog'
+  },
   'tokenLength': 16,
   'fwTokenLength': 16,
   'firmwareFileExtension': '.zip',
