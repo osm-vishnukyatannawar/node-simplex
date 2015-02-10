@@ -121,6 +121,9 @@ require_once 'ws-call.php';
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
             }
+            .footer {
+                min-height: 30px;
+            }
         </style>
     </head>
     <body>
@@ -135,6 +138,9 @@ require_once 'ws-call.php';
         <?php
         $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
         $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
+        $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
+        $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
+        $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
         ?>
         <form method ="POST" enctype="multipart/form-data">
             <table class="zebra">
@@ -160,6 +166,30 @@ require_once 'ws-call.php';
                 </tbody>
             </table>
             <hr>
+            <h2>Tag firmware info</h2>
+            <table class="zebra">
+                <thead>
+                    <tr>
+                        <td>Version type</td>
+                        <td>Version value</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>WIFI firmware version</td>
+                        <td><input class="pure-text" type='text' value="<?php echo $wifiFirmware ?>" name="wifiFirmware"></td>
+                    </tr>
+                    <tr>
+                        <td>BLE firmware version</td>
+                        <td><input class="pure-text" type='text' value="<?php echo $bleFirmware ?>" name="bleFirmware"></td>
+                    </tr>
+                    <tr>
+                        <td>Host firmware version</td>
+                        <td><input class="pure-text" type='text' value="<?php echo $hostFirmware ?>" name="hostFirmware"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
             <h2>Communicator</h2>        
             <input class="pure-text" type="text" value = "1" name="callsNmber" placeholder="Number of calls">
             <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="1">
@@ -169,6 +199,7 @@ require_once 'ws-call.php';
             <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="4">Current</button>
             <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="5">TagInfo</button>            
         </form>
+        <div class = "footer"></div>
         <?php
         require_once 'powertag-classes/BaseClass.php';
         require_once 'powertag-classes/MaintenanceClass.php';
@@ -181,7 +212,7 @@ require_once 'ws-call.php';
         $allOutput = array();
         if (isset($_POST['submit'])) {            
             function sendDataBasedOnDataType($dataType, $url = NULL) {
-                global $tagSN, $orgID;
+                global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware;
                 $finalResult = false;
                 switch ($dataType) {
                     case MAINTENANCE_TYPE :
@@ -206,6 +237,9 @@ require_once 'ws-call.php';
                         break;
                     case TAGINFO_TYPE :
                         $tagObj = new TagInfo();
+                        $tagObj->wifiFirmwareVer = $wifiFirmware;
+                        $tagObj->bleFirwareVer = $bleFirmware;
+                        $tagObj->hostFirmwareVer = $hostFirmware;
                         $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
                         $finalResult = makeCallToMaintURL($tagInfoData, $url);
                         break;
@@ -219,33 +253,37 @@ require_once 'ws-call.php';
                 }                
                 return $finalResult;
             }
+            
+            function processTagPendingEvents($data) {
+                global $firmwareLookupIds;
+                if (!empty($data)) {
+                    foreach ($data AS $key => $value) {
+                        if(filter_var($value, FILTER_VALIDATE_URL)) {
+                            if(in_array($key, $firmwareLookupIds)) {
+                                downloadFirmware($value);
+                            } else {
+                                sendDataBasedOnDataType(intval($key), $value);
+                            }
+                        }
+                    }
+                }
+            }
 
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
+            $firmwareLookupIds = unserialize(LOOKUP_VALUES);
             if ($nmbrOfCalls > 0) {
                 for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                     $respObj = sendDataBasedOnDataType($type);
                     // If it's a maintenance type process the pending events                    
                     if (intval($type) === MAINTENANCE_TYPE) {
-                        if (!empty($respObj->data)) {
-                            foreach ($respObj->data AS $key => $value) {
-                                if(filter_var($value, FILTER_VALIDATE_URL)) {
-                                    sendDataBasedOnDataType(intval($key), $value);
-                                }
-                            }
-                        }
+                        processTagPendingEvents($respObj->data);
                     }
                 }
             } else {
                 $respObj = sendDataBasedOnDataType($type);
                 if (intval($type) === MAINTENANCE_TYPE) {
-                    if (!empty($respObj->data)) {
-                        foreach ($respObj->data AS $key => $value) {
-                            if(filter_var($value, FILTER_VALIDATE_URL)) {
-                                sendDataBasedOnDataType(intval($key), $value);
-                            }
-                        }
-                    }
+                    processTagPendingEvents($respObj->data);
                 }
             }
         }

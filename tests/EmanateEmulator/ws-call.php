@@ -43,6 +43,18 @@ function makeGETRequest($url) {
     
 }
 
+function downloadFirmware($url) {
+    if(!empty($url)) {
+        $destination = 'Files/bleWifiHost_'.microtime(true).'.bin';
+        $data = file_get_contents($url);
+        $handle = fopen($destination, "w");
+        fwrite($handle, $data);
+        fclose($handle);
+        return true;
+    }
+    return false;
+}
+
 function parseResponse($ch, $resultObj) {    
     try {
         $respObj = new Response();
