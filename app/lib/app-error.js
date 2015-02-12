@@ -67,7 +67,7 @@ AppError.prototype.copyError = function(err, respMessage, vObj) {
   if(!err.vObj) {
     err.vObj = {};
   }
-  this.validation = __.extend(err.vObj, vObj);
+  this.validation = __.extend(err.validation, vObj);
 };
 
 module.exports = AppError;

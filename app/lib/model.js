@@ -41,7 +41,7 @@ Model.prototype.query = function(objQuery) {
   if (objQuery.validate === true || objQuery.validate === undefined) {
     if (!this.validator.isValid(objQuery.data)) {
       objQuery.cb(new AppError(this.getStatusCode("badRequest"),
-        "Validation error.", this.validator.getErrors()));
+        "Server encountered the following errors while processing the request --", this.validator.getErrors()));
       return;
     }
   }
