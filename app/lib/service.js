@@ -1,6 +1,7 @@
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var zip = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var moment = require('moment');
 
 function Service() {
   this.getStatusCode = getStatus;
@@ -95,6 +96,11 @@ Service.prototype.getDateInYMDFormate = function(dateObj){
 	var year = dateObj.getFullYear();
 	return year+'-'+month+'-'+date;
 }; 
+
+Service.prototype.parseClientDate = function(date) {
+  var dt = moment(date, __CONFIG__.clientSideDateFormat);
+  return dt;
+};
 
 function getPrevDateTime(isPrevDay) {
   var dt = new Date();
