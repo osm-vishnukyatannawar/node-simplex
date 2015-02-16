@@ -26,7 +26,12 @@ global.__CONFIG__ = {
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
-    'necessary_tag_events': ['POWERPATH_INFO', 'POWERPATH_REPORT_BLOB_DATA']
+    'necessary_tag_events': {
+      'POWERPATH_INFO': '',
+      'POWERPATH_REPORT_USD_DEBUG_DATA': '',
+      'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
+      'POWERPATH_SEND_DEBUG_LOG': '',
+    }
   },
   'user': {
     'default_password': 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
@@ -90,8 +95,6 @@ global.__CONFIG__ = {
     'factoryOrgId': '0000000000',
   },
   'currentSampleTime': 5, // in minutes
-  'maintMajorError': 'POWERPATH_MAINT_MAJOR_ERROR',
-  'maintMinorError': 'POWERPATH_MAINT_MINOR_ERROR',
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
   'lookup': {
     'powerpath_asset_type': 'powerPathAssetType',
@@ -110,9 +113,9 @@ global.__CONFIG__ = {
     'maint_error': 'POWERPATH_MAINT_MAJOR_ERROR',
     'minor_error': 'POWERPATH_MAINT_MINOR_ERROR',
     'tag_info': 'POWERPATH_INFO',
-    'tag_update_config' : 'POWERPATH_UPDATE_CONFIG_PARAM',
-    'tag_not_commissioned' : 'POWERPATH_TAG_NOT_COMMISSIONED',
-    'tag_maintenance' : 'POWERPATH_MAINT_CALL',
+    'tag_update_config': 'POWERPATH_UPDATE_CONFIG_PARAM',
+    'tag_not_commissioned': 'POWERPATH_TAG_NOT_COMMISSIONED',
+    'tag_maintenance': 'POWERPATH_MAINT_CALL',
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -137,10 +140,15 @@ global.__CONFIG__ = {
 
 __CONFIG__.isProduction = PRODUCTION;
 __CONFIG__.email.baseURL = __CONFIG__.app_http_base_url;
-__CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '')
-        + __CONFIG__.app_base_url;
+__CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CONFIG__.app_base_url;
 __CONFIG__.app_api_maint_url = __CONFIG__.app_api_url + 'tag/maintenance';
 __CONFIG__.cassandra_keyspace = dbConfig.cassandradb.keyspace;
+
+// Adding the URLs to the necessary tag events sections.
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_api_maint_url;
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_maint_url;
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_http_base_url + 'log/debug';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
