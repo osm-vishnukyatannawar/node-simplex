@@ -5,10 +5,10 @@ var PRODUCTION = false;
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
-  'app_code_path': __dirname + '/code/',
+  'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': 'http://localhost:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -20,9 +20,9 @@ global.__CONFIG__ = {
     'maxMsgPerCon': 20,
     'emailsToSend': 'vamsi.m@osmosys.asia'
   },
-  'maintenance': {
-    'run_maria_on_main': true,
-    'max_tries': 2,
+  'maintenance' : {
+    'run_maria_on_main' : true,
+    'max_tries' : 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
@@ -90,9 +90,9 @@ global.__CONFIG__ = {
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv',
-    'defaultSerialNumber': 'DEFAULT-',
-    'factorySerialNumber': '0000000000',
-    'factoryOrgId': '0000000000',
+    'defaultSerialNumber' : 'DEFAULT-',
+    'factorySerialNumber' : '0000000000',
+    'factoryOrgId': '0000000000'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -121,6 +121,11 @@ global.__CONFIG__ = {
     'writenFileName': 'tag-debug-log.txt',
     'downloadFileName': 'powerpath-debug-log.txt',
     'debugFolderName': 'debugLog',
+  },
+  'tag_status' : {
+	  'not_commissioned' : 0,
+	  'not_configured' : 1,
+	  'configured' : 2
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -152,6 +157,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONF
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: 'localhost',
   isProduction: PRODUCTION
 };
