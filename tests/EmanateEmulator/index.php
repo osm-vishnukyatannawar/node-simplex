@@ -210,65 +210,7 @@ require_once 'ws-call.php';
         require_once 'response.php';
 
         $allOutput = array();
-        if (isset($_POST['submit'])) {            
-            function sendDataBasedOnDataType($dataType, $url = NULL) {
-                global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware;
-                $finalResult = false;
-                switch ($dataType) {
-                    case MAINTENANCE_TYPE :
-                        $mainObj = new Maintenance();
-                        $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($mntnceData, $url);
-                        break;
-                    case HISTOGRAM_TYPE :
-                        $histogramObj = new Histogram();
-                        $histogramData = json_encode($histogramObj->getHistogramDataFormat());
-                        $finalResult = makeCallToMaintURL($histogramData, $url);
-                        break;
-                    case PIM_TYPE :
-                        $pimObj = new PIM();
-                        $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($pimData, $url);
-                        break;
-                    case CURRENT_TYPE :
-                        $currentObj = new Current();
-                        $currentData = json_encode($currentObj->getCurrentDataFormat());
-                        $finalResult = makeCallToMaintURL($currentData, $url);
-                        break;
-                    case TAGINFO_TYPE :
-                        $tagObj = new TagInfo();
-                        $tagObj->wifiFirmwareVer = $wifiFirmware;
-                        $tagObj->bleFirwareVer = $bleFirmware;
-                        $tagObj->hostFirmwareVer = $hostFirmware;
-                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($tagInfoData, $url);
-                        break;
-                    case POWERPATH_UPDATE_CONFIG_PARAM :
-                        $finalResult = makeGETRequest($url);
-                        break;
-                }                
-                if($finalResult) {
-                    global $allOutput;
-                    $allOutput[] = $finalResult;
-                }                
-                return $finalResult;
-            }
-            
-            function processTagPendingEvents($data) {
-                global $firmwareLookupIds;
-                if (!empty($data)) {
-                    foreach ($data AS $key => $value) {
-                        if(filter_var($value, FILTER_VALIDATE_URL)) {
-                            if(in_array($key, $firmwareLookupIds)) {
-                                downloadFirmware($value);
-                            } else {
-                                sendDataBasedOnDataType(intval($key), $value);
-                            }
-                        }
-                    }
-                }
-            }
-
+        if (isset($_POST['submit'])) {
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
             $firmwareLookupIds = unserialize(LOOKUP_VALUES);

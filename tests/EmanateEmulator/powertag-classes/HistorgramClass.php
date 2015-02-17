@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php';
+require_once __DIR__. '/../config.php';
 
 class Histogram {
 
@@ -28,9 +28,9 @@ class Histogram {
         $this->histData = 'Histogram'.DEFAULT_VALUES;
     }
 
-    public function getHistogramDataFormat() {
+    public function getHistogramDataFormat($tagSN, $orgID) {
         
-        $baseObj = new Base();
+        $baseObj = new Base($tagSN, $orgID);
 
         $this->startTimeStamp = (object) ['tm_sec' => $this->startTimeStamp_tm_sec,
                     'tm_min' => $this->startTimeStamp_tm_min,

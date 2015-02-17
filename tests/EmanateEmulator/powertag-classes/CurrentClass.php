@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php';
+require_once __DIR__. '/../config.php';
 
 class Current {
 
@@ -21,7 +21,6 @@ class Current {
     public $CurrentDataUtil2_usageState;
 
     public function __construct() {
-
         $this->type = CURRENT_TYPE;
         $this->CurrentData_startTimestamp = DEFAULT_VALUES;
         $this->CurrentData_numSamples = DEFAULT_VALUES;
@@ -33,10 +32,10 @@ class Current {
         $this->CurrentDataUtil2_usageState = DEFAULT_VALUES;
     }
 
-    public function getCurrentDataFormat() {
+    public function getCurrentDataFormat($tagSN, $orgID) {
 
-        $baseObj = new Base();
-        
+        $baseObj = new Base($tagSN, $orgID);
+
         $this->CurrentDataUtil1 = (object) ['currentRms' => $this->CurrentDataUtil1_currentRms,
                     'utilVal' => $this->CurrentDataUtil1_utilVal,
                     'usageState' => $this->CurrentDataUtil1_usageState];
