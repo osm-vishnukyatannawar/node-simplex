@@ -141,6 +141,7 @@ global.__CONFIG__ = {
     'value': 'dev_col_export'
   }],
   'clientSideDateFormat': 'YYYY-MM-DD',
+  'clientSideDateTimeFormat' : 'YYYY-MM-DD HH:mm'
 };
 
 __CONFIG__.isProduction = PRODUCTION;

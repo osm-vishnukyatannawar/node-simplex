@@ -102,6 +102,11 @@ Service.prototype.parseClientDate = function(date) {
   return dt;
 };
 
+Service.prototype.parseClientDateTime = function(date) {
+  var dt = moment(date, __CONFIG__.clientSideDateTimeFormat);
+  return dt;
+};
+
 function getPrevDateTime(isPrevDay) {
   var dt = new Date();
   if (isPrevDay) {
