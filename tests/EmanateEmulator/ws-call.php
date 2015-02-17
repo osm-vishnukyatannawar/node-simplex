@@ -2,6 +2,14 @@
 
 require_once 'config.php';
 require_once 'response.php';
+require_once __DIR__ . '/powertag-classes/CurrentClass.php';
+require_once __DIR__ . '/powertag-classes/DebugLog.php';
+require_once __DIR__ . '/powertag-classes/HistorgramClass.php';
+require_once __DIR__ . '/powertag-classes/MaintenanceClass.php';
+require_once __DIR__ . '/powertag-classes/PIMClass.php';
+require_once __DIR__ . '/powertag-classes/TagInfoClass.php';
+require_once __DIR__ . '/powertag-classes/USDDebug.php';
+
 
 $curlRes = array();
 
@@ -104,7 +112,7 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             break;
         case CURRENT_TYPE :
             $currentObj = new Current();
-            $currentData = json_encode($currentObj->getCurrentDataFormat());
+            $currentData = json_encode($currentObj->getCurrentDataFormat($tagSN, $orgID));
             $finalResult = makeCallToMaintURL($currentData, $url);
             break;
         case TAGINFO_TYPE :
