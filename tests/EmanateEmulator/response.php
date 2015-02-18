@@ -5,4 +5,6 @@ class Response {
     public $data;
     public $responseMsg;
     public $status;
+    public $callType;
+    public $urlCalled;
 }

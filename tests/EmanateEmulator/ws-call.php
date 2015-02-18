@@ -97,7 +97,7 @@ function parseResponse($ch, $resultObj) {
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
     global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog;
-    $finalResult = false;
+    $finalResult = false;    
     switch ($dataType) {
         case MAINTENANCE_TYPE :
             $mainObj = new Maintenance();
@@ -140,10 +140,12 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             $usdDebugObj = new USDDebug();
             $usdDebugObj->data = $tagUSDData;
             $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID));
-            $finalResult = makeCallToMaintURL($usdDebugData, $url);
+            $finalResult = makeCallToMaintURL($usdDebugData, $url);            
             break;
-    }
+    }    
     if ($finalResult) {
+        $finalResult->callType = $dataType;
+        $finalResult->urlCalled = $url;
         global $allOutput;
         $allOutput[] = $finalResult;
     }
