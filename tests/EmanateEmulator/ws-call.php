@@ -2,13 +2,17 @@
 
 require_once 'config.php';
 require_once 'response.php';
-require_once __DIR__ . '/powertag-classes/CurrentClass.php';
-require_once __DIR__ . '/powertag-classes/DebugLog.php';
-require_once __DIR__ . '/powertag-classes/HistorgramClass.php';
-require_once __DIR__ . '/powertag-classes/MaintenanceClass.php';
-require_once __DIR__ . '/powertag-classes/PIMClass.php';
-require_once __DIR__ . '/powertag-classes/TagInfoClass.php';
-require_once __DIR__ . '/powertag-classes/USDDebug.php';
+/**
+ * Classes for fetching the json data format for the tag post calls.
+ */
+require_once 'powertag-classes/BaseClass.php';
+require_once 'powertag-classes/MaintenanceClass.php';
+require_once 'powertag-classes/TagInfoClass.php';
+require_once 'powertag-classes/HistorgramClass.php';
+require_once 'powertag-classes/CurrentClass.php';
+require_once 'powertag-classes/PIMClass.php';
+require_once 'powertag-classes/USDDebug.php';
+require_once 'powertag-classes/DebugLog.php';
 
 
 $curlRes = array();
@@ -92,7 +96,7 @@ function parseResponse($ch, $resultObj) {
  * @return type object
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
-    global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware;
+    global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog;
     $finalResult = false;
     switch ($dataType) {
         case MAINTENANCE_TYPE :
@@ -128,11 +132,13 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             break;
         case POWERPATH_SEND_DEBUG_LOG :
             $debugLogObj = new DebugLog();
+            $debugLogObj->log = $tagDebugLog;
             $debugLogData = json_encode($debugLogObj->getDebugLog($tagSN, $orgID));
             $finalResult = makeCallToMaintURL($debugLogData, $url);
             break;
         case POWERPATH_REPORT_USD_DEBUG_DATA:
             $usdDebugObj = new USDDebug();
+            $usdDebugObj->data = $tagUSDData;
             $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID));
             $finalResult = makeCallToMaintURL($usdDebugData, $url);
             break;

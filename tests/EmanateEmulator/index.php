@@ -141,6 +141,8 @@ require_once 'ws-call.php';
         $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
         $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
         $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
+        $tagUSDData = empty($_POST['tagUSDData']) ? 'default data = ' . DEFAULT_VALUES : $_POST['tagUSDData'];
+        $tagDebugLog = empty($_POST['tagDebugLog']) ? 'Log == ' . DEFAULT_VALUES : $_POST['tagDebugLog'];
         ?>
         <form method ="POST" enctype="multipart/form-data">
             <table class="zebra">
@@ -190,6 +192,22 @@ require_once 'ws-call.php';
                 </tbody>
             </table>
             <hr>
+            <h2>Tag Debug info</h2>
+            <table class="zebra">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tag USD debug data</td>
+                        <td><textarea class="pure-text" name="tagUSDData"><?php echo $tagUSDData ?></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Tag debug log</td>
+                        <td><textarea class="pure-text" name="tagDebugLog"><?php echo $tagDebugLog ?></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
             <h2>Communicator</h2>        
             <input class="pure-text" type="text" value = "1" name="callsNmber" placeholder="Number of calls">
             <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="1">
@@ -201,12 +219,6 @@ require_once 'ws-call.php';
         </form>
         <div class = "footer"></div>
         <?php
-        require_once 'powertag-classes/BaseClass.php';
-        require_once 'powertag-classes/MaintenanceClass.php';
-        require_once 'powertag-classes/TagInfoClass.php';
-        require_once 'powertag-classes/HistorgramClass.php';
-        require_once 'powertag-classes/CurrentClass.php';
-        require_once 'powertag-classes/PIMClass.php';
         require_once 'response.php';
 
         $allOutput = array();
