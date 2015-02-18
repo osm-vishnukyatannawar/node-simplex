@@ -8,7 +8,7 @@ global.__CONFIG__ = {
   'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://localhost:3000/',
+  'app_http_base_url': 'http://10.0.0.15:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -154,10 +154,10 @@ __CONFIG__.cassandra_keyspace = dbConfig.cassandradb.keyspace;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
-__CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_http_base_url + 'log/debug';
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: 'localhost',
+  ip: '10.0.0.15',
   isProduction: PRODUCTION
 };

@@ -5,12 +5,12 @@ var cluster = require('cluster');
 var config = require('./config');
 var logger = require('./logger');
 var middleware = require('./middleware/index');
+var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
 var loadViews = require('./code/views.js');
 var loadApi = require('./code/api.js');
 var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
-
 var helper = require('./lib/server-helper');
 helper.init(app);
 
@@ -32,10 +32,15 @@ if (config.express.isProduction && cluster.isMaster) {
     next();
   });
   
-  app.use(helper.parseBodyType);
+  new ExclusionController(app);
   
-  app.use(function(err, req, res, next) {    
+  app.use(helper.parseBodyType);  
+    
+  app.use(function(err, req, res, next) {
     if(err) {
+      console.log(err);
+      console.log('----------\n\n');
+      res.set('Connection', 'close');
       res.status(getStatus('badRequest')).json({
         status : 'fail',
         message : 'JSON sent is invalid.'
@@ -43,9 +48,7 @@ if (config.express.isProduction && cluster.isMaster) {
     } else {
       next();
     }
-  });
-  
-  app.use(helper.parseQueryString);
+  });    
 
   // Bind the api routes.
   loadApi(app);
