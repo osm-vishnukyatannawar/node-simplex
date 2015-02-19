@@ -1,47 +1,20 @@
 // NodeJS includes
-var cluster = require("cluster");
-
-// Third Party Includes
-var bodyParser = require('body-parser');
-var __ = require('underscore');
+var cluster = require('cluster');
 
 // Osm Includes
-var config = require("./config");
-var logger = require("./logger");
-var middleware = require("./middleware/index");
-var loadViews = require("./code/views.js");
-var loadApi = require("./code/api.js");
+var config = require('./config');
+var logger = require('./logger');
+var middleware = require('./middleware/index');
+var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
+var loadViews = require('./code/views.js');
+var loadApi = require('./code/api.js');
+var getStatus = require('./lib/status');
+var express = require('express');
+var app = express();
+var helper = require('./lib/server-helper');
+helper.init(app);
 
-function parseQueryStringValues(request, response, next) {
-  if (__.isEmpty(request.query)) {
-    request.queryParams = {};
-    next();
-    return;
-  }
-  request.queryParams = {};
-  request.queryParams.limit = parseInt(request.query.limit, 10);
-  request.queryParams.startRecord = parseInt(request.query.start, 10);
-
-  request.queryParams.limit = isNaN(request.queryParams.limit) ? 20
-          : request.queryParams.limit;
-
-  request.queryParams.startRecord = isNaN(request.queryParams.startRecord) ? 0
-          : request.queryParams.startRecord;
-
-  // Checking if it's a string and check that it's not empty
-  request.queryParams.search = (__.isString(request.query.q)
-          && !__.isEmpty(request.query.q) ? request.query.q : false);
-
-  request.queryParams.seachCol = (__.isString(request.query.qcol)
-          && !__.isEmpty(request.query.qcol) ? request.query.qcol : '*');
-
-  request.queryParams.sortBy = (__.isString(request.query.sortby)
-          && !__.isEmpty(request.query.sortby) ? request.query.sortby : false);
-
-  request.queryParams.sortCol = (__.isString(request.query.sortcol)
-          && !__.isEmpty(request.query.sortcol) ? request.query.sortcol : false);
-  next();
-}
+app.set('json spaces', 0);
 
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster) {
@@ -54,11 +27,28 @@ if (config.express.isProduction && cluster.isMaster) {
   }
 } else {
   // A worker process
-  var express = require("express");
-  var app = express();
-
-  app.use(bodyParser.json());
-  app.use(parseQueryStringValues);
+  app.use(function(req, res, next) {
+    res.setHeader('X-Powered-By', 'Emanate Wireless');
+    next();
+  });
+  
+  new ExclusionController(app);
+  
+  app.use(helper.parseBodyType);  
+    
+  app.use(function(err, req, res, next) {
+    if(err) {
+      console.log(err);
+      console.log('----------\n\n');
+      res.set('Connection', 'close');
+      res.status(getStatus('badRequest')).json({
+        status : 'fail',
+        message : 'JSON sent is invalid.'
+      });
+    } else {
+      next();
+    }
+  });    
 
   // Bind the api routes.
   loadApi(app);
@@ -76,7 +66,7 @@ if (config.express.isProduction && cluster.isMaster) {
       logger.logAppErrors(error);
       process.exit(10);
     }
-    logger.logAppInfo("express is listening on http://" + config.express.ip
-            + ":" + config.express.port);
+    logger.logAppInfo('Express is listening on http://' + config.express.ip
+            + ':' + config.express.port);
   });
 }

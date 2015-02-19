@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>devices.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/devices.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>devices.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;DevicesController&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$document</span><span class="p">,</span><span class="nx">DeviceService</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">,</span><span class="nx">CurrentUserService</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">$jqxDevices</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvDevices&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nx">datatype</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+                <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;temp-url&#39;</span><span class="p">,</span>
+                <span class="nx">sort</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                  <span class="nx">$jqxDevices</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;updatebounddata&#39;</span><span class="p">,</span> <span class="s1">&#39;sort&#39;</span><span class="p">);</span>
+                   <span class="p">},</span>
+                  <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+                  <span class="nx">beforeprocessing</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                       <span class="nx">source</span><span class="p">.</span><span class="nx">totalrecords</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">numOfRecords</span><span class="p">;</span>
+                   <span class="p">},</span>
+                  <span class="nx">pagesize</span> <span class="o">:</span> <span class="mi">10</span> 
+              <span class="p">};</span>
+        <span class="kd">function</span> <span class="nx">getQueryParam</span><span class="p">(</span><span class="nx">queryParams</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="p">{};</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">pagesize</span><span class="p">;</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">recordstartindex</span><span class="p">;</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">sortcol</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">sortdatafield</span><span class="p">;</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">sortby</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">sortorder</span><span class="p">;</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">=</span> <span class="nx">queryParams</span><span class="p">.</span><span class="nx">pagenum</span> <span class="o">*</span> <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span><span class="p">;</span>
+          <span class="nx">request</span><span class="p">.</span><span class="nx">endRecord</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">+</span> <span class="nx">request</span><span class="p">.</span><span class="nx">limit</span><span class="p">;</span>
+          <span class="k">return</span> <span class="nx">request</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="kd">var</span> <span class="nx">dataAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">$</span><span class="p">.</span><span class="nx">jqx</span><span class="p">.</span><span class="nx">dataAdapter</span><span class="p">(</span><span class="nx">source</span> <span class="p">,</span> <span class="p">{</span>
+          <span class="nx">loadServerData</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">serverdata</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">requestData</span> <span class="o">=</span> <span class="nx">getQueryParam</span><span class="p">(</span><span class="nx">serverdata</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">CurrentUserService</span><span class="p">.</span><span class="nx">getUser</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">.</span><span class="nx">currOrganization</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">DeviceService</span><span class="p">.</span><span class="nx">getDevicesInfo</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">currOrganization</span><span class="p">,</span><span class="nx">requestData</span><span class="p">,</span>
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">startIndex</span> <span class="o">=</span> <span class="nx">requestData</span><span class="p">.</span><span class="nx">startRecord</span><span class="p">;</span>
+                <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">endIndex</span> <span class="o">=</span> <span class="nx">requestData</span><span class="p">.</span><span class="nx">endRecord</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">source</span><span class="p">.</span><span class="nx">beforeprocessing</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="nx">source</span><span class="p">.</span><span class="nx">beforeprocessing</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">loadjson</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">source</span><span class="p">);</span>
+                <span class="nx">callback</span><span class="p">({</span>
+                    <span class="nx">records</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">records</span><span class="p">,</span>
+                    <span class="nx">totalrecords</span><span class="o">:</span> <span class="nx">source</span><span class="p">.</span><span class="nx">totalrecords</span>
+                <span class="p">});</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+        
+        
+        <span class="kd">var</span> <span class="nx">deviceGridCode</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">renderGridRows</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">objToBind</span><span class="p">.</span><span class="nx">startindex</span> <span class="o">=</span> <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">startIndex</span><span class="p">;</span>
+              <span class="nx">objToBind</span><span class="p">.</span><span class="nx">endindex</span> <span class="o">=</span> <span class="nx">dataAdapter</span><span class="p">.</span><span class="nx">endIndex</span><span class="p">;</span>                  
+              <span class="k">return</span> <span class="nx">objToBind</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="p">},</span>
+            <span class="nx">renderToolbars</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">toolbar</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;margin: 5px;&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">colButton</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;button id=&quot;1_btnAddCols&quot; class=&quot;btn btn-xs pull-right&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-plus&quot;&gt;&lt;/span&gt;&lt;/button&gt;&#39;</span><span class="p">);</span>
+                <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">colButton</span><span class="p">);</span>
+                <span class="nx">toolbar</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="kd">var</span> <span class="nx">gridConfig</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultGridProperties</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nx">source</span><span class="o">:</span> <span class="nx">dataAdapter</span><span class="p">,</span>
+          <span class="nx">rendertoolbar</span><span class="o">:</span> <span class="nx">deviceGridCode</span><span class="p">.</span><span class="nx">renderToolbars</span><span class="p">,</span>
+          <span class="nx">rendergridrows</span> <span class="o">:</span> <span class="nx">deviceGridCode</span><span class="p">.</span><span class="nx">renderGridRows</span><span class="p">,</span>
+         
+          <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+            <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Device ID&#39;</span><span class="p">,</span>
+            <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;deviceId&#39;</span><span class="p">,</span>
+            <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Type&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Mfg.&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;mfg&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Model&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Device status&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;deviceStatus&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Util %&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;util&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Daily energy (kWh)&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;dailyEnergy&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">120</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Last seen&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;lastSeen&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Last used&#39;</span><span class="p">,</span>
+              <span class="nx">datafield</span><span class="o">:</span> <span class="s1">&#39;lastUsed&#39;</span><span class="p">,</span>
+              <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span>
+          <span class="p">}]</span>
+        <span class="p">});</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>$jqxDevices.jqxGrid(gridConfig);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">$jqxDevices</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="nx">gridConfig</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;bindingcomplete&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">$jqxDevices</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;clearselection&#39;</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s2">&quot;DeviceService&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">getDevicesInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">orgId</span><span class="p">,</span><span class="nx">queryParams</span><span class="p">,</span><span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+          <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;organization/&#39;</span><span class="o">+</span><span class="nx">orgId</span><span class="o">+</span><span class="s1">&#39;/devices&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;data&#39;</span><span class="o">:</span> <span class="nx">queryParams</span>
+        <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span>  <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">cbProcess</span><span class="p">();</span>
+          <span class="p">}</span>        
+        <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+        <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cbAlways</span><span class="p">();</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">};</span>  
+    
+    <span class="kd">var</span> <span class="nx">getDevicesForDashboard</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbAlways</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span>  <span class="p">[{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Infusion pump&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;54&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;2&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Bed&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;78&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;5&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Patient monitor&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;45&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;4&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Infusion pump&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;54&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;6&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Patient monitor&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;78&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;5&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Bed&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;87&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;5&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Infusion pump&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTime&#39;</span> <span class="o">:</span> <span class="s1">&#39;66&#39;</span> <span class="p">,</span> <span class="s1">&#39;avgUsageTimeBt&#39;</span> <span class="o">:</span> <span class="s1">&#39;4&#39;</span> <span class="p">,</span> <span class="s1">&#39;utilization&#39;</span> <span class="o">:</span> <span class="s1">&#39;20th Dash&#39;</span><span class="p">}</span>
+                   <span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
+      <span class="p">};</span>
+        <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">};</span>
+    
+    <span class="kd">var</span> <span class="nx">getEnergyOfDevicesFrDashboard</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbAlways</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span>  <span class="p">[{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Infusion pump&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;58&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Bed&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;65&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Patient monitor&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;84&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Bed&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;87&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Infusion pump&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;62&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Bed&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;78&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;type&#39;</span> <span class="o">:</span> <span class="s1">&#39;Patient monitor&#39;</span> <span class="p">,</span>  <span class="s1">&#39;energyUsePerDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;20KW&#39;</span> <span class="p">,</span> <span class="s1">&#39;energyUseAllDevice&#39;</span> <span class="o">:</span> <span class="s1">&#39;500MW&#39;</span> <span class="p">,</span> <span class="s1">&#39;wastedEnergy&#39;</span> <span class="o">:</span> <span class="s1">&#39;45&#39;</span><span class="p">}</span>
+                     <span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
+      <span class="p">};</span>
+      <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">};</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="nx">getDevicesInfo</span><span class="o">:</span> <span class="nx">getDevicesInfo</span><span class="p">,</span>
+      <span class="nx">getDevicesForDashboard</span> <span class="o">:</span> <span class="nx">getDevicesForDashboard</span><span class="p">,</span>
+      <span class="nx">getEnergyOfDevicesFrDashboard</span> <span class="o">:</span> <span class="nx">getEnergyOfDevicesFrDashboard</span>
+      
+      <span class="p">};</span>    
+    
+
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

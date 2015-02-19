@@ -3,7 +3,7 @@ var winston = require('winston');
 var logger = (function() {
   var errLogger = new (winston.Logger)({
     transports: [new winston.transports.File({
-      filename: __CONFIG__.app_base_path + "../logs/exceptions.log",
+      filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
       timestamp: true,
       prettyPrint: false,
       json: false
@@ -12,7 +12,7 @@ var logger = (function() {
       filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
       json: false,
       timestamp: true,
-      prettyPrint: false
+      prettyPrint: true,     
     })],
     exitOnError: false
   });
@@ -28,21 +28,40 @@ var logger = (function() {
     })]
   });
 
+  var maintLogger = new (winston.Logger)({
+    transports: [new winston.transports.File({
+      filename: __CONFIG__.app_base_path + '../logs/maintenance.log',
+      json: false,
+      timestamp: false,
+      prettyPrint: true, 
+    })]
+  });
+  
   var logAppErrors = function(error, logLevel, severity) {
-    errLogger.error("\n----\n" + error.stack + "\n Arguments : "
-            + error.arguments + "\n Severity : " + error.severity + "\n----\n");
+    errLogger.error('\n----\n' + error.stack + '\n Arguments : '
+            + error.arguments + '\n Severity : ' + error.severity + '\n----\n');
   };
+  
   var logAppInfo = function(info) {
-    infoLogger.info(info + "\n----\n");
+    infoLogger.info(info + '\n----\n');
   };
 
   var writeErrLog = function(err) {
     errLogger.error(err);
   };
+  
+  var logMaintError = function(info) {
+    var dt = new Date();
+    var headerDate = dt.toDateString()  + ' ' + dt.toTimeString();
+    maintLogger.info('\n--------------- Maintenance Data - ' + headerDate 
+            + ' --------------------\n\n' + info);
+  };
+  
   return {
     logAppErrors: logAppErrors,
     logAppInfo: logAppInfo,
-    writeLogErr: writeErrLog
+    writeLogErr: writeErrLog,
+    logMaintError : logMaintError
   };
 }());
 

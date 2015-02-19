@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>model.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "app/lib/model.js", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>model.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">mariaDb</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/db-connector/mariadb&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cassandraDb</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span>
+        <span class="o">+</span> <span class="s1">&#39;lib/db-connector/cassandradb&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">dbConfig</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;db-config&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;logger&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">getStatus</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/status&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">utility</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/utility&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mailer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/mailer&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">validator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/validator&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">csv</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/csvHelper&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">zip</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/helpers/zipper&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">bcrypt</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bcrypt&#39;</span><span class="p">);</span>
+
+
+<span class="kd">function</span> <span class="nx">Model</span><span class="p">(</span><span class="nx">mProperties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">queryModifiers</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">config</span> <span class="o">=</span> <span class="nx">dbConfig</span><span class="p">[</span><span class="s1">&#39;mariadb&#39;</span><span class="p">];</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">cassandraConfig</span> <span class="o">=</span> <span class="nx">dbConfig</span><span class="p">[</span><span class="s1">&#39;cassandradb&#39;</span><span class="p">];</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mariaDb</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">csDb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cassandraDb</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cassandraConfig</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">validator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">validator</span><span class="p">(</span><span class="nx">mProperties</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span> <span class="o">=</span> <span class="nx">getStatus</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span> <span class="o">=</span> <span class="nx">queryModifiers</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">buildObject</span><span class="p">(</span><span class="nx">mProperties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span> <span class="o">=</span> <span class="nx">utility</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">mailer</span> <span class="o">=</span> <span class="nx">mailer</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">csvHelper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">csv</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">query</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">objQuery</span><span class="p">.</span><span class="nx">validate</span> <span class="o">===</span> <span class="kc">true</span> <span class="o">||</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">validate</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isValid</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">.</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">objQuery</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s2">&quot;badRequest&quot;</span><span class="p">),</span>
+              <span class="s2">&quot;Validation error.&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">getErrors</span><span class="p">()));</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">beforeEvents</span> <span class="o">=</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">before</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">beforeEvents</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">beforeEvents</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">currentData</span> <span class="o">=</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+    <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">(</span><span class="nx">beforeEvents</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">objQuery</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">runQuery</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">self</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">runQuery</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">self</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getActiveID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getResults</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">cbProcess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">objQuery</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">objQuery</span><span class="p">.</span><span class="nx">isCassandra</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">csDb</span><span class="p">.</span><span class="nx">getResults</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">getResults</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getResult</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">cbProcess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">objQuery</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">objQuery</span><span class="p">.</span><span class="nx">isCassandra</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">csDb</span><span class="p">.</span><span class="nx">getResult</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">getResult</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildObject</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">objToBind</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">propValue</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">propertyName</span> <span class="k">in</span> <span class="nx">properties</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">propValue</span> <span class="o">=</span> <span class="nx">objToBind</span><span class="p">[</span><span class="nx">propertyName</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">propValue</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">[</span><span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">propValue</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">validateProp</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">propsToValidate</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isValid</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">propsToValidate</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">validator</span>
+          <span class="p">.</span><span class="nx">getErrors</span><span class="p">();</span> <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isValid</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">validator</span>
+          <span class="p">.</span><span class="nx">getErrors</span><span class="p">();</span> <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processGridQuery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">selectQuery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">finalQueryParams</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">defaultSelectProps</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">))</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Columns</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">sortCol</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortCol</span> <span class="o">=</span> <span class="nx">__</span>
+              <span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">sortCol</span><span class="p">].</span><span class="nx">dbName</span><span class="p">)</span>
+              <span class="o">?</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortCol</span>
+              <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">sortCol</span><span class="p">].</span><span class="nx">dbName</span><span class="p">;</span>
+      <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">)</span>
+              <span class="o">?</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">;</span>
+      <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">=</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Records - Limit</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">var</span> <span class="nx">intLimit</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">limit</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+    <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">limit</span> <span class="o">=</span> <span class="nb">isNaN</span><span class="p">(</span><span class="nx">intLimit</span><span class="p">)</span> <span class="o">?</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">limit</span>
+            <span class="o">:</span> <span class="nx">intLimit</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">intStart</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">startRecord</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">=</span> <span class="nb">isNaN</span><span class="p">(</span><span class="nx">intStart</span><span class="p">)</span>
+            <span class="o">?</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">.</span><span class="nx">startRecord</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">!==</span> <span class="s1">&#39;ASC&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">!==</span> <span class="s1">&#39;DESC&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">=</span> <span class="s1">&#39;ASC&#39;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">selectQuery</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">selectQuery</span> <span class="o">+=</span> <span class="s1">&#39; ORDER BY &#39;</span> <span class="o">+</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortCol</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+            <span class="o">+</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">sortBy</span> <span class="o">+</span> <span class="s1">&#39; LIMIT &#39;</span>
+            <span class="o">+</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">startRecord</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">finalQueryParams</span><span class="p">.</span><span class="nx">limit</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">defaultSelectProps</span> <span class="o">=</span> <span class="nx">finalQueryParams</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">selectQuery</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">beginTransaction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">beginTransaction</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">commitTransaction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">commitTransaction</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">rollbackTransaction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">rollbackTransaction</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>    
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">handleTransactionEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transactionID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">rollbackTransaction</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rollBackErr</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">rollBackErr</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">rollBackErr</span><span class="p">);</span> <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">commitTransaction</span><span class="p">(</span><span class="nx">transactionID</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getMultipleInsertQuery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQueryDetails</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">initialQuery</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">initialQuery</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">finalData</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">staticData</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">propNames</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">propNames</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">staticCols</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">staticCols</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">dataToBind</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">hasPrimaryKey</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">hasPrimary</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">defaultVals</span> <span class="o">=</span> <span class="nx">objQueryDetails</span><span class="p">.</span><span class="nx">defaultVals</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">valuesQueryArr</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">valuesQuery</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> 
+  <span class="k">if</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">dataToBind</span><span class="p">))</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>It's an array.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">dataToBind</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">dynamicCols</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">hasPrimaryKey</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>Adding the id column.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="kd">var</span> <span class="nx">idCol</span> <span class="o">=</span> <span class="s1">&#39;id_&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+        <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">idCol</span><span class="p">);</span>
+        <span class="nx">finalData</span><span class="p">[</span><span class="nx">idCol</span><span class="p">]</span> <span class="o">=</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">();</span>
+      <span class="p">}</span>
+  
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>Now adding the data itself.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">var</span> <span class="nx">currData</span> <span class="o">=</span> <span class="nx">dataToBind</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len2</span> <span class="o">=</span> <span class="nx">propNames</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">len2</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">currColName</span> <span class="o">=</span> <span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+        <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">currColName</span><span class="p">);</span>
+        <span class="nx">finalData</span><span class="p">[</span><span class="nx">currColName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">currData</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]];</span>
+      <span class="p">}</span>
+      <span class="nx">valuesQueryArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">join</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">staticCols</span><span class="p">.</span><span class="nx">join</span><span class="p">()</span>
+              <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">valuesQuery</span> <span class="o">=</span> <span class="nx">valuesQueryArr</span><span class="p">.</span><span class="nx">join</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>It's an object.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">dataToBind</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="mi">0</span><span class="p">]].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">dynamicCols</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">hasPrimaryKey</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">idCol</span> <span class="o">=</span> <span class="s1">&#39;id_&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+        <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">idCol</span><span class="p">);</span>
+        <span class="nx">finalData</span><span class="p">[</span><span class="nx">idCol</span><span class="p">]</span> <span class="o">=</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len2</span> <span class="o">=</span> <span class="nx">propNames</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">len2</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">currColName</span> <span class="o">=</span> <span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+        <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">currColName</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">dataToBind</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span> <span class="o">&amp;&amp;</span> <span class="nx">dataToBind</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]][</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+          <span class="nx">finalData</span><span class="p">[</span><span class="nx">currColName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">dataToBind</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]][</span><span class="nx">i</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">defaultVals</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]])</span> <span class="p">{</span>
+          <span class="nx">finalData</span><span class="p">[</span><span class="nx">currColName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">defaultVals</span><span class="p">[</span><span class="nx">propNames</span><span class="p">[</span><span class="nx">j</span><span class="p">]];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">finalData</span><span class="p">[</span><span class="nx">currColName</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>        
+      <span class="p">}</span>
+      <span class="nx">valuesQueryArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nx">dynamicCols</span><span class="p">.</span><span class="nx">join</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">staticCols</span><span class="p">.</span><span class="nx">join</span><span class="p">()</span>
+              <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">valuesQuery</span> <span class="o">=</span> <span class="nx">valuesQueryArr</span><span class="p">.</span><span class="nx">join</span><span class="p">();</span>
+  <span class="p">}</span>
+  
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">initialQuery</span> <span class="o">+</span> <span class="nx">valuesQuery</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">finalData</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">timeStamp</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">timeStamp</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">timeStamp</span><span class="p">,</span> <span class="nx">getDefaultTagDateObj</span><span class="p">());</span>
+  <span class="kd">var</span> <span class="nx">convDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_year</span><span class="p">,</span> <span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_mon</span><span class="p">,</span>
+          <span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_mday</span><span class="p">,</span> <span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_hour</span><span class="p">,</span> <span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_min</span><span class="p">,</span>
+          <span class="nx">timeStamp</span><span class="p">.</span><span class="nx">tm_sec</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">convDate</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getBcryptHash</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stringToHash</span><span class="p">,</span> <span class="nx">noOfRounds</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="nx">bcrypt</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">stringToHash</span><span class="p">,</span> <span class="nx">noOfRounds</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">hash</span><span class="p">);</span>
+  <span class="p">});</span>  
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compareHash</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stringToCheck</span><span class="p">,</span> <span class="nx">hashString</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">bcrypt</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">stringToCheck</span><span class="p">,</span> <span class="nx">hashString</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">readCsvFile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="nx">cb</span><span class="p">){</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">csvHelper</span><span class="p">.</span><span class="nx">readCsvHelper</span><span class="p">(</span><span class="nx">path</span> <span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span> <span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+
+<span class="kd">function</span> <span class="nx">getDefaultTagDateObj</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">dt</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">tm_year</span><span class="o">:</span> <span class="mi">1900</span> <span class="o">+</span> <span class="nx">dt</span><span class="p">.</span><span class="nx">getYear</span><span class="p">(),</span>
+    <span class="nx">tm_mon</span><span class="o">:</span> <span class="nx">dt</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">tm_mday</span><span class="o">:</span> <span class="nx">dt</span><span class="p">.</span><span class="nx">getDate</span><span class="p">(),</span>
+    <span class="nx">tm_hour</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">tm_min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">tm_sec</span><span class="o">:</span> <span class="mi">0</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span><span class="p">.</span><span class="nx">isInternalErr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">err</span><span class="p">.</span><span class="nx">writeToLog</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">runQuery</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">self</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">cbProcess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">processError</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">objQuery</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">objQuery</span><span class="p">.</span><span class="nx">isCassandra</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">csDb</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

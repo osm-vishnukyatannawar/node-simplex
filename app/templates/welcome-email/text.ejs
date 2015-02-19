@@ -1,0 +1,14 @@
+Hi <%= user.username %>,
+
+You signed up for a Powerpath account using the email <%= user.emailID %>.
+
+Please confirm your email address by following this link:
+
+<%= email.baseURL %>confirm-email?userID=<%= user.userID %> 
+
+You can login into the Powerpath Dashboard at <%= email.baseURL %>
+
+Thanks,
+<%= email.fromName %> 
+----------------------------------
+Please do not reply to this email. Click on <%= email.baseURL %>help to contact Emanate Support.

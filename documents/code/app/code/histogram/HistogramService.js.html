@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HistogramService.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/histogram/HistogramService.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>HistogramService.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Service</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/service&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Histogram</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;histogram/Histogram&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">HistogramService</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Service</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">HistogramService</span><span class="p">,</span> <span class="nx">Service</span><span class="p">);</span>
+
+<span class="nx">HistogramService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertHistogramInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>  
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>TODO : Any validations?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="kd">var</span> <span class="nx">mHistogram</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Histogram</span><span class="p">();</span>  
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">histogramData</span><span class="p">.</span><span class="nx">startTimestamp</span> <span class="o">=</span> <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">.</span><span class="nx">startTimeStamp</span><span class="p">);</span>
+  <span class="nx">histogramData</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span> <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">getDefaultHistogramData</span><span class="p">());</span>
+  <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">insertHistogramData</span><span class="p">(</span><span class="nx">histogramData</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cntrlCb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">HistogramService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllHistoData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">mHistogram</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Histogram</span><span class="p">();</span>
+  <span class="nx">mHistogram</span><span class="p">.</span><span class="nx">getHistogramData</span><span class="p">(</span><span class="nx">cb</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">HistogramService</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

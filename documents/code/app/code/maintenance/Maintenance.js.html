@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Maintenance.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/maintenance/Maintenance.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#save%20tag%20data%20into%20cassandra">Save tag data into Cassandra</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20tag%20data%20records%20not%20yet%20processed%20from%20tag%20data%20dump%20table%20(cassandra)">Get tag data records not yet processed from tag data dump table (Cassandra)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#set%20processed%20flag%20in%20tag%20data%20dump%20table%20(casssandra)">Set processed flag in tag data dump table (Casssandra)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#set%20failed%20flag%20in%20tag%20data%20dump%20table%20(cassandra)">Set failed flag in tag data dump table (Cassandra)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#save%20tag%20maintenance%20call%20data">Save Tag maintenance call data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#save%20tag%20maintenance%20ble%20events">Save Tag maintenance ble events</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Maintenance.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;i18n&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Maintenance</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Maintenance</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="save%20tag%20data%20into%20cassandra">
+  <h2>
+    <a href="#save%20tag%20data%20into%20cassandra" name="save%20tag%20data%20into%20cassandra" class="pilcrow">&#182;</a>
+    Save tag data into Cassandra
+  </h2>
+</div>
+
+
+<p>Inserts the tag data into the Cassandra dump table. The data JSON sent by the tag is stored into tag_data column
+without any further processing.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>maintObj Information about the tag data</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">-
+</span>
+      <span class="dox_type">defaultReqCb</span>
+      <span>Callback that handles the response.</span>
+    </div>
+    <div class="dox_tag_title">returns
+</div>
+
+
+<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/div&gt;</span>
+</code></pre></div>
+
+
+
+<p></div>
+</div></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertTagMaint</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">maintObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO emanate.tag_data_dump(organization_id,dump_rec_id,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;tag_id,tag_data_type,tag_data,created_on,is_processed, has_failed) values(?,?,?,?,?,?,?,?)&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">isCassandra</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">valdiate</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="nx">maintObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">maintObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+      <span class="nx">maintObj</span><span class="p">.</span><span class="nx">tagSN</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">maintObj</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nx">maintObj</span><span class="p">.</span><span class="nx">strData</span><span class="p">,</span>
+      <span class="nx">maintObj</span><span class="p">.</span><span class="nx">createdOn</span><span class="p">,</span> <span class="nx">maintObj</span><span class="p">.</span><span class="nx">isProcessed</span><span class="p">,</span> <span class="nx">maintObj</span><span class="p">.</span><span class="nx">hasFailed</span>
+    <span class="p">],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="get%20tag%20data%20records%20not%20yet%20processed%20from%20tag%20data%20dump%20table%20(cassandra)">
+  <h2>
+    <a href="#get%20tag%20data%20records%20not%20yet%20processed%20from%20tag%20data%20dump%20table%20(cassandra)" name="get%20tag%20data%20records%20not%20yet%20processed%20from%20tag%20data%20dump%20table%20(cassandra)" class="pilcrow">&#182;</a>
+    Get tag data records not yet processed from tag data dump table (Cassandra)
+  </h2>
+</div>
+
+
+<p>Returns the records which are not yet processed from the tag_data_dump table in Cassandra.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span>organization Id, tag serial number, dump record id, created on, tag data, tag data type 
+for each record that is not yet processed. </span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFailedMaintenanceData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT organization_id AS organizationID, dump_rec_id AS id, created_on AS &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; createdOn, read_flag AS readFlag, tag_data AS tagData, tag_data_type AS tagDataType, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_id AS tagSN FROM emanate.tag_data_dump where is_processed = false ALLOW FILTERING&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">isCassandra</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
+            <span class="nx">i18n</span><span class="p">.</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;tags.no-tagdata-toprocess&#39;</span><span class="p">),</span> <span class="p">{});</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="set%20processed%20flag%20in%20tag%20data%20dump%20table%20(casssandra)">
+  <h2>
+    <a href="#set%20processed%20flag%20in%20tag%20data%20dump%20table%20(casssandra)" name="set%20processed%20flag%20in%20tag%20data%20dump%20table%20(casssandra)" class="pilcrow">&#182;</a>
+    Set processed flag in tag data dump table (Casssandra)
+  </h2>
+</div>
+
+
+<p>Sets the processed flag in Cassandra dump table. Updates the is_processed to
+true and increments count_trials by 1</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>csObj Information about the dump record</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{string}
+</span>
+      <span class="dox_type">string
+</span>
+      <span>csObj.dmpRecID The dump record ID</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{string}
+</span>
+      <span class="dox_type">string
+</span>
+      <span>csObj.organizationID The organization ID to which the current tag
+         data belongs to.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{integer}
+</span>
+      <span class="dox_type">integer
+</span>
+      <span>[csObj.trialCount=0] Number of tries that have been made to process
+         this data.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">-
+</span>
+      <span class="dox_type">defaultReqCb</span>
+      <span>Callback that handles the response.</span>
+    </div>
+    <div class="dox_tag_title">returns
+</div>
+
+
+<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/div&gt;</span>
+</code></pre></div>
+
+
+
+<p></div>
+</div></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setProcessedTag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">csObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isUUID4</span><span class="p">(</span><span class="nx">csObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span>
+      <span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span>
+      <span class="nx">i18n</span><span class="p">.</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;tags.invalid-record-org&#39;</span><span class="p">),</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="nx">csObj</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">csObj</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDefaultUpdateFlag</span><span class="p">());</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE emanate.tag_data_dump SET is_processed = ?, count_trials = ?&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; WHERE dump_rec_id = ? AND organization_id = ?&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">isCassandra</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="kc">true</span><span class="p">,</span> <span class="o">++</span><span class="nx">csObj</span><span class="p">.</span><span class="nx">trialCount</span><span class="p">,</span> <span class="nx">csObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">,</span> <span class="nx">csObj</span><span class="p">.</span><span class="nx">organizationID</span><span class="p">],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="set%20failed%20flag%20in%20tag%20data%20dump%20table%20(cassandra)">
+  <h2>
+    <a href="#set%20failed%20flag%20in%20tag%20data%20dump%20table%20(cassandra)" name="set%20failed%20flag%20in%20tag%20data%20dump%20table%20(cassandra)" class="pilcrow">&#182;</a>
+    Set failed flag in tag data dump table (Cassandra)
+  </h2>
+</div>
+
+
+<p>Updates the has_failed to true, sets the failure reason, and increments count_trials by 1</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>errObj Information about the error</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{string}
+</span>
+      <span class="dox_type">string
+</span>
+      <span>errObj.dmpRecID The dump record ID</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{string}
+</span>
+      <span class="dox_type">string
+</span>
+      <span>errObj.organizationID The organization ID to which the current tag
+         data belongs to.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{integer}
+</span>
+      <span class="dox_type">integer
+</span>
+      <span>[errObj.trialCount=0] Number of tries that have been made to process
+         this data.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>errObj.err The error object      </span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">-
+</span>
+      <span class="dox_type">defaultReqCb</span>
+      <span>finalCb Callback that handles the response.</span>
+    </div>
+    <div class="dox_tag_title">returns
+</div>
+
+
+<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/div&gt;</span>
+</code></pre></div>
+
+
+
+<p></div>
+</div></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setErrorFlag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">errObj</span><span class="p">,</span> <span class="nx">finalCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">isUUID4</span><span class="p">(</span><span class="nx">errObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="k">this</span>
+      <span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span>
+      <span class="nx">i18n</span><span class="p">.</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;tags.invalid-record-org&#39;</span><span class="p">),</span> <span class="p">{}));</span>
+  <span class="p">}</span>
+  <span class="nx">errObj</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">errObj</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDefaultUpdateFlag</span><span class="p">());</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;UPDATE emanate.tag_data_dump SET count_trials = ?, has_failed = ?,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; failure_reason = ?, is_processed = ? WHERE dump_rec_id = ? AND organization_id = ?&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">errMsg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">errObj</span><span class="p">.</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">errObj</span><span class="p">.</span><span class="nx">err</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">isCassandra</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="o">++</span><span class="nx">errObj</span><span class="p">.</span><span class="nx">trialCount</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">errObj</span><span class="p">.</span><span class="nx">dmpRecID</span><span class="p">,</span>
+      <span class="nx">errObj</span><span class="p">.</span><span class="nx">organizationID</span>
+    <span class="p">],</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="nx">finalCb</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFailedLogs</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">finalCb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;SELECT organization_id AS organizationID, dump_rec_id AS dmpRecID, created_on AS &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; createdOn, is_processed AS readFlag, tag_data AS tagData, tag_data_type AS tagDataType, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; tag_id AS tagSN, count_trials AS trialCount&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; FROM emanate.tag_data_dump WHERE is_processed = ? AND has_failed = ? AND count_trials &lt; ? &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; ALLOW FILTERING&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">isCassandra</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">CONFIG</span><span class="p">.</span><span class="nx">max_tries</span><span class="p">],</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="nx">finalCb</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="save%20tag%20maintenance%20call%20data">
+  <h2>
+    <a href="#save%20tag%20maintenance%20call%20data" name="save%20tag%20maintenance%20call%20data" class="pilcrow">&#182;</a>
+    Save Tag maintenance call data
+  </h2>
+</div>
+
+
+<p>Inserts tag maintenance data into tag_maint_call table (MariaDB)</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>maintData maintenance header information</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">-
+</span>
+      <span class="dox_type">defaultReqCb</span>
+      <span>cb Callback that handles the response.</span>
+    </div>
+    <div class="dox_tag_title">returns
+</div>
+
+
+<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/div&gt;</span>
+</code></pre></div>
+
+
+
+<p></div>
+</div></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertMaintData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">maintData</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">maintData</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;transactionID&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">transactionID</span> <span class="o">=</span> <span class="nx">maintData</span><span class="p">.</span><span class="nx">transactionID</span><span class="p">;</span>
+    <span class="nx">maintData</span> <span class="o">=</span> <span class="nx">maintData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span>
+    <span class="s1">&#39;INSERT INTO tag_maint_call (tag_maint_call_recid, cassandra_dump_rec_id, tag_srno, organization_id, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;curr_timestamp, tag_maint_reason_id_enum, tag_usage_info_id_enum, util_percent_5min, util_percent_1hr, util_percent_1day,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;util_percent_1week, util_percent_1month,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;util_percent_6months, nearest_ap_macaddr, nearest_ap_rssi_dbm, battery_level_percent, predicted_battery_capacity,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;totalnum_battery_charges, num_battery_charges, battery_charge_timestamp, num_motion_det, motion_det_start_timestamp,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;num_chokepoint_det, chokepoint_type, chokepoint_timestamp, created_on, created_by)&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39; VALUES(:id, :dmpRecID, :tagSN, :organizationID, :currentTimeStamp, :maintReason, :powerPathUsageState, :util5min, :util1hr,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;:util1day,:util1week,:util1month,:util6months,:nearestAPMACAddr,:nearestAPRSSIdBm,:batteryLevelPercent,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;:predictedBatteryCapacity,:totalNumBatteryCharges,:numBatteryCharges,:batteryChargeTimestamp,:numMotionDet,&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;:motionDetStartTimestamp,:numChokePointDet,:chokepointType,:timestamp,:createdOn,:createdBy)&#39;</span><span class="p">;</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">maintData</span><span class="p">,</span>
+    <span class="nx">transactionID</span><span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">maintDataID</span><span class="o">:</span> <span class="nx">maintData</span><span class="p">.</span><span class="nx">id</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="save%20tag%20maintenance%20ble%20events">
+  <h2>
+    <a href="#save%20tag%20maintenance%20ble%20events" name="save%20tag%20maintenance%20ble%20events" class="pilcrow">&#182;</a>
+    Save Tag maintenance ble events
+  </h2>
+</div>
+
+
+<p>Inserts multiple ble events into tag_ble_events table (MariaDB)</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">{object}
+</span>
+      <span class="dox_type">object
+</span>
+      <span>maintBleEvents Array of ble events</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">-
+</span>
+      <span class="dox_type">defaultReqCb</span>
+      <span>cb Callback that handles the response.</span>
+    </div>
+    <div class="dox_tag_title">returns
+</div>
+
+
+<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/div&gt;</span>
+</code></pre></div>
+
+
+
+<p></div>
+</div></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertBleEvents</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">maintBleEvents</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">transactionID</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">maintBleEvents</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;transactionID&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">transactionID</span> <span class="o">=</span> <span class="nx">maintBleEvents</span><span class="p">.</span><span class="nx">transactionID</span><span class="p">;</span>
+    <span class="nx">maintBleEvents</span> <span class="o">=</span> <span class="nx">maintBleEvents</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">queries</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getMappingQuery</span><span class="p">(</span><span class="nx">maintBleEvents</span><span class="p">);</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">query</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+    <span class="nx">validate</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">transactionID</span><span class="o">:</span> <span class="nx">transactionID</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getMappingQuery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bleEventsObj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO tag_ble_events (tag_ble_events_recid , ble_connect_timestamp, bt_phone_macaddr, &#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;tag_maint_call_recid, num_ble_connect, num_ble_dev_find, created_on, created_by) VALUES&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">finalData</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">tagMaintCallRecID</span><span class="o">:</span> <span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">tagMaintCallRecID</span><span class="p">.</span><span class="nx">maintDataID</span><span class="p">,</span>
+    <span class="nx">numBleConnect</span><span class="o">:</span> <span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">numBleConnect</span><span class="p">,</span>
+    <span class="nx">numBleDevFind</span><span class="o">:</span> <span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">numBleDevFind</span><span class="p">,</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span>
+  <span class="p">};</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">bleConnectTimestamps</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">!=</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">bleConnectTimestamps</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span>
+      <span class="p">.</span><span class="nx">convertTagTimeStamp</span><span class="p">(</span><span class="nx">bleEventsObj</span><span class="p">.</span><span class="nx">bleConnectTimestamps</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">queryObj</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getMultipleInsertQuery</span><span class="p">({</span>
+    <span class="nx">initialQuery</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">staticData</span><span class="o">:</span> <span class="nx">finalData</span><span class="p">,</span>
+    <span class="nx">propNames</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;bleConnectTimestamps&#39;</span><span class="p">,</span> <span class="s1">&#39;btPhoneMacAddr&#39;</span><span class="p">],</span>
+    <span class="nx">staticCols</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;:tagMaintCallRecID&#39;</span><span class="p">,</span> <span class="s1">&#39;:numBleConnect&#39;</span><span class="p">,</span> <span class="s1">&#39;:numBleDevFind&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;:createdOn&#39;</span><span class="p">,</span> <span class="s1">&#39;:createdBy&#39;</span>
+    <span class="p">],</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">bleEventsObj</span><span class="p">,</span>
+    <span class="nx">hasPrimary</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="nx">queryObj</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultMaintData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span><span class="p">,</span>
+    <span class="nx">dmpRecID</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultBleEvents</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">createdBy</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">default_created_by</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultMaintObj</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">timeNow</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">dmpRecID</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">timeNow</span><span class="p">,</span>
+    <span class="nx">trialCount</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">isProcessed</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">hasFailed</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">tagSN</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">maintenance</span><span class="p">.</span><span class="nx">default_value_tag_sn</span><span class="p">,</span>
+    <span class="nx">organizationID</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">maintenance</span><span class="p">.</span><span class="nx">default_value_org</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">maintenance</span><span class="p">.</span><span class="nx">default_value_type</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">Maintenance</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultUpdateFlag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">err</span><span class="o">:</span> <span class="s1">&#39;Unknown Error&#39;</span><span class="p">,</span>
+    <span class="nx">trialCount</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Maintenance</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

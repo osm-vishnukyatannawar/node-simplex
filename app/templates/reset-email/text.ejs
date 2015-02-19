@@ -1,0 +1,14 @@
+Hi <%= user.emailID %>!
+
+<%= email.fromName %> received a request to reset the password for your account <%=user.emailID %>.
+
+Click this link to reset your password:
+
+<%= email.baseURL %>reset-password?token=<%= user.token %>
+
+The link will expire after <%= user.tokenExpire %> hours.
+
+Thanks,
+<%= email.fromName %> 
+----------------------------------
+Please do not reply to this email. Click on <%= email.baseURL %>help to contact Emanate Support.

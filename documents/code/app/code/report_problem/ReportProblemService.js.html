@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ReportProblemService.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/report_problem/ReportProblemService.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#reporting%20a%20problem%20and%20sending%20an%20email.">Reporting a problem and sending an email.</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>ReportProblemService.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Service</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/service&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Authorization</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;authorization/Authorization&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ReportProblem</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;report_problem/ReportProblem&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Email</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;emails/Email.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">EmailService</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;emails/EmailService.js&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;i18n&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">S</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;logger&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">ReportProblemService</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Service</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">ReportProblemService</span><span class="p">,</span> <span class="nx">Service</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="reporting%20a%20problem%20and%20sending%20an%20email.">
+  <h2>
+    <a href="#reporting%20a%20problem%20and%20sending%20an%20email." name="reporting%20a%20problem%20and%20sending%20an%20email." class="pilcrow">&#182;</a>
+    Reporting a problem and sending an email.
+  </h2>
+</div>
+
+
+<ol>
+<li>Inserts into the database</li>
+<li>Sends a mail with an attachment</li>
+</ol>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">clientData</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cntrlCb
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">ReportProblemService</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reportProblem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">clientData</span><span class="p">,</span> <span class="nx">cntrlCb</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">mReport</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ReportProblem</span><span class="p">();</span>
+
+  <span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">reportData</span> <span class="o">=</span> <span class="nx">clientData</span><span class="p">;</span>
+      <span class="nx">reportData</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">defaults</span><span class="p">(</span><span class="nx">reportData</span><span class="p">,</span> <span class="nx">mReport</span><span class="p">.</span><span class="nx">getDefaultReportData</span><span class="p">());</span>
+      <span class="nx">mReport</span><span class="p">.</span><span class="nx">insertReport</span><span class="p">(</span><span class="nx">reportData</span><span class="p">,</span> <span class="nx">next</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">reportDataID</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">ReportProblemInfo</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">username</span><span class="o">:</span> <span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">username</span><span class="p">).</span><span class="nx">trim</span><span class="p">(),</span>
+        <span class="nx">organization</span><span class="o">:</span> <span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">organization</span><span class="p">).</span><span class="nx">trim</span><span class="p">(),</span>
+        <span class="nx">deployment</span><span class="o">:</span> <span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">deployment</span><span class="p">).</span><span class="nx">trim</span><span class="p">(),</span>
+        <span class="nx">reportDescription</span><span class="o">:</span> <span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">description</span><span class="p">).</span><span class="nx">trim</span><span class="p">(),</span>
+        <span class="nx">dateAndTime</span><span class="o">:</span> <span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">dateAndTime</span><span class="p">).</span><span class="nx">trim</span><span class="p">()</span>
+      <span class="p">};</span>
+
+      <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Email</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">dataToSave</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">ReportProblemData</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">username</span><span class="o">:</span> <span class="nx">ReportProblemInfo</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+          <span class="nx">organization</span><span class="o">:</span> <span class="nx">ReportProblemInfo</span><span class="p">.</span><span class="nx">organization</span><span class="p">,</span>
+          <span class="nx">deployment</span><span class="o">:</span> <span class="nx">ReportProblemInfo</span><span class="p">.</span><span class="nx">deployment</span><span class="p">,</span>
+          <span class="nx">reportDescription</span><span class="o">:</span> <span class="nx">ReportProblemInfo</span><span class="p">.</span><span class="nx">reportDescription</span><span class="p">,</span>
+          <span class="nx">dateAndTime</span><span class="o">:</span> <span class="nx">ReportProblemInfo</span><span class="p">.</span><span class="nx">dateAndTime</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+      
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Getting the property values from the files object.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="nx">__</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">clientData</span><span class="p">.</span><span class="nx">files</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">attachments</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">files</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">attachments</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+              <span class="nx">filename</span><span class="o">:</span> <span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">,</span>
+              <span class="nx">path</span><span class="o">:</span> <span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">path</span>
+            <span class="p">});</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="nx">email</span><span class="p">.</span><span class="nx">queueMail</span><span class="p">(</span><span class="nx">__</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">email</span><span class="p">.</span><span class="nx">getDefaultObj</span><span class="p">(),</span> <span class="p">{</span>
+        <span class="nx">toEmail</span><span class="o">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">email</span><span class="p">.</span><span class="nx">emailsToSend</span><span class="p">,</span>
+        <span class="nx">templateName</span><span class="o">:</span> <span class="s1">&#39;report-problem&#39;</span><span class="p">,</span>
+        <span class="nx">subject</span><span class="o">:</span> <span class="s1">&#39;Problem reported on Emanate portal&#39;</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="nx">dataToSave</span><span class="p">,</span>
+        <span class="nx">attachments</span><span class="o">:</span> <span class="nx">attachments</span>
+      <span class="p">}),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s1">&#39;There was an error while sending the email to the administrator.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+        <span class="nx">next</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span>
+        <span class="s1">&#39;There was an error while reporting a problem.&#39;</span><span class="p">,</span> <span class="p">{}));</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">emailService</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EmailService</span><span class="p">();</span>
+    <span class="nx">emailService</span><span class="p">.</span><span class="nx">sendUnsentMails</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">cntrlCb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ReportProblemService</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

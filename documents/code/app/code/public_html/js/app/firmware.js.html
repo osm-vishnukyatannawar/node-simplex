@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>firmware.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/firmware.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>firmware.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;FirmwareController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$document</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">,</span> <span class="nx">$upload</span><span class="p">,</span> <span class="nx">$timeout</span><span class="p">,</span> <span class="nx">FirmwareService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">$jqxFirmware</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">firmwareGridClass</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="kd">var</span> <span class="nx">customGridCode</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">bleRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">$jqxFirmware</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;getrowdatabyid&#39;</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="k">return</span> <span class="s1">&#39;&lt;a href=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">bleURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">wifiRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">$jqxFirmware</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;getrowdatabyid&#39;</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="k">return</span> <span class="s1">&#39;&lt;a href=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">wifiURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">hostRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">$jqxFirmware</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;getrowdatabyid&#39;</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="k">return</span> <span class="s1">&#39;&lt;a href=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hostURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">overAllRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">$jqxFirmware</span><span class="p">.</span><span class="nx">jqxGrid</span><span class="p">(</span><span class="s1">&#39;getrowdatabyid&#39;</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="k">return</span> <span class="s1">&#39;&lt;a href=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">overAllURL</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">firmwareGridConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">columns</span><span class="o">:</span> <span class="p">[{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Over all uploaded version&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;overAllVersion&#39;</span><span class="p">,</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>cellsrenderer: customGridCode.overAllRender,</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;20%&#39;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Host firmware version&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;hostVersion&#39;</span><span class="p">,</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>cellsrenderer: customGridCode.hostRender,</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;20%&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;WIFI firmware version&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;wifiVersion&#39;</span><span class="p">,</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>cellsrenderer: customGridCode.wifiRender,</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;20%&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;BLE firmware version&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;bleVersion&#39;</span><span class="p">,</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>cellsrenderer: customGridCode.bleRender,</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;20%&quot;</span>
+
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Uploaded by&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;uploadedBy&#39;</span><span class="p">,</span>
+      <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;10%&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Uploaded on&#39;</span><span class="p">,</span>
+      <span class="nx">dataField</span><span class="o">:</span> <span class="s1">&#39;createdOn&#39;</span><span class="p">,</span>
+      <span class="nx">width</span><span class="o">:</span> <span class="s2">&quot;10%&quot;</span>
+    <span class="p">}]</span>
+  <span class="p">};</span>
+
+
+
+  <span class="nx">$document</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$jqxFirmware</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#1_dvFirmware&#39;</span><span class="p">);</span>
+    <span class="nx">firmwareGridClass</span> <span class="o">=</span> <span class="nx">getInitializedGrid</span><span class="p">({</span>
+      <span class="nx">config</span><span class="o">:</span> <span class="nx">firmwareGridConfig</span><span class="p">,</span>
+      <span class="nx">element</span><span class="o">:</span> <span class="nx">$jqxFirmware</span><span class="p">,</span>
+      <span class="nx">ddlColContainer</span><span class="o">:</span> <span class="s1">&#39;#firmwareGridColContainer&#39;</span><span class="p">,</span>
+      <span class="nx">ngScope</span><span class="o">:</span> <span class="nx">$scope</span>
+    <span class="p">});</span>
+
+    <span class="nx">firmwareGridClass</span><span class="p">.</span><span class="nx">initializeGrid</span><span class="p">();</span>
+
+    <span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">getFirwareInfo</span><span class="p">(</span><span class="nx">firmwareGridClass</span><span class="p">.</span><span class="nx">refreshGridData</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.selectpicker&#39;</span><span class="p">).</span><span class="nx">selectpicker</span><span class="p">();</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">uploadFirmwareFormVal</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isSubmitted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">saveFirmware</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$uploadFirmwareFormVal</span><span class="p">,</span> <span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">isSubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">$uploadFirmwareFormVal</span><span class="p">.</span><span class="nx">firmware</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">$uploadFirmwareFormVal</span><span class="p">.</span><span class="nx">version</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">changeLog</span> <span class="o">=</span> <span class="nx">$uploadFirmwareFormVal</span><span class="p">.</span><span class="nx">chagneLog</span><span class="p">;</span>
+      <span class="nx">file</span><span class="p">.</span><span class="nx">upload</span> <span class="o">=</span> <span class="nx">$upload</span><span class="p">.</span><span class="nx">upload</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;firmware/&#39;</span><span class="p">,</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s1">&#39;version&#39;</span><span class="o">:</span> <span class="nx">version</span><span class="p">,</span>
+          <span class="s1">&#39;changeLog&#39;</span><span class="o">:</span> <span class="nx">changeLog</span>
+        <span class="p">},</span>
+        <span class="nx">file</span><span class="o">:</span> <span class="nx">file</span><span class="p">,</span>
+        <span class="nx">fileFormDataName</span><span class="o">:</span> <span class="s1">&#39;uploadFile&#39;</span><span class="p">,</span>
+      <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">msgToShow</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+      <span class="p">});;</span>
+
+      <span class="nx">file</span><span class="p">.</span><span class="nx">upload</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$timeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">isSubmitted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">uploadFirmwareFormVal</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#6_firmwareDialog&#39;</span><span class="p">).</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">);</span>
+            <span class="nx">FirmwareService</span><span class="p">.</span><span class="nx">getFirwareInfo</span><span class="p">(</span><span class="nx">firmwareGridClass</span><span class="p">.</span><span class="nx">refreshGridData</span><span class="p">);</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>Hard coded message .</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">msgToShow</span> <span class="o">=</span> <span class="s2">&quot;There was an error on the server please try again later.&quot;</span><span class="p">;</span>
+          <span class="p">}</span>
+
+        <span class="p">});</span>
+      <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">errorMsg</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+      <span class="p">});</span>    
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s2">&quot;FirmwareService&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">getFirwareInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;firmware/&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  
+  <span class="kd">var</span> <span class="nx">getFirwareVersions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">defaultAjaxParams</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPItoken</span> <span class="o">+</span> <span class="s1">&#39;firmware/versions&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span>
+      <span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+      <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbAlways</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">getFirwareInfo</span><span class="o">:</span> <span class="nx">getFirwareInfo</span><span class="p">,</span>
+    <span class="nx">getFirwareVersions</span><span class="o">:</span> <span class="nx">getFirwareVersions</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;validFile&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">require</span><span class="o">:</span> <span class="s1">&#39;ngModel&#39;</span><span class="p">,</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">el</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">ngModel</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">el</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">ngModel</span><span class="p">.</span><span class="nx">$setViewValue</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">());</span>
+          <span class="nx">ngModel</span><span class="p">.</span><span class="nx">$render</span><span class="p">();</span>
+        <span class="p">});</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

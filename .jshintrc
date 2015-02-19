@@ -1,0 +1,21 @@
+{
+    "indent": 2,
+    "node": true,
+    "unused": true,
+    "undef": true,
+    "newcap": true,
+    "esnext": true,
+    "curly": true,
+    "eqeqeq": true,
+    "expr": true,
+    "sub" : true,
+    "predef": [
+        "describe",
+        "it",
+        "beforeEach",
+        "afterEach"
+    ],
+	"globals": { "__CONFIG__": true },
+	"laxbreak" : true,
+	"quotmark" : "single"
+}

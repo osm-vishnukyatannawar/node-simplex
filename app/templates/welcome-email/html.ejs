@@ -1,0 +1,22 @@
+<p>Hi <%= user.username %>,</p>
+<p>
+	You signed up for a Powerpath account using the email <strong><%=
+		user.emailID %></strong>.
+</p>
+<p>Please confirm your email address by following this link:</p>
+<p>
+	<a href="<%= email.baseURL %>confirm-email?userID=<%= user.userID %>"><%=
+		email.baseURL %>/confirm-email</a>
+</p>
+<p>
+	You can login into the Powerpath Dashboard at <a
+		href="<%= email.baseURL %>"><%= email.baseURL %></a>
+</p>
+Thank you,
+<br>
+<strong><%= email.fromName %></strong>
+<hr>
+<p style="font-size: smaller">
+	Please do not reply to this email. Click <a
+		href="<%= email.baseURL %>help">here</a> to contact Emanate Support.
+</p>

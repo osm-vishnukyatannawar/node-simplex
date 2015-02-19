@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ReportProblem.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/report_problem/ReportProblem.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>ReportProblem.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+<p>Custom Models</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Authorization</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;authorization/Authorization&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Utility Libraries</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;i18n&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">ReportProblem</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">ReportProblem</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+<span class="nx">ReportProblem</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">insertReport</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">reportObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO report_problem_m (report_problem_recid, user_recid, organization_recid, deployment_recid,&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;description, filepath, filename, is_active,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;created_on,  modified_on) VALUES(:id, :userID, :organizationID, :deploymentID,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;:description, :filepath, :filename, :isActive,&#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;:createdOn, :modifiedOn);&#39;</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">reportObj</span><span class="p">,</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,{});</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">reportDataID</span> <span class="o">:</span> <span class="nx">reportObj</span><span class="p">.</span><span class="nx">id</span>
+      <span class="p">});</span>
+   <span class="p">}</span>  
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">ReportProblem</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDefaultReportData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">currDate</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">dbUtils</span><span class="p">.</span><span class="nx">toMySQLDateTime</span><span class="p">();</span>  
+  
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">v4</span><span class="p">(),</span>
+    <span class="nx">createdOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">modifiedOn</span><span class="o">:</span> <span class="nx">currDate</span><span class="p">,</span>
+    <span class="nx">isActive</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">ReportProblem</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

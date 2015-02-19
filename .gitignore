@@ -6,6 +6,9 @@ pids
 *.pid
 *.seed
 
+# SVN
+.svn
+
 # Eclipse
 .project
 .settings/
@@ -35,3 +38,8 @@ node_modules
 #bower-plugins
 app/code/public_html/plugins/*
 !app/code/public_html/plugins/datatables-boostrap
+!app/code/public_html/plugins/jqxwidgets/*
+!app/code/public_html/plugins/ladda/*
+
+# Uploads
+uploads/

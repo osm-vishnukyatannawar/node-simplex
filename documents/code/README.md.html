@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+  <script src="fileSearch.js"></script>
+  <link rel="stylesheet" href="fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#powerpath-server-base">powerpath-server-base</a>
+      </div>
+      <div class="heading h1">
+        <a href="#requirements">Requirements</a>
+      </div>
+      <div class="heading h1">
+        <a href="#installation">Installation</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20the%20files%20from%20github">Get the files from github</a>
+      </div>
+      <div class="heading h2">
+        <a href="#setup%20the%20sql%20database">Setup the SQL database</a>
+      </div>
+      <div class="heading h2">
+        <a href="#installing%20dependencies">Installing dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#setting%20up%20documentation">Setting up documentation</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="docs markdown">
+<div class="pilwrap" id="powerpath-server-base">
+  <h1>
+    <a href="#powerpath-server-base" name="powerpath-server-base" class="pilcrow">&#182;</a>
+    powerpath-server-base
+  </h1>
+</div>
+
+
+<p>A base framework for the PowerPath server.</p>
+
+
+<div class="pilwrap" id="requirements">
+  <h1>
+    <a href="#requirements" name="requirements" class="pilcrow">&#182;</a>
+    Requirements
+  </h1>
+</div>
+
+
+<ul>
+<li>Ensure that you have python (version of python must be > 2.5.0 and &lt; 3.0.0). <code>node-mariasql</code> requires python to be installed and in the PATH variable.</li>
+<li>node.js</li>
+<li>npm</li>
+<li>bower (<code>npm install -g bower</code>)</li>
+</ul>
+
+
+<div class="pilwrap" id="installation">
+  <h1>
+    <a href="#installation" name="installation" class="pilcrow">&#182;</a>
+    Installation
+  </h1>
+</div>
+
+
+
+<div class="pilwrap" id="get%20the%20files%20from%20github">
+  <h2>
+    <a href="#get%20the%20files%20from%20github" name="get%20the%20files%20from%20github" class="pilcrow">&#182;</a>
+    Get the files from github
+  </h2>
+</div>
+
+
+<ol>
+<li>Do a git clone - <code>git clone /path/to/git --recursive</code>. This will pull the latest code including the sub-directoy.</li>
+<li>Open a terminal in the sub-directory - <code>cd app/code</code></li>
+<li>Change the branch to whatever is the current sprint. You can do so - <code>git checkout -b sprint_X</code>.</li>
+</ol>
+
+
+<div class="pilwrap" id="setup%20the%20sql%20database">
+  <h2>
+    <a href="#setup%20the%20sql%20database" name="setup%20the%20sql%20database" class="pilcrow">&#182;</a>
+    Setup the SQL database
+  </h2>
+</div>
+
+
+<p>We use the MariaDB server.</p>
+
+<ol>
+<li>Restore the database from the <code>sql</code> folder</li>
+<li>Update the <code>db-config.js</code> file to point to your database</li>
+</ol>
+
+
+<div class="pilwrap" id="installing%20dependencies">
+  <h2>
+    <a href="#installing%20dependencies" name="installing%20dependencies" class="pilcrow">&#182;</a>
+    Installing dependencies
+  </h2>
+</div>
+
+
+<ol>
+<li>Run <code>npm install</code> to install node.js dependencies</li>
+<li>Run <code>bower install</code> to install frontend dependencies</li>
+<li>Run <code>npm start</code></li>
+</ol>
+
+
+<div class="pilwrap" id="setting%20up%20documentation">
+  <h2>
+    <a href="#setting%20up%20documentation" name="setting%20up%20documentation" class="pilcrow">&#182;</a>
+    Setting up documentation
+  </h2>
+</div>
+
+
+<ol>
+<li>Ensure <code>docker</code> is installed - <code>npm install -g docker</code></li>
+<li>In command line, and browse to the code base directory</li>
+<li>Run <code>docker -o ./documents/code -c manni -s yes -I -u -x node_modules,app/code/public_html/plugins,documents -w --extras fileSearch</code></li>
+</ol></div>
+  </div>
+</body>
+</html>

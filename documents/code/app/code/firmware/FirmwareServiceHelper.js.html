@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FirmwareServiceHelper.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/firmware/FirmwareServiceHelper.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>FirmwareServiceHelper.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">getStatus</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/status&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Service</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/service&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">FirmwareServiceHelper</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This function  helps the firmware service to extract all the files in the zip file uploaded to the destination folder</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">fwUploadPropObj
+</span>
+      <span>-Firmware properties object</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span>-Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareServiceHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">extactFilesTofolder</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fwUploadPropObj</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">fwUploadPropObj</span><span class="p">.</span><span class="nx">clientObj</span><span class="p">.</span><span class="nx">version</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">sourcePath</span> <span class="o">=</span> <span class="nx">fwUploadPropObj</span><span class="p">.</span><span class="nx">clientObj</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">filesFolder</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">filesFolderName</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">firmwareFolder</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">folder</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">destPath</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;../&#39;</span> <span class="o">+</span> <span class="nx">filesFolder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">firmwareFolder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>
+    <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseVersionFolderName</span> <span class="o">+</span>
+    <span class="nx">version</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sService</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Service</span><span class="p">();</span>
+  <span class="nx">sService</span><span class="p">.</span><span class="nx">UnzipFilesTofolder</span><span class="p">(</span><span class="nx">sourcePath</span><span class="p">,</span> <span class="nx">destPath</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">fwUploadPropObj</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>This function is used to extract the information from the files in the zip file</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">fileNameArray
+</span>
+      <span>we get this from the uploaded zip file Formate of the file in the zip file is WIFI_FW_VERSION_{version number}</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">version
+</span>
+      <span>-overall version of the firmware</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb
+</span>
+      <span>-Callback</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">FirmwareServiceHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getPropertiesArray</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fileNameArray</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">isValid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">errorMsg</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">propsArray</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">fileNameArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">fileNameArray</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">extension</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">extension</span> <span class="o">!==</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmwareFileExtension</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="nx">errorMsg</span> <span class="o">=</span> <span class="s2">&quot;Invalid file type. Please check and upload again&quot;</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;badRequest&#39;</span><span class="p">),</span>
+        <span class="nx">errorMsg</span><span class="p">,</span> <span class="p">{}));</span>
+    <span class="p">};</span>
+    <span class="kd">var</span> <span class="nx">validFileName</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">DefaultObj</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseFirmwareFileStrs</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">firmwareElementKey</span> <span class="k">in</span> <span class="nx">DefaultObj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">DefaultObj</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">firmwareElementKey</span><span class="p">))</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">firmwareElement</span> <span class="o">=</span> <span class="nx">DefaultObj</span><span class="p">[</span><span class="nx">firmwareElementKey</span><span class="p">];</span>
+          <span class="kd">var</span> <span class="nx">elementPos</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">firmwareElement</span><span class="p">);</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">elementPos</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">propsArray</span><span class="p">[</span><span class="nx">firmwareElement</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="nx">validFileName</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">firmwareElement</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">extension</span> <span class="o">=</span> <span class="nx">res</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmwareFileExtension</span><span class="p">);</span>
+            <span class="nx">propsArray</span><span class="p">[</span><span class="nx">firmwareElement</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">propsArray</span><span class="p">[</span><span class="nx">firmwareElement</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">element</span><span class="p">;</span>
+            <span class="nx">propsArray</span><span class="p">[</span><span class="nx">firmwareElement</span><span class="p">][</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">firmware</span><span class="p">.</span><span class="nx">baseVersionFolderName</span> <span class="o">+</span>
+              <span class="nx">version</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>
+              <span class="nx">element</span><span class="p">;</span>
+          <span class="p">};</span>
+        <span class="p">};</span>
+      <span class="p">};</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;internalError&#39;</span><span class="p">),</span>
+        <span class="s2">&quot;There was an error on the server.Please try again later.&quot;</span><span class="p">,</span> <span class="nx">e</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">validFileName</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">errorMsg</span> <span class="o">=</span> <span class="s2">&quot;Invalid files in the zip file.&quot;</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">getStatus</span><span class="p">(</span><span class="s2">&quot;badRequest&quot;</span><span class="p">),</span>
+        <span class="nx">errorMsg</span><span class="p">,</span> <span class="p">{}));</span>
+    <span class="p">};</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">propsArray</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">FirmwareServiceHelper</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

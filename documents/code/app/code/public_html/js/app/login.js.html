@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>login.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../../doc-style.css" />
+  <script src="../../../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../../../", thisFile = "app/code/public_html/js/app/login.js", defaultSidebar = true;
+  </script>
+  <script src="../../../../../doc-script.js"></script>
+  <script src="../../../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>login.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">emanateApp</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;emanateApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;LoginController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">LoginService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">isSubmitted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">isLoginPage</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">loginUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$login</span><span class="p">,</span> <span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isSubmitted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">LoginService</span><span class="p">.</span><span class="nx">validateUser</span><span class="p">(</span><span class="nx">$login</span><span class="p">,</span> <span class="nx">cbLoginProcess</span><span class="p">,</span> <span class="nx">cbLoginComplete</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kd">function</span> <span class="nx">cbLoginProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">respObj</span> <span class="o">=</span> <span class="nx">getErrorResponseMsg</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">(</span><span class="nx">scopeApplyResponse</span><span class="p">(</span><span class="nx">respObj</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">LoginService</span><span class="p">.</span><span class="nx">saveUser</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">(</span><span class="nx">scopeApplyResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">isAdmin</span> <span class="o">===</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;/dashboard-admin#/overview&#39;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;/dashboard#/overview&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">cbLoginComplete</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">scopeApplyResponse</span><span class="p">(</span><span class="nx">respObj</span><span class="p">,</span> <span class="nx">hasError</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">msgToShow</span> <span class="o">=</span> <span class="nx">respObj</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">hasError</span> <span class="o">=</span> <span class="nx">hasError</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">emanateApp</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s2">&quot;LoginService&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">validateUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">cbProcess</span><span class="p">,</span> <span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">makeAjaxCall</span><span class="p">({</span>
+      <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">baseAPI</span> <span class="o">+</span> <span class="s1">&#39;user/login/&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;data&#39;</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nx">cbProcess</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">&#39;success&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cbProcess</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cbProcess</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">cbAlways</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cbAlways</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">saveUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">sessionStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">__GLOBAL__</span><span class="p">.</span><span class="nx">currUsrData</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">validateUser</span><span class="o">:</span> <span class="nx">validateUser</span><span class="p">,</span>
+    <span class="nx">saveUser</span><span class="o">:</span> <span class="nx">saveUser</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+
+<span class="nx">$</span><span class="p">(</span> <span class="nb">document</span> <span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.login-link&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">);</span>  
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

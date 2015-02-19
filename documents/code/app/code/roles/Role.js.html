@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Role.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/roles/Role.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Role.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Model</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/model&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;node-uuid&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">__</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Role</span><span class="p">(</span><span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Model</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="nx">objToBind</span><span class="p">,</span> <span class="nx">requestParameters</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">Role</span><span class="p">,</span> <span class="nx">Model</span><span class="p">);</span>
+
+<span class="nx">Role</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">requestParams</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">queryModifiers</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT role_m.role_recID AS roleID, role_m.role_name AS roleName, &quot;</span>
+          <span class="o">+</span> <span class="s2">&quot;role_m.created_on AS createdOn,  role_m.modified_on AS modifiedOn &quot;</span>
+          <span class="o">+</span> <span class="s2">&quot;FROM role_m &quot;</span> <span class="o">+</span> <span class="s2">&quot;WHERE role_m.is_active = ?&quot;</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResults</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()],</span>
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;No roles were defined.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">}</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">Role</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFullRoleID</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>  
+  <span class="kd">var</span> <span class="nx">sqlQuery</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;SELECT role_m.role_recID AS roleID FROM role_m WHERE role_m.is_active = ? AND role_m.role_name = &quot;Full&quot;&#39;</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">getResult</span><span class="p">({</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="nx">sqlQuery</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">getActiveID</span><span class="p">()],</span>    
+    <span class="nx">cb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span> <span class="o">&amp;&amp;</span> <span class="nx">__</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">getStatusCode</span><span class="p">(</span><span class="s1">&#39;notFound&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;A role with that name was not found.&#39;</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span> <span class="nx">roleID</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">roleID</span> <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Role</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

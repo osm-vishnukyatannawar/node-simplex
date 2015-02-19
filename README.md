@@ -31,3 +31,7 @@ We use the MariaDB server.
 3. Run `npm start`
 
 
+## Setting up documentation
+1. Ensure `docker` is installed - `npm install -g docker`
+2. In command line, and browse to the code base directory
+2. Run `docker -o ./documents/code -c manni -s yes -I -u -x node_modules,app/code/public_html/plugins,documents -w --extras fileSearch`

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DevicesController.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/code/devices/DevicesController.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>DevicesController.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">Authorization</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;authorization/Authorization&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Organization</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;organization/Organization&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;logger&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Controller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/controller&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">DeviceService</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_code_path</span> <span class="o">+</span> <span class="s1">&#39;devices/DevicesService&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;util&quot;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">DevicesController</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Controller</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">sDevice</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DeviceService</span><span class="p">();</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_url_token</span> <span class="o">+</span> <span class="s1">&#39;devices/:id&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDevices</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpPost</span><span class="p">(</span><span class="s1">&#39;upload-csv/&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">uploadCsv</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;export-devices/&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">exportDeviceCsv</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;unexported-rows/&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">unExportedCsvRows</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">httpGet</span><span class="p">(</span><span class="s1">&#39;calibration/details/&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCalibrationDetails</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">),</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">DevicesController</span><span class="p">,</span> <span class="nx">Controller</span><span class="p">);</span>
+
+<span class="nx">DevicesController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getDevices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="nx">DevicesController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">uploadCsv</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">uploadFile</span><span class="p">.</span><span class="nx">path</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">currToken</span><span class="p">.</span><span class="nx">userID</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">sDevice</span><span class="p">.</span><span class="nx">srvcGetDataForCalibrations</span><span class="p">({</span>
+    <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="nx">path</span><span class="p">,</span>
+    <span class="s1">&#39;userId&#39;</span><span class="o">:</span> <span class="nx">userId</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">logger</span><span class="p">.</span><span class="nx">logAppInfo</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">DevicesController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">exportDeviceCsv</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">currToken</span><span class="p">.</span><span class="nx">userID</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">clientDataObj</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;userId&quot;</span> <span class="o">:</span> <span class="nx">userId</span><span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">sDevice</span><span class="p">.</span><span class="nx">getDevicesForCsv</span><span class="p">(</span><span class="nx">clientDataObj</span> <span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">attachment</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">calibration</span><span class="p">.</span><span class="nx">exportCsvFileDownloadName</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">root</span><span class="o">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s2">&quot;../&quot;</span> <span class="o">+</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">filesFolderName</span><span class="p">,</span>
+      <span class="nx">dotfiles</span><span class="o">:</span> <span class="s1">&#39;deny&#39;</span><span class="p">,</span>
+      <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">&#39;x-timestamp&#39;</span><span class="o">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">(),</span>
+        <span class="s1">&#39;x-sent&#39;</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="nx">userId</span><span class="o">+</span><span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">calibration</span><span class="p">.</span><span class="nx">allRecordsCsvFileName</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span>
+          <span class="s2">&quot;There was a problem on the server.Please try again later&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">),</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+      <span class="p">};</span>
+
+    <span class="p">});</span>
+
+
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">DevicesController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unExportedCsvRows</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">currToken</span><span class="p">.</span><span class="nx">userID</span><span class="p">;</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">attachment</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">calibration</span><span class="p">.</span><span class="nx">unExportedLogFileName</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">root</span><span class="o">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s2">&quot;../&quot;</span> <span class="o">+</span> <span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">filesFolderName</span><span class="p">,</span>
+    <span class="nx">dotfiles</span><span class="o">:</span> <span class="s1">&#39;deny&#39;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;x-timestamp&#39;</span><span class="o">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">(),</span>
+      <span class="s1">&#39;x-sent&#39;</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="nx">userId</span><span class="o">+</span><span class="nx">global</span><span class="p">.</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">calibration</span><span class="p">.</span><span class="nx">failureRecordsFileName</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;There was a problem on the server.Please try again later&quot;</span><span class="p">,</span>
+        <span class="nx">err</span><span class="p">),</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+    <span class="p">};</span>
+
+  <span class="p">});</span>
+
+<span class="p">};</span>
+
+<span class="nx">DevicesController</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCalibrationDetails</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">sDevice</span><span class="p">.</span><span class="nx">getCountAndLastModifiedDate</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">sendResponse</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+
+  <span class="p">});</span>
+
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">DevicesController</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

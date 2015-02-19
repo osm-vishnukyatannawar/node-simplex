@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mysql.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../doc-style.css" />
+  <script src="../../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../../", thisFile = "app/lib/db-connector/mysql.js", defaultSidebar = true;
+  </script>
+  <script src="../../../doc-script.js"></script>
+  <script src="../../../fileSearch.js"></script>
+  <link rel="stylesheet" href="../../../fileSearch.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>mysql.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>A db class to be used by other models. Uses the following -
+<a href='https://github.com/felixge/node-mysql'>https://github.com/felixge/node-mysql</a> DEPENDENCIES - node-mariasql -
+app-error.js TODO : Add transaction support.</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">mSQLClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mysql&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mSQLPool</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span>
+        <span class="o">+</span> <span class="s1">&#39;lib/db-connector/pools/mysql-pool&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">AppError</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="nx">__CONFIG__</span><span class="p">.</span><span class="nx">app_base_path</span> <span class="o">+</span> <span class="s1">&#39;lib/app-error&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">defaultMsg</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">errorDbConn</span><span class="o">:</span> <span class="s2">&quot;There was an error while communicating with the database.&quot;</span><span class="p">,</span>
+  <span class="nx">queryExecution</span><span class="o">:</span> <span class="s2">&quot;There was an error while executing the query.&quot;</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>The base MariaDb constructor.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">dbConfig
+</span>
+      <span>Database configurations</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">customMsgs
+</span>
+      <span>Use this parameter to override the custom messages used.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">function</span> <span class="nx">MySQL</span><span class="p">(</span><span class="nx">dbConfig</span><span class="p">,</span> <span class="nx">customMsgs</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">config</span> <span class="o">=</span> <span class="nx">dbConfig</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">msgStrings</span> <span class="o">=</span> <span class="nx">defaultMsg</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">customMsgs</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">customMsgs</span><span class="p">.</span><span class="nx">errorDbConn</span>
+          <span class="o">&amp;&amp;</span> <span class="nx">customMsgs</span><span class="p">.</span><span class="nx">queryExecution</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">msgStrings</span> <span class="o">=</span> <span class="nx">customMsgs</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">MySQL</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setDbConfig</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dbConfig</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">config</span> <span class="o">=</span> <span class="nx">dbConfig</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">closeConnection</span><span class="p">();</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>Use this for INSERT, UPDATE, DELETE queries</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">objQuery
+</span>
+      <span>Contains the following the properties - query - The SQL Query. data -
+         Data to be sent for the query. cb - Callback method. closeConn -
+         Close the connection automatically. useArray - Respond with an array
+         rather than an object.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">MySQL</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">query</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">runQuery</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">query</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">closeConn</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">MySQL</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getResult</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">runQuery</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">query</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">response</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+  <span class="p">},</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">closeConn</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">useArray</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">MySQL</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getResults</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objQuery</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">runQuery</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">query</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">objQuery</span><span class="p">.</span><span class="nx">closeConn</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>isSelect is currently not being used, leaving it as is, to maybe use in the
+future</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">function</span> <span class="nx">runQuery</span><span class="p">(</span><span class="nx">objMySQL</span><span class="p">,</span> <span class="nx">isSelect</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">closeConn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">mSQLPool</span><span class="p">(</span><span class="nx">objMySQL</span><span class="p">.</span><span class="nx">config</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">connection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">objMySQL</span><span class="p">.</span><span class="nx">msgStrings</span><span class="p">[</span><span class="s1">&#39;errorDbConn&#39;</span><span class="p">]),</span> <span class="kc">null</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="k">new</span> <span class="nx">AppError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">objMySQL</span><span class="p">.</span><span class="nx">msgStrings</span><span class="p">[</span><span class="s1">&#39;queryExecution&#39;</span><span class="p">]),</span> <span class="kc">null</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">closeConn</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">connection</span><span class="p">.</span><span class="nx">release</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">MySQL</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
