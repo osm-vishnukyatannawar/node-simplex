@@ -32,7 +32,7 @@ csvHelper.prototype.readObjCreateCsv = function(arrayToRead, cb) {
   });
 };
 
-csvHelper.prototype.getArrayForCsv = function(data, cb) {
+csvHelper.prototype.getArrayForCsv = function(data, cb , properties) {
   var baseArray = [];
   var labelsArray = [];
   for (var index in data) {
@@ -40,7 +40,18 @@ csvHelper.prototype.getArrayForCsv = function(data, cb) {
     var element = data[index];
     if (labelsArray.length == 0) {
       for (var key in element) {
-        labelsArray.push(key);
+    	if(properties){
+    		var csvName = getPropertyCsvName(key , properties);
+    		if(csvName){
+    			labelsArray.push(csvName);
+    		}else{
+    			labelsArray.push(key);
+    		}
+    		
+    	}else{
+    		labelsArray.push(key);
+    	}
+        
       }
       baseArray.push(labelsArray);
     }
@@ -51,6 +62,18 @@ csvHelper.prototype.getArrayForCsv = function(data, cb) {
   }
   cb(null, baseArray);
 };
+
+function getPropertyCsvName(key , props){
+	if (props.hasOwnProperty(key)) {
+		if(props[key].hasOwnProperty('csvName')){
+			return props[key]['csvName'];
+		}else{
+			return false;
+		}
+	} else {
+	    return false;
+	  }
+}
 
 csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
   cb) {
@@ -67,11 +90,11 @@ csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
 };
 
 
-csvHelper.prototype.getCSV = function(data, fileName, cb) {
+csvHelper.prototype.getCSV = function(data, fileName, cb , properties) {
   var that = this;
   async.waterfall([
     function(wfcb) {
-    	that.getArrayForCsv(data, wfcb);
+    	that.getArrayForCsv(data, wfcb , properties);
     },
     function(array, wfcb) {
     	that.readObjCreateCsv(array, wfcb);

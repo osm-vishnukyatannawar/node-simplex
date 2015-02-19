@@ -10,7 +10,23 @@ require_once 'ws-call.php';
         <title>
             Emanate Emulator
         </title>
-        <style>
+        <style> 
+            h1, h2, h3, h4 {
+                margin-bottom: 0.5em;
+                margin-top:0.5em;
+            }
+            .form-right, .form-left {
+                width:49%;                
+            }
+            .form-right {
+                float:right;
+            }
+            .form-left {
+                float:left;
+            }
+            .clear-div {
+                clear:both;
+            }
             table {
                 *border-collapse: collapse; /* IE7 and lower */
                 border-spacing: 0;
@@ -121,6 +137,9 @@ require_once 'ws-call.php';
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
             }
+            .footer {
+                min-height: 10px;
+            }
         </style>
     </head>
     <body>
@@ -130,32 +149,81 @@ require_once 'ws-call.php';
             }
         </script>
         <h1>Emanate Simulator</h1>
-        <hr>
-        <h2>Tag Info</h2>
+        <hr>                
         <?php
-        $tagSN = empty($_POST['tagSN']) || empty(intval($_POST['tagSN'])) ? TAG_SN : intval($_POST['tagSN']);
-        $orgID = empty($_POST['orgID']) || empty(intval($_POST['orgID'])) ? ORG_ID : intval($_POST['orgID']);
+        $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
+        $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
+        $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
+        $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
+        $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
+        $tagUSDData = empty($_POST['tagUSDData']) ? 'default data = ' . DEFAULT_VALUES : $_POST['tagUSDData'];
+        $tagDebugLog = empty($_POST['tagDebugLog']) ? 'Log == ' . DEFAULT_VALUES : $_POST['tagDebugLog'];
         ?>
         <form method ="POST" enctype="multipart/form-data">
+            <div class="form-left">                
+                <h2>Tag Info</h2>
+                <table class="zebra">
+                    <thead>
+                        <tr>
+                            <td>Property</td>
+                            <td>Value</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tag Serial Number</td>
+                            <td><input class="pure-text" type='text' value="<?php echo $tagSN ?>" name="tagSN"></td>
+                        </tr>
+                        <tr>
+                            <td>Organization ID</td>
+                            <td><input class="pure-text" type='text' value="<?php echo $orgID ?>" name="orgID"></td>
+                        </tr>
+                        <tr>
+                            <td>Default Data</td>
+                            <td><?php echo DEFAULT_VALUES ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-right">
+                <h2>Tag firmware info</h2>
+                <table class="zebra">
+                    <thead>
+                        <tr>
+                            <td>Version type</td>
+                            <td>Version value</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>WIFI firmware version</td>
+                            <td><input class="pure-text" type='text' value="<?php echo $wifiFirmware ?>" name="wifiFirmware"></td>
+                        </tr>
+                        <tr>
+                            <td>BLE firmware version</td>
+                            <td><input class="pure-text" type='text' value="<?php echo $bleFirmware ?>" name="bleFirmware"></td>
+                        </tr>
+                        <tr>
+                            <td>Host firmware version</td>
+                            <td><input class="pure-text" type='text' value="<?php echo $hostFirmware ?>" name="hostFirmware"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clear-div"></div>
+            <hr>
+            <h2>Tag Debug info</h2>
             <table class="zebra">
                 <thead>
-                    <tr>
-                        <td>Property</td>
-                        <td>Value</td>
-                    </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Tag Serial Number</td>
-                        <td><input class="pure-text" type='text' value="<?php echo $tagSN ?>" name="tagSN"></td>
+                        <td>Tag USD debug data</td>
+                        <td><textarea class="pure-text" name="tagUSDData"><?php echo $tagUSDData ?></textarea></td>
                     </tr>
                     <tr>
-                        <td>Organization ID</td>
-                        <td><input class="pure-text" type='text' value="<?php echo $orgID ?>" name="orgID"></td>
-                    </tr>
-                    <tr>
-                        <td>Default Data</td>
-                        <td><?php echo DEFAULT_VALUES ?></td>
+                        <td>Tag debug log</td>
+                        <td><textarea class="pure-text" name="tagDebugLog"><?php echo $tagDebugLog ?></textarea></td>
                     </tr>
                 </tbody>
             </table>
@@ -169,6 +237,8 @@ require_once 'ws-call.php';
             <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="4">Current</button>
             <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="5">TagInfo</button>            
         </form>
+        <hr>
+        <div class = "footer"></div>
         <?php
         require_once 'powertag-classes/BaseClass.php';
         require_once 'powertag-classes/MaintenanceClass.php';
@@ -179,79 +249,52 @@ require_once 'ws-call.php';
         require_once 'response.php';
 
         $allOutput = array();
-        if (isset($_POST['submit'])) {            
-            function sendDataBasedOnDataType($dataType, $url = NULL) {
-                global $tagSN, $orgID;
-                $finalResult = false;
-                switch ($dataType) {
-                    case MAINTENANCE_TYPE :
-                        $mainObj = new Maintenance();
-                        $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($mntnceData);
-                        break;
-                    case HISTOGRAM_TYPE :
-                        $histogramObj = new Histogram();
-                        $histogramData = json_encode($histogramObj->getHistogramDataFormat());
-                        $finalResult = makeCallToMaintURL($histogramData);
-                        break;
-                    case PIM_TYPE :
-                        $pimObj = new PIM();
-                        $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($pimData);
-                        break;
-                    case CURRENT_TYPE :
-                        $currentObj = new Current();
-                        $currentData = json_encode($currentObj->getCurrentDataFormat());
-                        $finalResult = makeCallToMaintURL($currentData);
-                        break;
-                    case TAGINFO_TYPE :
-                        $tagObj = new TagInfo();
-                        $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
-                        $finalResult = makeCallToMaintURL($tagInfoData);
-                        break;
-                    case POWERPATH_UPDATE_CONFIG_PARAM :
-                        $finalResult = makeGETRequest($url);
-                        break;
-                }                
-                if($finalResult) {
-                    global $allOutput;
-                    $allOutput[] = $finalResult;
-                }                
-                return $finalResult;
-            }
-
+        if (isset($_POST['submit'])) {
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
+            $firmwareLookupIds = unserialize(LOOKUP_VALUES);
             if ($nmbrOfCalls > 0) {
                 for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                     $respObj = sendDataBasedOnDataType($type);
                     // If it's a maintenance type process the pending events                    
                     if (intval($type) === MAINTENANCE_TYPE) {
-                        if (!empty($respObj->data)) {
-                            foreach ($respObj->data AS $key => $value) {
-                                sendDataBasedOnDataType(intval($key), $value);
-                            }
-                        }
+                        processTagPendingEvents($respObj->data);
                     }
                 }
             } else {
-                $finalResult = sendDataBasedOnDataType($type);
-                foreach ($finalResult['data'] AS $key => $value) {
-                    sendDataBasedOnDataType($key);
+                $respObj = sendDataBasedOnDataType($type);
+                if (intval($type) === MAINTENANCE_TYPE) {
+                    processTagPendingEvents($respObj->data);
                 }
             }
         }
         ?>
+        <h2>Event Info</h2>
+<pre>
+    MAINTENANCE_TYPE -  1
+    TAGINFO_TYPE -  5
+    HISTOGRAM_TYPE -  2
+    CURRENT_TYPE -  4
+    PIM_TYPE -  3
+    POWERPATH_SEND_DEBUG_LOG -  9
+    POWERPATH_REPORT_USD_DEBUG_DATA - 16
+</pre>
+        <hr>
         <?php if (!empty($allOutput)) { ?>
             <h2>Output</h2>
             <?php
             $i = 1;
             foreach ($allOutput as $output) {
+                if(empty($output)) {
+                    continue;
+                }
                 ?>
                 <ul class="output-list">
                     <li><strong>#<?php echo $i ?></strong>
                         <hr>
                     <li><strong>HTTP</strong> : <?php echo $output->statusCode ?></li>
+                    <li><strong>URL</strong> : <?php echo $output->urlCalled ?></li>
+                    <li><strong>Call Type</strong> : <?php echo $output->callType ?></li>
                     <li><strong>Status</strong> : <?php echo $output->status ?></li>
                     <li><strong>Data</strong> : <pre><?php echo json_encode($output->data, JSON_PRETTY_PRINT) ?></pre></li>
                     <?php if (!empty($output->message)) { ?>

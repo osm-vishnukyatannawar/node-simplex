@@ -2,15 +2,20 @@
   "name": "node-simplex",
   "version": "0.1.2",
   "description": "Simple node.js framework for our internal use.",
-  "directory" : "app/code/public_html/plugins/",
+  "directory": "app/code/public_html/plugins/",
   "author": "Abijeet Patro",
-  "contributors" : ["<abijeet.p@osmosys.asia> (http://osmosys.asia)"],  
-  "dependencies": { 
-    "bootstrap":"3.3.0",
-    "bootstrap-select" : "1.6.3",
-    "datatables" : "1.10.4",
-    "Chart.js" : "1.0.1-beta.4",
-    "bootstrap-vertical-tabs" : "1.2.1",
-    "ng-file-upload" : "2.0.5"    
+  "contributors": [
+    "<abijeet.p@osmosys.asia> (http://osmosys.asia)"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.0",
+    "bootstrap-select": "1.6.3",
+    "datatables": "1.10.4",
+    "Chart.js": "1.0.1-beta.4",
+    "bootstrap-vertical-tabs": "1.2.1",
+    "ng-file-upload": "2.0.5",
+    "moment": "~2.9.0",
+    "n3-line-chart" : "1.1.6",
+    "eonasdan-bootstrap-datetimepicker" : "4.0.0"
   }
 }

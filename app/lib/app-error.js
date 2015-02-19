@@ -13,7 +13,7 @@ var __ = require('underscore');
  * @param vObj -
  *          This object will be sent if it's a validation error. 
  */
-function AppError(err, respMessage, vObj) {
+function AppError(err, respMessage, vObj, logError) {
   'use strict';
   this.vObj = {};
   var objType = typeof (err) ;  
@@ -22,6 +22,9 @@ function AppError(err, respMessage, vObj) {
     this.message = err.message;
     this.appMessage = respMessage;
     this.isInternalErr = true;
+    if(logError) {
+      this.writeToLog();
+    }
   } else  if(objType === 'object' && err instanceof AppError) {
     this.copyError(err, respMessage, vObj);
   } else {
@@ -64,7 +67,7 @@ AppError.prototype.copyError = function(err, respMessage, vObj) {
   if(!err.vObj) {
     err.vObj = {};
   }
-  this.validation = __.extend(err.vObj, vObj);
+  this.validation = __.extend(err.validation, vObj);
 };
 
 module.exports = AppError;

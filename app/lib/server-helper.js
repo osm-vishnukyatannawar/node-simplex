@@ -43,8 +43,8 @@ var serverHelper = function() {
   var parseBodyTypeValues = function(request, response, next) {
     var contentType = request.get('content-type');
     var type = typeof(contentType);
-    if (type != "undefined") {
-      var isMultipart = contentType.search("multipart/form-data");
+    if (type != 'undefined') {
+      var isMultipart = contentType.search('multipart/form-data');
     } else {
       var isMultipart = -1;
     }
@@ -93,37 +93,7 @@ var serverHelper = function() {
     return finalUrl;
   };
 
-  var parseQueryStringValues = function(request, response, next) {
-    if (__.isEmpty(request.query)) {
-      request.queryParams = {};
-      next();
-      return;
-    }
-    request.queryParams = {};
-    request.queryParams.limit = parseInt(request.query.limit, 10);
-    request.queryParams.startRecord = parseInt(request.query.startRecord, 10);
-
-    request.queryParams.limit = isNaN(request.queryParams.limit) ? 20 : request.queryParams.limit;
-
-    request.queryParams.startRecord = isNaN(request.queryParams.startRecord) ? 0 : request.queryParams.startRecord;
-
-    // Checking if it's a string and check that it's not empty
-    request.queryParams.search = (__.isString(request.query.q) && !__.isEmpty(request.query.q) ? request.query.q :
-      false);
-
-    request.queryParams.seachCol = (__.isString(request.query.qcol) && !__.isEmpty(request.query.qcol) ? request.query
-      .qcol : '*');
-
-    request.queryParams.sortBy = (__.isString(request.query.sortby) && !__.isEmpty(request.query.sortby) ? request.query
-      .sortby : false);
-
-    request.queryParams.sortCol = (__.isString(request.query.sortcol) && !__.isEmpty(request.query.sortcol) ?
-      request.query.sortcol : false);
-    next();
-  };
-
   return {
-    parseQueryString: parseQueryStringValues,
     parseBodyType: parseBodyTypeValues,
     init: init,
   };
