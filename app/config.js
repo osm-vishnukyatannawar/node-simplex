@@ -48,7 +48,7 @@ global.__CONFIG__ = {
       'host_fw_version': 'PowerPath_HOST_FW_'
     },
     'firmwareFileExtension': {
-    	'ble_fw_version': '.hex',
+    	'ble_fw_version': '.bin',
     	'wifi_fw_version': '.bin',
     	'host_fw_version' : '.bin'
     },
