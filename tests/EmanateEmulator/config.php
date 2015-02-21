@@ -35,7 +35,7 @@ define('BASE_URL', 'http://10.0.0.15:3000/api/v1/');
 define('WS_URL', 'http://10.0.0.15:3000/api/v1/tag/maintenance/');
 
 // Sleep time in seconds
-define('SLEEP_TIME', 1);
+define('SLEEP_TIME', 0);
 
 //Look up values for powerpath firmware updation commands
 

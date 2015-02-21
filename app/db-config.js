@@ -9,7 +9,7 @@ var dbConfig = {
     password: 'Change123',
     db: 'dev_emanate_db',
     connTimeout: 15,
-    multiSelect: true
+    multiStatements: true
   },
   'cassandradb': {
     name: 'cassandradb',
