@@ -13,7 +13,6 @@ var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
 var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
 var csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
-var zip = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 
 var uuid = require('node-uuid');
 var __ = require('underscore');
@@ -40,15 +39,15 @@ Model.prototype.query = function(objQuery) {
   var self = this;
   if (objQuery.validate === true || objQuery.validate === undefined) {
     if (!this.validator.isValid(objQuery.data)) {
-      objQuery.cb(new AppError(this.getStatusCode("badRequest"),
-        "Server encountered the following errors while processing the request --", this.validator.getErrors()));
+      objQuery.cb(new AppError(this.getStatusCode('badRequest'),
+        'Server encountered the following errors while processing the request --', this.validator.getErrors()));
       return;
     }
   }
   var beforeEvents = objQuery.before;
   if (__.isArray(beforeEvents) && beforeEvents.length !== 0) {
     this.currentData = objQuery.data;
-    async.waterfall(beforeEvents, function(err, result) {
+    async.waterfall(beforeEvents, function(err) {
       if (err) {
         objQuery.cb(err);
         return;
@@ -73,7 +72,7 @@ Model.prototype.getResults = function(objQuery) {
     this.csDb.getResults(objQuery, cbProcess);
   } else {
     this.db.getResults(objQuery, cbProcess);
-  };
+  }
 };
 
 Model.prototype.getResult = function(objQuery) {
@@ -217,13 +216,14 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var defaultVals = objQueryDetails.defaultVals;
   var valuesQueryArr = [];
   var valuesQuery = '';
+  var idCol = '';
   if (__.isArray(dataToBind)) {
     // It's an array.
     for (var i = 0, len = dataToBind.length; i < len; ++i) {
       var dynamicCols = [];
       if (hasPrimaryKey) {
         // Adding the id column.
-        var idCol = 'id_' + i.toString();
+        idCol = 'id_' + i.toString();
         dynamicCols.push(':' + idCol);
         finalData[idCol] = uuid.v4();
       }
@@ -244,7 +244,7 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
     for (var i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
       var dynamicCols = [];
       if (hasPrimaryKey) {
-        var idCol = 'id_' + i.toString();
+        idCol = 'id_' + i.toString();
         dynamicCols.push(':' + idCol);
         finalData[idCol] = uuid.v4();
       }
@@ -292,7 +292,6 @@ Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
 };
 
 Model.prototype.readCsvFile = function(path, cb) {
-
   this.csvHelper.readCsvHelper(path, function(err, data) {
     if (err) {
       cb(err);
@@ -301,6 +300,9 @@ Model.prototype.readCsvFile = function(path, cb) {
   });
 };
 
+Model.prototype.queries = function(objQuery) {
+  runQuery(objQuery, this);
+};
 
 function getDefaultTagDateObj() {
   var dt = new Date();
@@ -313,6 +315,7 @@ function getDefaultTagDateObj() {
     tm_sec: 0
   };
 }
+
 
 function processError(err) {
   if (err && err.isInternalErr) {
@@ -328,7 +331,11 @@ function runQuery(objQuery, self) {
   if (objQuery.isCassandra) {
     self.csDb.query(objQuery, cbProcess);
   } else {
-    self.db.query(objQuery, cbProcess);
+    if(objQuery.isMultiple) {
+      self.db.queries(objQuery, cbProcess); 
+    } else {
+      self.db.query(objQuery, cbProcess);
+    }    
   }
 }
 
