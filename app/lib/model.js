@@ -195,8 +195,8 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
 /**
  *
  * @param objQueryDetails Information about the query to be generated
- * @param objQueryDetails.initialQuery string Initial part of the query 
- * @param objQueryDetails.staticData object or array Static data, data that will stay the same for all the 
+ * @param objQueryDetails.initialQuery string Initial part of the query
+ * @param objQueryDetails.staticData object or array Static data, data that will stay the same for all the
  * queries.
  * @param objQueryDetails.staticCols array Static columns. They should be in the same order as
  * present in the query.
@@ -204,7 +204,7 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
  * @param objQueryDetails.data
  * @param objQueryDetails.propNames
  * @param objQueryDetails.defaultVals
- * @returns 
+ * @returns
  */
 Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var initialQuery = objQueryDetails.initialQuery;
@@ -331,11 +331,11 @@ function runQuery(objQuery, self) {
   if (objQuery.isCassandra) {
     self.csDb.query(objQuery, cbProcess);
   } else {
-    if(objQuery.isMultiple) {
-      self.db.queries(objQuery, cbProcess); 
+    if (objQuery.isMultiple) {
+      self.db.queries(objQuery, cbProcess);
     } else {
       self.db.query(objQuery, cbProcess);
-    }    
+    }
   }
 }
 

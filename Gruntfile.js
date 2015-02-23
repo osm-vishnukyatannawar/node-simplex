@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   var codePath = __dirname + '/app/code/';
   var publicHTML = codePath + 'public_html/';
+  var codeBasePath = __dirname + '/app/';
 
   var gridFiles = [
     "plugins/jqxwidgets/jqxcore.js", "plugins/jqxwidgets/jqxdata.js",
@@ -48,7 +49,7 @@ module.exports = function(grunt) {
       },
     },
     jsbeautifier: {
-      files: [codePath + '*.js', codePath + '**/*.js', publicHTML +
+      files: [codePath + '*.js', codePath + '**/*.js', codeBasePath + '**/*.js', publicHTML +
         'js/**/*.js', '!' + publicHTML + 'plugins/**', '!' + codePath +
         '**/*.min.js'
       ],

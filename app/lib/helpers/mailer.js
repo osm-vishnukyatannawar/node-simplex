@@ -158,7 +158,7 @@ var mailer = function() {
     }
     async.filter(mailObj.attachments, function(attachment, next) {
       fs.exists(attachment.path, next);
-    }, function(results) {      
+    }, function(results) {
       mailObj.attachments = results;
       return cb(null, mailObj);
     });

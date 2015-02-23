@@ -3,7 +3,7 @@
 var poolModule = require('generic-pool');
 var poolsList = {};
 
-var getPoolObj = function(objDbConfig) { 
+var getPoolObj = function(objDbConfig) {
   var poolName = objDbConfig.name;
   if (!poolName) {
     // pool name is mandatory
@@ -15,7 +15,7 @@ var getPoolObj = function(objDbConfig) {
   poolsList[poolName] = poolModule.Pool({
     name: poolName,
     create: function(callback) {
-      objDbConfig.create(callback);         
+      objDbConfig.create(callback);
     },
     destroy: function(client) {
       objDbConfig.destroy(client);

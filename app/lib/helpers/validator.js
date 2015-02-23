@@ -2,12 +2,16 @@ var validatorLib = require('validator');
 var __ = require('underscore');
 
 validatorLib.extend('isRequired', function(str) {
-  if (!str || str.length === 0) { return false; }
+  if (!str || str.length === 0) {
+    return false;
+  }
   return true;
 });
 
 validatorLib.extend('isBoolRequired', function(str) {
-  if (!str || str.length !== 0) { return true; }
+  if (!str || str.length !== 0) {
+    return true;
+  }
   return false;
 });
 
@@ -23,13 +27,13 @@ Validator.prototype.isValid = function(objToValidate, propsToValidate) {
       propName = propsToValidate[i];
       if (this.requiredFields.hasOwnProperty(propName)) {
         this.validateProperty(objToValidate, propsToValidate[i],
-                this.requiredFields[propName].validation);
+          this.requiredFields[propName].validation);
       }
     }
   } else {
-    for ( var propName in this.requiredFields) {
+    for (var propName in this.requiredFields) {
       this.validateProperty(objToValidate, propName,
-              this.requiredFields[propName].validation);
+        this.requiredFields[propName].validation);
     }
   }
   // If object is empty no errors - so true it's valid else its not valid
@@ -37,10 +41,12 @@ Validator.prototype.isValid = function(objToValidate, propsToValidate) {
 };
 
 Validator.prototype.validateProperty = function(objToValidate, propName,
-        propsToValidate) {
-  if (!propsToValidate) { return; }
+  propsToValidate) {
+  if (!propsToValidate) {
+    return;
+  }
   var value = objToValidate[propName];
-  for ( var validationRule in propsToValidate) {
+  for (var validationRule in propsToValidate) {
     if (validationRule !== 'isRequired' && !value) {
       continue;
     }
@@ -63,7 +69,9 @@ Validator.prototype.isEmail = function(str) {
   return validatorLib.isEmail(str);
 };
 Validator.prototype.chkPswrdLength = function(str) {
-	if(!str || str.length <= 7) { return false;}
-	return true;
+  if (!str || str.length <= 7) {
+    return false;
+  }
+  return true;
 }
 module.exports = Validator;
