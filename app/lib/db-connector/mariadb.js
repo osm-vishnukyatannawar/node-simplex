@@ -17,7 +17,7 @@ var defaultMsg = {
 
 /**
  * The base MariaDb constructor.
- * 
+ *
  * @param dbConfig
  *          Database configurations
  * @param customMsgs
@@ -34,7 +34,7 @@ function MariaDB(dbConfig, customMsgs) {
 
 /**
  * Use this for INSERT, UPDATE, DELETE queries
- * 
+ *
  * @param objQuery
  *          Contains the following the properties - query - The SQL Query. data -
  *          Data to be sent for the query. cb - Callback method. closeConn -
@@ -70,7 +70,7 @@ MariaDB.prototype.getResults = function(objQuery, cb) {
 
 /**
  * Returns the first value from the result set or null
- * 
+ *
  * @param objQuery
  *          Object containing query, parameters etc.
  */
@@ -158,7 +158,7 @@ MariaDB.prototype.rollbackTransaction = function(transactionID, cb) {
   destroyTransactionClient(that, transactionID);
 };
 
-MariaDB.prototype.queries = function(objQuery, cb) {  
+MariaDB.prototype.queries = function(objQuery, cb) {
   objQuery = getDefaultValues(objQuery);
   runQuery(this, true, objQuery.query, objQuery.data, cb, objQuery.closeConn,
     objQuery.useArray, objQuery.transactionID, objQuery.isMultiple);
@@ -184,7 +184,7 @@ function getDefaultValues(objQuery) {
   if (objQuery.transactionID === undefined) {
     objQuery.transactionID = false;
   }
-  if(objQuery.isMultiple === undefined) {
+  if (objQuery.isMultiple === undefined) {
     objQuery.isMultiple = false;
   }
   return objQuery;
@@ -195,7 +195,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
   var response = [];
   var clientObj = null;
   var qCnt = 0;
-  
+
   if (transactionID) {
     clientObj = transactionPool[transactionID];
     runQueryWithClient();
@@ -213,21 +213,21 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
   function runQueryWithClient() {
     try {
       clientObj.query(query, data, useArray).on('result', function(res) {
-        if(isMultiple) {
+        if (isMultiple) {
           cbMultipleResultQuery(res);
         } else {
           cbResultQuery(res);
         }
       }).on('end', cbEndQuery).on('error', function(err) {
-        if(!isMultiple) {
+        if (!isMultiple) {
           return;
-        }      
+        }
         response = initMultipleResObj(response, qCnt);
         response[qCnt].err = err;
         return cb(new AppError(err, objMaria.msgStrings.queryExecution));
       });
-    } catch (e) {      
-      if(transactionID) {        
+    } catch (e) {
+      if (transactionID) {
         destroyTransactionClient(objMaria, transactionID);
       } else {
         objMaria.pool.release(clientObj);
@@ -235,7 +235,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
       cb(new AppError(e, objMaria.msgStrings.queryExecution, {}));
     }
   }
-  
+
   // Processes single query.
   function cbResultQuery(res) {
     if (isSelect) {
@@ -253,34 +253,34 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
       handleError(err);
     });
   }
-  
+
   // Processes multiple result query.
   function cbMultipleResultQuery(res) {
     response = initMultipleResObj(response, qCnt);
     res.on('row', function(row) {
       response[qCnt].data.push(row);
     });
-    
-    res.on('error', function(err) {      
+
+    res.on('error', function(err) {
       res.abort();
       handleError(err);
     });
-    
+
     res.on('end', function(info) {
-      if(!hadError) {
+      if (!hadError) {
         response[qCnt].info = info;
         ++qCnt;
       }
     });
   }
-  
+
   // Called at the end of the query...
   function cbEndQuery() {
     if (closeConn && !transactionID) {
       objMaria.pool.release(clientObj);
     }
-    if(!hadError) {
-      if(isMultiple) {
+    if (!hadError) {
+      if (isMultiple) {
         return cb(null, response);
       } else {
         if (isSelect) {
@@ -289,10 +289,10 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
       }
     }
   }
-  
+
   function handleError(err) {
     hadError = true;
-    cb(new AppError(err, objMaria.msgStrings.queryExecution, {}));    
+    cb(new AppError(err, objMaria.msgStrings.queryExecution, {}));
     if (closeConn) {
       objMaria.pool.release(clientObj);
     }
@@ -300,7 +300,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
 }
 
 function initMultipleResObj(response, qCnt) {
-  if(response[qCnt]) {
+  if (response[qCnt]) {
     return response;
   }
   response[qCnt] = {};
@@ -312,7 +312,7 @@ function initMultipleResObj(response, qCnt) {
 
 
 /***
- * This method is called by the Pooling handler. 
+ * This method is called by the Pooling handler.
  */
 function modifyConfigObj(dbConfig) {
   dbConfig.create = function(callback) {

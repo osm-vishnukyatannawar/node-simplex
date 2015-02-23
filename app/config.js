@@ -1,14 +1,14 @@
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
-var PRODUCTION = false;
+var PRODUCTION = true;
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
-  'app_code_path' : __dirname + '/code/',
+  'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': 'http://localhost:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -20,9 +20,9 @@ global.__CONFIG__ = {
     'maxMsgPerCon': 20,
     'emailsToSend': 'abijeet.p@osmosys.asia'
   },
-  'maintenance' : {
-    'run_maria_on_main' : true,
-    'max_tries' : 2,
+  'maintenance': {
+    'run_maria_on_main': true,
+    'max_tries': 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
@@ -43,7 +43,7 @@ global.__CONFIG__ = {
   },
   'firmware': {
     'folder': 'firmwares',
-    'maxFileSizeMB' : 10,
+    'maxFileSizeMB': 10,
     'baseFirmwareFileStrs': {
       'ble_fw_version': 'PowerPath_BLE_FW_',
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
@@ -52,7 +52,7 @@ global.__CONFIG__ = {
     'firmwareFileExtension': {
       'ble_fw_version': '.bin',
       'wifi_fw_version': '.bin',
-      'host_fw_version' : '.bin'
+      'host_fw_version': '.bin'
     },
     'baseVersionFolderName': 'Powerpath_FW_version_'
 
@@ -96,8 +96,8 @@ global.__CONFIG__ = {
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv',
-    'defaultSerialNumber' : 'DEFAULT-',
-    'factorySerialNumber' : '0000000000',
+    'defaultSerialNumber': 'DEFAULT-',
+    'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000'
   },
   'currentSampleTime': 5, // in minutes
@@ -129,10 +129,10 @@ global.__CONFIG__ = {
     'downloadFileName': 'powerpath-debug-log.txt',
     'debugFolderName': 'debugLog',
   },
-  'tag_status' : {
-    'not_commissioned' : 0,
-    'not_configured' : 1,
-    'configured' : 2
+  'tag_status': {
+    'not_commissioned': 0,
+    'not_configured': 1,
+    'configured': 2
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -148,7 +148,7 @@ global.__CONFIG__ = {
     'value': 'dev_col_export'
   }],
   'clientSideDateFormat': 'YYYY-MM-DD',
-  'clientSideDateTimeFormat' : 'YYYY-MM-DD HH:mm'
+  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -166,6 +166,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] =
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: 'localhost',
   isProduction: PRODUCTION
 };
