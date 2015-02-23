@@ -28,7 +28,7 @@ function getCurlObj($url) {
 
 function makeCallToMaintURL($dataToSend, $url) {
     $reqUrl = empty($url) ? WS_URL : $url;
-    $ch = getCurlObj($reqUrl);
+    $ch = getCurlObj(trim($reqUrl));
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $dataToSend);
@@ -43,7 +43,7 @@ function makeCallToMaintURL($dataToSend, $url) {
 }
 
 function makeGETRequest($url) {
-    $ch = getCurlObj($url);
+    $ch = getCurlObj(trim($url));
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 45);
