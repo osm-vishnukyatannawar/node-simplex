@@ -68,8 +68,13 @@ function downloadFirmware($url) {
 }
 
 function parseResponse($ch, $resultObj) {
-    try {
-        $respObj = new Response();
+    $respObj = new Response();    
+    if(empty($resultObj)) {
+        $respObj->status = 'Error';
+        $respObj->status = 'No data was returned from the WS..';
+        return $respObj;
+    }
+    try {        
         $respObj->statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $resultObj = json_decode($resultObj);
         $respObj->status = $resultObj->status;
@@ -106,7 +111,7 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             break;
         case HISTOGRAM_TYPE :
             $histogramObj = new Histogram();
-            $histogramData = json_encode($histogramObj->getHistogramDataFormat());
+            $histogramData = json_encode($histogramObj->getHistogramDataFormat($tagSN, $orgID));
             $finalResult = makeCallToMaintURL($histogramData, $url);
             break;
         case PIM_TYPE :

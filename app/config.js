@@ -8,7 +8,7 @@ global.__CONFIG__ = {
   'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.159:3000/',
+  'app_http_base_url': 'http://10.0.0.247:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -18,7 +18,7 @@ global.__CONFIG__ = {
     'fromName': 'Emanate Wireless',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'vamsi.m@osmosys.asia'
+    'emailsToSend': 'surendra.b@osmosys.asia'
   },
   'maintenance' : {
     'run_maria_on_main' : true,
@@ -31,6 +31,7 @@ global.__CONFIG__ = {
       'POWERPATH_REPORT_USD_DEBUG_DATA': '',
       'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
       'POWERPATH_SEND_DEBUG_LOG': '',
+      'POWERPATH_REPORT_HIST_DATA': ''
     }
   },
   'user': {
@@ -121,6 +122,7 @@ global.__CONFIG__ = {
     'tag_update_config': 'POWERPATH_UPDATE_CONFIG_PARAM',
     'tag_not_commissioned': 'POWERPATH_TAG_NOT_COMMISSIONED',
     'tag_maintenance': 'POWERPATH_MAINT_CALL',
+    'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -160,9 +162,10 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_a
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.159',
+  ip: '10.0.0.247',
   isProduction: PRODUCTION
 };
