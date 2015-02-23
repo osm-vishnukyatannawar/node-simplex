@@ -2,18 +2,18 @@ var dbConfig = {
   'mariadb': {
     name: 'mariadb',
     maxConn: 150,
-    minConn: 35,
+    minConn: 15,
     idleTimeout: 30000,
-    host: '10.0.0.66',
-    user: 'osmosys',
-    password: 'Change123',
+    host: 'localhost',
+    user: 'root',
+    password: 'B3stPr@c',
     db: 'dev_emanate_db',
     connTimeout: 15,
     multiStatements: true
   },
   'cassandradb': {
     name: 'cassandradb',
-    host: '10.0.0.66',
+    host: 'localhost',
     keyspace: 'emanate',
     connTimeout: 10,
   }
