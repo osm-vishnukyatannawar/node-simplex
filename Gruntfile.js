@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     "plugins/jqxwidgets/jqxcheckbox.js",
     "plugins/jqxwidgets/jqxgrid.storage.js"
   ];
-
+  
   for (var i = 0; i < gridFiles.length; ++i) {
     gridFiles[i] = publicHTML + gridFiles[i];
   }
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     'js/*.js'
   ];
   minifyFiles[publicHTML + '/dist/emanate.ng.min.js'] = [publicHTML +
-    'js/app/*.js'
+    'js/app/*.js',
   ];
   minifyFiles[publicHTML + '/dist/emanate.grid.min.js'] = gridFiles;
 
@@ -43,7 +43,9 @@ module.exports = function(grunt) {
     uglify: {
       prodclient: {
         files: minifyFiles
-      }
+      }, options: {
+    	    mangle: true
+      },
     },
     jsbeautifier: {
       files: [codePath + '*.js', codePath + '**/*.js', publicHTML +
@@ -56,14 +58,24 @@ module.exports = function(grunt) {
           indentSize: 2,
         }
       }
+    },
+    ngAnnotate: {
+      options: {
+        singleQuotes: true,
+      },
+      files: {
+        expand: true,
+        src: [publicHTML + 'js/app/*.js']
+      }
     }
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks("grunt-jsbeautifier");
+  grunt.loadNpmTasks('grunt-ng-annotate');
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify:prodclient']);
+  grunt.registerTask('default', [ 'ngAnnotate', 'uglify:prodclient']);
   grunt.registerTask('dev', ['jsbeautifier']);
 };

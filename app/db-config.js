@@ -1,8 +1,8 @@
 var dbConfig = {
   'mariadb': {
     name: 'mariadb',
-    maxConn: 150,
-    minConn: 35,
+    maxConn: 40,
+    minConn: 20,
     idleTimeout: 30000,
     host: '10.0.0.66',
     user: 'osmosys',
