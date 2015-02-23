@@ -86,7 +86,15 @@ CassandraDB.prototype.getValue = function(objQuery, cb) {
 function runQuery(objCassandra, isSelect, query, data, cb) {
   objCassandra.client.execute(query, data, {
     prepare: true
-  }, cb);
+  },  function(err, data) {
+    if (err) {
+      cb(new AppError(err, defaultMsg.queryExecution, {
+        query: query
+      }), null);
+      return;
+    }
+    cb(null, data);
+  });
 }
 
 module.exports = CassandraDB;
