@@ -7,50 +7,88 @@ class Current {
     public $dataToSend;
     public $data;
     public $type;
-    public $CurrentData;
-    public $CurrentData_startTimestamp;
-    public $CurrentData_numSamples;
+    public $currentHeader;
+    public $currentTimeStamp;
+    public $numBlocks;
+    public $currentUtilization = array();
+    public $currentUtilHeader;
+    public $numSamples;
+    public $currentUtilMeasurements = array();
+    public $currentRms;
+    public $utilVal;
+    public $usageState;
+    public $startTimeStamp;
+    public $startTimeStamp_tm_sec;
+    public $startTimeStamp_tm_min;
+    public $startTimeStamp_tm_hour;
+    public $startTimeStamp_tm_mday;
+    public $startTimeStamp_tm_mon;
+    public $startTimeStamp_tm_year;
+    public $currentTimeStamp_tm_sec;
+    public $currentTimeStamp_tm_min;
+    public $currentTimeStamp_tm_hour;
+    public $currentTimeStamp_tm_mday;
+    public $currentTimeStamp_tm_mon;
+    public $currentTimeStamp_tm_year;
     public $CurrentDataUtil;
-    public $CurrentDataUtil1;
-    public $CurrentDataUtil1_currentRms;
-    public $CurrentDataUtil1_utilVal;
-    public $CurrentDataUtil1_usageState;
-    public $CurrentDataUtil2;
-    public $CurrentDataUtil2_currentRms;
-    public $CurrentDataUtil2_utilVal;
-    public $CurrentDataUtil2_usageState;
 
     public function __construct() {
         $this->type = CURRENT_TYPE;
-        $this->CurrentData_startTimestamp = DEFAULT_VALUES;
-        $this->CurrentData_numSamples = DEFAULT_VALUES;
-        $this->CurrentDataUtil1_currentRms = DEFAULT_VALUES;
-        $this->CurrentDataUtil1_utilVal = DEFAULT_VALUES;
-        $this->CurrentDataUtil1_usageState = DEFAULT_VALUES;
-        $this->CurrentDataUtil2_currentRms = DEFAULT_VALUES;
-        $this->CurrentDataUtil2_utilVal = DEFAULT_VALUES;
-        $this->CurrentDataUtil2_usageState = DEFAULT_VALUES;
+        $this->currentRms = DEFAULT_VALUES;
+        $this->utilVal = DEFAULT_VALUES;
+        $this->usageState = DEFAULT_VALUES;
+        $this->numSamples = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_sec = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_min = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_hour = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_mday = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_mon = DEFAULT_VALUES;
+        $this->startTimeStamp_tm_year = DEFAULT_VALUES;
+        $this->numBlocks = DEFAULT_VALUES;
     }
 
     public function getCurrentDataFormat($tagSN, $orgID) {
-
         $baseObj = new Base($tagSN, $orgID);
+        
+        $utilArr = ['currentRms' => $this->currentRms,
+           'utilVal' => $this->utilVal,
+           'usageState' =>  $this->usageState];
+        
+        for($i = 0; $i <= 9; ++$i) {
+            array_push($this->currentUtilMeasurements, (object) $utilArr);
+        }
+        
+        $this->currentTimeStamp = (object) ['tm_sec' => $this->currentTimeStamp_tm_sec,
+            'tm_min' => $this->currentTimeStamp_tm_min,
+            'tm_hour' => $this->currentTimeStamp_tm_hour,
+            'tm_mday' => $this->currentTimeStamp_tm_mday,
+            'tm_mon' => $this->currentTimeStamp_tm_mon,
+            'tm_year' => $this->currentTimeStamp_tm_year];
+        
+        $this->currentHeader = (object) ['currentTimeStamp' => $this->currentTimeStamp, 'numBlocks' => $this->numBlocks];
+        
+        $this->startTimeStamp = (object) ['tm_sec' => $this->startTimeStamp_tm_sec,
+            'tm_min' => $this->startTimeStamp_tm_min,
+            'tm_hour' => $this->startTimeStamp_tm_hour,
+            'tm_mday' => $this->startTimeStamp_tm_sec,
+            'tm_mon' => $this->startTimeStamp_tm_mon,
+            'tm_year' => $this->startTimeStamp_tm_year];
 
-        $this->CurrentDataUtil1 = (object) ['currentRms' => $this->CurrentDataUtil1_currentRms,
-                    'utilVal' => $this->CurrentDataUtil1_utilVal,
-                    'usageState' => $this->CurrentDataUtil1_usageState];
+        $this->currentUtilHeader = (object) ['startTimestamp' => $this->startTimeStamp,
+                    'numSamples' => $this->numSamples];
+        
+        $this->currentUtilization[] = (object) ['currentUtilHeader' => $this->currentUtilHeader,
+            'currentUtilMeasurements' => (object) $this->currentUtilMeasurements];
+        
 
-        $this->CurrentDataUtil2 = (object) ['currentRms' => $this->CurrentDataUtil2_currentRms,
-                    'utilVal' => $this->CurrentDataUtil2_utilVal,
-                    'usageState' => $this->CurrentDataUtil2_usageState];
-
-        $this->CurrentDataUtil = [$this->CurrentDataUtil1, $this->CurrentDataUtil2];
-
-        $this->CurrentData = (object) ['startTimestamp' => $this->CurrentData_startTimestamp,
-                    'numSamples' => $this->CurrentData_numSamples];
-
-        $this->data = (object) ['CurrentData' => $this->CurrentData,
-                    'CurrentDataUtil' => $this->CurrentDataUtil];
+        $this->data = (object) ['currentHeader' => $this->currentHeader,
+                    'currentUtilization' => (object) $this->currentUtilization];
 
         $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
                     'serialNum' => $baseObj->serialNum,
