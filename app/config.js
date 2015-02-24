@@ -134,6 +134,12 @@ global.__CONFIG__ = {
     'not_configured': 1,
     'configured': 2
   },
+  'tagBlobFiles': {
+	  'tagDebugLog' : 'tag-debug-log.csv',
+	  'tagUSDDebug' : 'tag-usd-debug.csv',
+	  'tagHistogram': 'tag-histogram.csv',
+	  'tagCurrUtil' : 'tag-current-util.csv'
+  },
   'tokenLength': 16,
   'fwTokenLength': 16,
   'firmwareFileExtension': '.zip',
