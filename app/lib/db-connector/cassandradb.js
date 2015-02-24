@@ -27,7 +27,7 @@ function CassandraDB(dbConfig) {
 
 /**
  * Use this for INSERT, UPDATE, DELETE queries
- * 
+ *
  * @param objQuery
  *            Contains the following the properties - query - The SQL Query.
  *            data - Data to be sent for the query. cb - Callback method.
@@ -63,7 +63,7 @@ CassandraDB.prototype.getResults = function(objQuery, cb) {
 
 /**
  * Returns the first value from the result set or null
- * 
+ *
  * @param objQuery
  *            Object containing query, parameters etc.
  */
@@ -86,7 +86,7 @@ CassandraDB.prototype.getValue = function(objQuery, cb) {
 function runQuery(objCassandra, isSelect, query, data, cb) {
   objCassandra.client.execute(query, data, {
     prepare: true
-  },  function(err, data) {
+  }, function(err, data) {
     if (err) {
       cb(new AppError(err, defaultMsg.queryExecution, {
         query: query

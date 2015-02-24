@@ -7,8 +7,7 @@
 'use strict';
 
 var mSQLClient = require('mysql');
-var mSQLPool = require(__CONFIG__.app_base_path
-        + 'lib/db-connector/pools/mysql-pool');
+var mSQLPool = require(__CONFIG__.app_base_path + 'lib/db-connector/pools/mysql-pool');
 
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
@@ -19,7 +18,7 @@ var defaultMsg = {
 
 /**
  * The base MariaDb constructor.
- * 
+ *
  * @param dbConfig
  *          Database configurations
  * @param customMsgs
@@ -28,8 +27,7 @@ var defaultMsg = {
 function MySQL(dbConfig, customMsgs) {
   this.config = dbConfig;
   this.msgStrings = defaultMsg;
-  if (customMsgs !== undefined && customMsgs.errorDbConn
-          && customMsgs.queryExecution) {
+  if (customMsgs !== undefined && customMsgs.errorDbConn && customMsgs.queryExecution) {
     this.msgStrings = customMsgs;
   }
 }
@@ -41,7 +39,7 @@ MySQL.prototype.setDbConfig = function(dbConfig) {
 
 /**
  * Use this for INSERT, UPDATE, DELETE queries
- * 
+ *
  * @param objQuery
  *          Contains the following the properties - query - The SQL Query. data -
  *          Data to be sent for the query. cb - Callback method. closeConn -

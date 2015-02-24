@@ -129,10 +129,16 @@ global.__CONFIG__ = {
     'downloadFileName': 'powerpath-debug-log.txt',
     'debugFolderName': 'debugLog',
   },
-  'tag_status' : {
-    'not_commissioned' : 0,
-    'not_configured' : 1,
-    'configured' : 2
+  'tag_status': {
+    'not_commissioned': 0,
+    'not_configured': 1,
+    'configured': 2
+  },
+  'tagBlobFiles': {
+	  'tagDebugLog' : 'tag-debug-log.csv',
+	  'tagUSDDebug' : 'tag-usd-debug.csv',
+	  'tagHistogram': 'tag-histogram.csv',
+	  'tagCurrUtil' : 'tag-current-util.csv'
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -148,7 +154,7 @@ global.__CONFIG__ = {
     'value': 'dev_col_export'
   }],
   'clientSideDateFormat': 'YYYY-MM-DD',
-  'clientSideDateTimeFormat' : 'YYYY-MM-DD HH:mm'
+  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm'
 };
 
 __CONFIG__.isProduction = PRODUCTION;

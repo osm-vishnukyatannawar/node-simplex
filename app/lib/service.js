@@ -79,7 +79,7 @@ Service.prototype.getTimePeriod = function(timePeriod) {
     dt.setDate(dt.getDate() - (interval * i));
     dtArr.push(dt);
   }
-  var startDate = dtArr[dtArr.length-1];
+  var startDate = dtArr[dtArr.length - 1];
   var obj = {
     interval: interval,
     iterations: iterations,
@@ -90,12 +90,12 @@ Service.prototype.getTimePeriod = function(timePeriod) {
   return obj;
 };
 
-Service.prototype.getDateInYMDFormate = function(dateObj){
-	var date = dateObj.getDate();
-	var month = dateObj.getMonth() + 1;
-	var year = dateObj.getFullYear();
-	return year+'-'+month+'-'+date;
-}; 
+Service.prototype.getDateInYMDFormate = function(dateObj) {
+  var date = dateObj.getDate();
+  var month = dateObj.getMonth() + 1;
+  var year = dateObj.getFullYear();
+  return year + '-' + month + '-' + date;
+};
 
 Service.prototype.parseClientDate = function(date) {
   var dt = moment(date, __CONFIG__.clientSideDateFormat);
