@@ -8,7 +8,7 @@ global.__CONFIG__ = {
   'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.247:3000/',
+  'app_http_base_url': 'http://10.0.0.15:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -18,7 +18,7 @@ global.__CONFIG__ = {
     'fromName': 'Emanate Wireless',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'surendra.b@osmosys.asia'
+    'emailsToSend': 'abijeet.p@osmosys.asia'
   },
   'maintenance' : {
     'run_maria_on_main' : true,
@@ -50,9 +50,9 @@ global.__CONFIG__ = {
       'host_fw_version': 'PowerPath_HOST_FW_'
     },
     'firmwareFileExtension': {
-    	'ble_fw_version': '.bin',
-    	'wifi_fw_version': '.bin',
-    	'host_fw_version' : '.bin'
+      'ble_fw_version': '.bin',
+      'wifi_fw_version': '.bin',
+      'host_fw_version' : '.bin'
     },
     'baseVersionFolderName': 'Powerpath_FW_version_'
 
@@ -129,10 +129,16 @@ global.__CONFIG__ = {
     'downloadFileName': 'powerpath-debug-log.txt',
     'debugFolderName': 'debugLog',
   },
-  'tag_status' : {
-	  'not_commissioned' : 0,
-	  'not_configured' : 1,
-	  'configured' : 2
+  'tag_status': {
+    'not_commissioned': 0,
+    'not_configured': 1,
+    'configured': 2
+  },
+  'tagBlobFiles': {
+	  'tagDebugLog' : 'tag-debug-log.csv',
+	  'tagUSDDebug' : 'tag-usd-debug.csv',
+	  'tagHistogram': 'tag-histogram.csv',
+	  'tagCurrUtil' : 'tag-current-util.csv'
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -148,7 +154,7 @@ global.__CONFIG__ = {
     'value': 'dev_col_export'
   }],
   'clientSideDateFormat': 'YYYY-MM-DD',
-  'clientSideDateTimeFormat' : 'YYYY-MM-DD HH:mm'
+  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -159,13 +165,13 @@ __CONFIG__.cassandra_keyspace = dbConfig.cassandradb.keyspace;
 
 // Adding the URLs to the necessary tag events sections.
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_api_maint_url;
-__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.247',
+  ip: '10.0.0.15',
   isProduction: PRODUCTION
 };

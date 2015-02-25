@@ -31,24 +31,24 @@ if (config.express.isProduction && cluster.isMaster) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     next();
   });
-  
+
   new ExclusionController(app);
-  
-  app.use(helper.parseBodyType);  
-    
+
+  app.use(helper.parseBodyType);
+
   app.use(function(err, req, res, next) {
-    if(err) {
+    if (err) {
       console.log(err);
       console.log('----------\n\n');
       res.set('Connection', 'close');
       res.status(getStatus('badRequest')).json({
-        status : 'fail',
-        message : 'JSON sent is invalid.'
+        status: 'fail',
+        message: 'JSON sent is invalid.'
       });
     } else {
       next();
     }
-  });    
+  });
 
   // Bind the api routes.
   loadApi(app);
@@ -66,7 +66,6 @@ if (config.express.isProduction && cluster.isMaster) {
       logger.logAppErrors(error);
       process.exit(10);
     }
-    logger.logAppInfo('Express is listening on http://' + config.express.ip
-            + ':' + config.express.port);
+    logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
   });
 }
