@@ -1,4 +1,3 @@
-var __ = require('underscore');
 var formidable = require('formidable');
 var bodyParser = require('body-parser');
 var loadApi = require(__CONFIG__.app_code_path + 'api.js');
@@ -43,10 +42,9 @@ var serverHelper = function() {
   var parseBodyTypeValues = function(request, response, next) {
     var contentType = request.get('content-type');
     var type = typeof(contentType);
-    if (type != 'undefined') {
-      var isMultipart = contentType.search('multipart/form-data');
-    } else {
-      var isMultipart = -1;
+    var isMultipart = -1;
+    if (type !== 'undefined') {
+      isMultipart = contentType.search('multipart/form-data');
     }
 
     if (isMultipart > -1) {

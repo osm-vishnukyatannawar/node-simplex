@@ -8,7 +8,7 @@ global.__CONFIG__ = {
   'app_code_path' : __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': 'http://10.0.0.247:3000/',
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -154,7 +154,8 @@ global.__CONFIG__ = {
     'value': 'dev_col_export'
   }],
   'clientSideDateFormat': 'YYYY-MM-DD',
-  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm'
+  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
+  'limitString' : ' LIMIT 0,5'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -172,6 +173,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] =
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: '10.0.0.247',
   isProduction: PRODUCTION
 };
