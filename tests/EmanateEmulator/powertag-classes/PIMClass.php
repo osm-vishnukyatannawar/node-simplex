@@ -48,47 +48,47 @@ class PIM {
     public $PimData2_peakToRms;
     public $PimData2_stdDev;
 
-    public function __construct() {
+    public function __construct($dfltData) {
 
         $this->type = PIM_TYPE;
-        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->numACPlugins = DEFAULT_VALUES;
-        $this->numPimBlocks = DEFAULT_VALUES;
-        $this->numSamplesInBlock = DEFAULT_VALUES;
-        $this->PimData1_trig = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->PimData1_plugInTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->PimData1_plugInDur_min = DEFAULT_VALUES;
-        $this->PimData1_plugInToMeasDelay_msec = DEFAULT_VALUES;
-        $this->PimData1_rmsCurrent = DEFAULT_VALUES;
-        $this->PimData1_peakToRms = DEFAULT_VALUES;
-        $this->PimData1_stdDev = DEFAULT_VALUES;
-        $this->PimData2_trig = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->PimData2_plugInTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->PimData2_plugInDur_min = DEFAULT_VALUES;
-        $this->PimData2_plugInToMeasDelay_msec = DEFAULT_VALUES;
-        $this->PimData2_rmsCurrent = DEFAULT_VALUES;
-        $this->PimData2_peakToRms = DEFAULT_VALUES;
-        $this->PimData2_stdDev = DEFAULT_VALUES;
+        $this->currentTimeStamp_tm_sec = $dfltData;
+        $this->currentTimeStamp_tm_min = $dfltData;
+        $this->currentTimeStamp_tm_hour = $dfltData;
+        $this->currentTimeStamp_tm_mday = $dfltData;
+        $this->currentTimeStamp_tm_mon = $dfltData;
+        $this->currentTimeStamp_tm_year = $dfltData;
+        $this->numACPlugins = $dfltData;
+        $this->numPimBlocks = $dfltData;
+        $this->numSamplesInBlock = $dfltData;
+        $this->PimData1_trig = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_sec = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_min = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_hour = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_mday = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_mon = $dfltData;
+        $this->PimData1_plugInTimeStamp_tm_year = $dfltData;
+        $this->PimData1_plugInDur_min = $dfltData;
+        $this->PimData1_plugInToMeasDelay_msec = $dfltData;
+        $this->PimData1_rmsCurrent = $dfltData;
+        $this->PimData1_peakToRms = $dfltData;
+        $this->PimData1_stdDev = $dfltData;
+        $this->PimData2_trig = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_sec = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_min = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_hour = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_mday = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_mon = $dfltData;
+        $this->PimData2_plugInTimeStamp_tm_year = $dfltData;
+        $this->PimData2_plugInDur_min = $dfltData;
+        $this->PimData2_plugInToMeasDelay_msec = $dfltData;
+        $this->PimData2_rmsCurrent = $dfltData;
+        $this->PimData2_peakToRms = $dfltData;
+        $this->PimData2_stdDev = $dfltData;
     }
 
-    public function getPIMDataFormat($tagSN, $orgID) {
+    public function getPIMDataFormat($tagSN, $orgID, $dfltData) {
 
-        $baseObj = new Base($tagSN, $orgID);
+        $baseObj = new Base($tagSN, $orgID, $dfltData);
         
         $this->PlugInTimeStamp1 = (object) ['tm_sec' => $this->PimData1_plugInTimeStamp_tm_sec,
                     'tm_min' => $this->PimData1_plugInTimeStamp_tm_min,
@@ -139,6 +139,7 @@ class PIM {
 
         $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
                     'serialNum' => $baseObj->serialNum,
+                    'defaultData' => $baseObj->defaultData,
                     'type' => $this->type,
                     'data' => $this->data];
 

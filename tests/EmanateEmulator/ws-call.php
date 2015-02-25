@@ -92,6 +92,7 @@ function parseResponse($ch, $resultObj) {
  * Sends data to the server ($url) based on the $dataType paramter and the
  * @global type $tagSN - Tag serial number
  * @global type $orgID - Organization ID
+ * @global type $dfltData - Tag default data
  * @global type $wifiFirmware - WIFI Firmware
  * @global type $bleFirmware - BLE Firmware
  * @global type $hostFirmware - Host Firmware
@@ -101,50 +102,50 @@ function parseResponse($ch, $resultObj) {
  * @return type object
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
-    global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog;
+    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog;
     $finalResult = false;    
     switch ($dataType) {
         case MAINTENANCE_TYPE :
-            $mainObj = new Maintenance();
-            $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
+            $mainObj = new Maintenance($dfltData);
+            $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($mntnceData, $url);
             break;
         case HISTOGRAM_TYPE :
-            $histogramObj = new Histogram();
-            $histogramData = json_encode($histogramObj->getHistogramDataFormat($tagSN, $orgID));
+            $histogramObj = new Histogram($dfltData);
+            $histogramData = json_encode($histogramObj->getHistogramDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($histogramData, $url);
             break;
         case PIM_TYPE :
-            $pimObj = new PIM();
-            $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
+            $pimObj = new PIM($dfltData);
+            $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($pimData, $url);
             break;
         case CURRENT_TYPE :
-            $currentObj = new Current();
-            $currentData = json_encode($currentObj->getCurrentDataFormat($tagSN, $orgID));
+            $currentObj = new Current($dfltData);
+            $currentData = json_encode($currentObj->getCurrentDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($currentData, $url);
             break;
         case TAGINFO_TYPE :
-            $tagObj = new TagInfo();
+            $tagObj = new TagInfo($dfltData);
             $tagObj->wifiFirmwareVer = $wifiFirmware;
             $tagObj->bleFirwareVer = $bleFirmware;
             $tagObj->hostFirmwareVer = $hostFirmware;
-            $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
+            $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($tagInfoData, $url);
             break;
         case POWERPATH_UPDATE_CONFIG_PARAM :
             $finalResult = makeGETRequest($url);
             break;
         case POWERPATH_SEND_DEBUG_LOG :
-            $debugLogObj = new DebugLog();
+            $debugLogObj = new DebugLog($dfltData);
             $debugLogObj->log = $tagDebugLog;
-            $debugLogData = json_encode($debugLogObj->getDebugLog($tagSN, $orgID));
+            $debugLogData = json_encode($debugLogObj->getDebugLog($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($debugLogData, $url);
             break;
         case POWERPATH_REPORT_USD_DEBUG_DATA:
-            $usdDebugObj = new USDDebug();
+            $usdDebugObj = new USDDebug($dfltData);
             $usdDebugObj->data = $tagUSDData;
-            $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID));
+            $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($usdDebugData, $url);            
             break;
     }    
