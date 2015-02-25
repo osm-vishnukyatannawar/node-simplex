@@ -153,7 +153,11 @@ require_once 'ws-call.php';
         <?php
         $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
         $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
-        $dfltData = empty($_POST['dfltData']) ? DEFAULT_VALUES : intval($_POST['dfltData']);
+        if(ctype_digit($_POST['dfltData'])) {
+            $dfltData = intval($_POST['dfltData']);
+        } else {
+            $dfltData = DEFAULT_VALUES;
+        }
         $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
         $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
         $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
