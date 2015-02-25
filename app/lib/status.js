@@ -13,7 +13,7 @@ var getStatus = function(str) {
   if (status.hasOwnProperty(str)) {
     return status[str];
   }
-  return status[unknown];
+  return status['unknown'];
 };
 
 module.exports = getStatus;
