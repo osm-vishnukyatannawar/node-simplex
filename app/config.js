@@ -43,7 +43,7 @@ global.__CONFIG__ = {
   },
   'firmware': {
     'folder': 'firmwares',
-    'maxFileSizeMB' : 10,
+    'maxFileSizeMB' : 2,
     'baseFirmwareFileStrs': {
       'ble_fw_version': 'PowerPath_BLE_FW_',
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
@@ -173,6 +173,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] =
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.247',
+  ip: '10.0.0.159',
   isProduction: PRODUCTION
 };

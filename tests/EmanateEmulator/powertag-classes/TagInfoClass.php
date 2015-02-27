@@ -32,35 +32,35 @@ class TagInfo {
     public $configTime_tm_mon;
     public $configTime_tm_year;
 
-    public function __construct() {
+    public function __construct($dfltData) {
 
         $this->type = TAGINFO_TYPE;
-        $this->deviceID = DEFAULT_VALUES;
-        $this->hardwareVersion = 'Tag - '.DEFAULT_VALUES;
-        $this->wifiMacAddr = 'Tag - '.DEFAULT_VALUES;
-        $this->tagConfigState = DEFAULT_VALUES;
-        $this->hwPeripherals = 'Tag - '.DEFAULT_VALUES;
-        $this->hostFirmwareVer = 'Tag - '.DEFAULT_VALUES;
-        $this->wifiFirmwareVer = 'Tag - '.DEFAULT_VALUES;
-        $this->bleFirwareVer = 'Tag - '.DEFAULT_VALUES;
-        $this->powerPathConfigVer = 'Tag - '.DEFAULT_VALUES;
-        $this->factoryTestTime_tm_sec = DEFAULT_VALUES;
-        $this->factoryTestTime_tm_min = DEFAULT_VALUES;
-        $this->factoryTestTime_tm_hour = DEFAULT_VALUES;
-        $this->factoryTestTime_tm_mday = DEFAULT_VALUES;
-        $this->factoryTestTime_tm_mon = DEFAULT_VALUES;
-        $this->factoryTestTime_tm_year = DEFAULT_VALUES;
-        $this->configTime_tm_sec = DEFAULT_VALUES;
-        $this->configTime_tm_min = DEFAULT_VALUES;
-        $this->configTime_tm_hour = DEFAULT_VALUES;
-        $this->configTime_tm_mday = DEFAULT_VALUES;
-        $this->configTime_tm_mon = DEFAULT_VALUES;
-        $this->configTime_tm_year = DEFAULT_VALUES;
+        $this->deviceID = $dfltData;
+        $this->hardwareVersion = 'Tag - '.$dfltData;
+        $this->wifiMacAddr = 'Tag - '.$dfltData;
+        $this->tagConfigState = $dfltData;
+        $this->hwPeripherals = 'Tag - '.$dfltData;
+        $this->hostFirmwareVer = 'Tag - '.$dfltData;
+        $this->wifiFirmwareVer = 'Tag - '.$dfltData;
+        $this->bleFirwareVer = 'Tag - '.$dfltData;
+        $this->powerPathConfigVer = 'Tag - '.$dfltData;
+        $this->factoryTestTime_tm_sec = $dfltData;
+        $this->factoryTestTime_tm_min = $dfltData;
+        $this->factoryTestTime_tm_hour = $dfltData;
+        $this->factoryTestTime_tm_mday = $dfltData;
+        $this->factoryTestTime_tm_mon = $dfltData;
+        $this->factoryTestTime_tm_year = $dfltData;
+        $this->configTime_tm_sec = $dfltData;
+        $this->configTime_tm_min = $dfltData;
+        $this->configTime_tm_hour = $dfltData;
+        $this->configTime_tm_mday = $dfltData;
+        $this->configTime_tm_mon = $dfltData;
+        $this->configTime_tm_year = $dfltData;
     }
 
-    public function getTagInfoDataFormat($tagSN, $orgID) {
+    public function getTagInfoDataFormat($tagSN, $orgID, $dfltData) {
 
-        $baseObj = new Base($tagSN, $orgID);
+        $baseObj = new Base($tagSN, $orgID, $dfltData);
         
         $this->factoryTestTime = (object) ['tm_sec' => $this->factoryTestTime_tm_sec,
                     'tm_min' => $this->factoryTestTime_tm_min,
@@ -91,6 +91,7 @@ class TagInfo {
 
         $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
                     'serialNum' => $baseObj->serialNum,
+                    'defaultData' => $baseObj->defaultData,
                     'type' => $this->type,
                     'data' => $this->data];
 

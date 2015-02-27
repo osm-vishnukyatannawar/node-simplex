@@ -100,11 +100,14 @@ require_once 'ws-call.php';
             }
             .output-list {
                 padding:0.5em;
-                background-color:#d3d3d3;
+                //background-color:;
                 margin-bottom: 1em;
                 border-radius:5px;
                 font-family:'Consolas','monospace';
                 font-size: 13px;
+            }
+            .highlight {
+                background-color:#D80000!important;
             }
             .output-list li {
                 list-style: none;
@@ -153,11 +156,17 @@ require_once 'ws-call.php';
         <?php
         $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
         $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
+        if(ctype_digit($_POST['dfltData'])) {
+            $dfltData = intval($_POST['dfltData']);
+        } else {
+            $dfltData = DEFAULT_VALUES;
+        }
         $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
         $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
         $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
         $tagUSDData = empty($_POST['tagUSDData']) ? 'default data = ' . DEFAULT_VALUES : $_POST['tagUSDData'];
         $tagDebugLog = empty($_POST['tagDebugLog']) ? 'Log == ' . DEFAULT_VALUES : $_POST['tagDebugLog'];
+        $tagHistogramData = empty($_POST['tagHistogramData']) ? 'Histogram Data == ' . DEFAULT_VALUES : $_POST['tagHistogramData'];
         ?>
         <form method ="POST" enctype="multipart/form-data">
             <div class="form-left">                
@@ -180,7 +189,8 @@ require_once 'ws-call.php';
                         </tr>
                         <tr>
                             <td>Default Data</td>
-                            <td><?php echo DEFAULT_VALUES ?></td>
+<!--                            <td><?php // echo DEFAULT_VALUES ?></td>-->
+                            <td><input class="pure-text" type='text' value="<?php echo $dfltData ?>" name="dfltData"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -225,17 +235,23 @@ require_once 'ws-call.php';
                         <td>Tag debug log</td>
                         <td><textarea class="pure-text" name="tagDebugLog"><?php echo $tagDebugLog ?></textarea></td>
                     </tr>
+                    <tr>
+                        <td>Tag histogram Data</td>
+                        <td><textarea class="pure-text" name="tagHistogramData"><?php echo $tagHistogramData ?></textarea></td>
+                    </tr>
                 </tbody>
             </table>
             <hr>
             <h2>Communicator</h2>        
             <input class="pure-text" type="text" value = "1" name="callsNmber" placeholder="Number of calls">
-            <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="1">
-            <button class="pure-button" type="submit" name="submit" onclick="changeDataType(this.value)" value="1">Maintenance</button>
-            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="2">Histogram</button>
-            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="3">PIM</button>
-            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="4">Current</button>
-            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="5">TagInfo</button>            
+            <input type="hidden" name="dataType" placeholder="Type" id = "hdnDataType" value ="<?php echo MAINTENANCE_TYPE; ?>">
+            <button class="pure-button" type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo MAINTENANCE_TYPE; ?>">Maintenance</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo HISTOGRAM_TYPE; ?>">Histogram</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo PIM_TYPE; ?>">PIM</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo CURRENT_TYPE; ?>">Current</button>
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo TAGINFO_TYPE; ?>">TagInfo</button>            
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo POWERPATH_SEND_DEBUG_LOG; ?>">Debug log</button>            
+            <button class="pure-button"  type="submit" name="submit" onclick="changeDataType(this.value)" value="<?php echo POWERPATH_REPORT_USD_DEBUG_DATA; ?>">USD Debug data</button>            
         </form>
         <hr>
         <div class = "footer"></div>
@@ -284,22 +300,57 @@ require_once 'ws-call.php';
             <h2>Output</h2>
             <?php
             $i = 1;
+            $intTotalSucesCals = 0;
+            $intTotalCalls = count($allOutput);
+            foreach ($allOutput as $output) {
+                if($output->statusCode == 200) {
+                    ++$intTotalSucesCals;
+                }
+            }
+            $intFailureCall = $intTotalCalls - $intTotalSucesCals;
+            ?>
+            <h3>Total Calls Made: <?php echo $intTotalCalls; ?></h3>
+            <h3>Total Success Calls : <?php echo $intTotalSucesCals; ?> & Total Failure Calls : <?php echo $intFailureCall; ?></h3>
+            <?php
             foreach ($allOutput as $output) {
                 if(empty($output)) {
                     continue;
                 }
-                ?>
-                <ul class="output-list">
-                    <li><strong>#<?php echo $i ?></strong>
+                $intCallType = $output->callType;
+                $strCallType = '';
+                if(isset($intCallType) && $intCallType == MAINTENANCE_TYPE){
+                    $strCallType = 'MAINTENANCE_TYPE';
+                } elseif ($intCallType == HISTOGRAM_TYPE){
+                    $strCallType = 'HISTOGRAM_TYPE';
+                } elseif ($intCallType == PIM_TYPE){
+                    $strCallType = 'PIM_TYPE';
+                } elseif ($intCallType == CURRENT_TYPE){
+                    $strCallType = 'CURRENT_TYPE';
+                } elseif ($intCallType == TAGINFO_TYPE){
+                    $strCallType = 'TAGINFO_TYPE';
+                } elseif ($intCallType == POWERPATH_SEND_DEBUG_LOG){
+                    $strCallType = 'POWERPATH_SEND_DEBUG_LOG';
+                } elseif ($intCallType == POWERPATH_REPORT_USD_DEBUG_DATA){
+                    $strCallType = 'POWERPATH_REPORT_USD_DEBUG_DATA';
+                }
+                if($output->statusCode == 400) {
+                    $listColor = "#FF0000 ";
+                } else {
+                    $listColor = "#d3d3d3";
+                }
+            ?>
+
+                <ul class="output-list" style="background-color:<?php echo $listColor; ?>">
+                    <li><strong>#<?php echo "$i ($strCallType - $intCallType)"?></strong>
                         <hr>
+                    <li><strong>Page generated in</strong> : <?php echo $output->timeTaken; ?> seconds</li>
                     <li><strong>HTTP</strong> : <?php echo $output->statusCode ?></li>
                     <li><strong>URL</strong> : <?php echo $output->urlCalled ?></li>
-                    <li><strong>Call Type</strong> : <?php echo $output->callType ?></li>
                     <li><strong>Status</strong> : <?php echo $output->status ?></li>
                     <li><strong>Data</strong> : <pre><?php echo json_encode($output->data, JSON_PRETTY_PRINT) ?></pre></li>
                     <?php if (!empty($output->message)) { ?>
                         <li><strong>Message</strong> : <?php echo $output->message ?></li>
-                    <?php } ?>
+                    <?php }?>
                 </ul>                
                 <?php
                 ++$i;
