@@ -50,7 +50,7 @@ var serverHelper = function() {
     if (isMultipart > -1) {
       var form = new formidable.IncomingForm({
         uploadDir: __dirname + '/../../uploads/',
-        keepExtensions : true
+        keepExtensions: true
       });
       form.parse(request, function(err, fields, files) {
         request.fields = fields;
