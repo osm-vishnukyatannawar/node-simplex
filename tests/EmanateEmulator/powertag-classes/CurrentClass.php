@@ -32,29 +32,29 @@ class Current {
     public $currentTimeStamp_tm_year;
     public $CurrentDataUtil;
 
-    public function __construct() {
+    public function __construct($dfltData) {
         $this->type = CURRENT_TYPE;
-        $this->currentRms = DEFAULT_VALUES;
-        $this->utilVal = DEFAULT_VALUES;
-        $this->usageState = DEFAULT_VALUES;
-        $this->numSamples = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->numBlocks = DEFAULT_VALUES;
+        $this->currentRms = $dfltData;
+        $this->utilVal = $dfltData;
+        $this->usageState = $dfltData;
+        $this->numSamples = $dfltData;
+        $this->currentTimeStamp_tm_sec = $dfltData;
+        $this->currentTimeStamp_tm_min = $dfltData;
+        $this->currentTimeStamp_tm_hour = $dfltData;
+        $this->currentTimeStamp_tm_mday = $dfltData;
+        $this->currentTimeStamp_tm_mon = $dfltData;
+        $this->currentTimeStamp_tm_year = $dfltData;
+        $this->startTimeStamp_tm_sec = $dfltData;
+        $this->startTimeStamp_tm_min = $dfltData;
+        $this->startTimeStamp_tm_hour = $dfltData;
+        $this->startTimeStamp_tm_mday = $dfltData;
+        $this->startTimeStamp_tm_mon = $dfltData;
+        $this->startTimeStamp_tm_year = $dfltData;
+        $this->numBlocks = $dfltData;
     }
 
-    public function getCurrentDataFormat($tagSN, $orgID) {
-        $baseObj = new Base($tagSN, $orgID);
+    public function getCurrentDataFormat($tagSN, $orgID, $dfltData) {
+        $baseObj = new Base($tagSN, $orgID, $dfltData);
         
         $utilArr = ['currentRms' => $this->currentRms,
            'utilVal' => $this->utilVal,
@@ -92,6 +92,7 @@ class Current {
 
         $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
                     'serialNum' => $baseObj->serialNum,
+                    'defaultData' => $baseObj->defaultData,
                     'type' => $this->type,
                     'data' => $this->data];
 
