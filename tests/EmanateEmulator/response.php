@@ -7,4 +7,5 @@ class Response {
     public $status;
     public $callType;
     public $urlCalled;
+    public $timeTaken;
 }

@@ -38,8 +38,11 @@ function makeCallToMaintURL($dataToSend, $url) {
         'Content-Length: ' . strlen($dataToSend))
     );
     sleep(SLEEP_TIME);
+    $startTime = timeCalculation();
     $resultObj = curl_exec($ch);
-    return parseResponse($ch, $resultObj);
+    $endTime   = timeCalculation();
+    $totalTimeTaken = round(($endTime - $startTime), 4);
+    return parseResponse($ch, $resultObj, $totalTimeTaken);
 }
 
 function makeGETRequest($url) {
@@ -67,11 +70,12 @@ function downloadFirmware($url) {
     return false;
 }
 
-function parseResponse($ch, $resultObj) {
+function parseResponse($ch, $resultObj, $totalTimeTaken = NULL) {
     $respObj = new Response();    
     if(empty($resultObj)) {
         $respObj->status = 'Error';
         $respObj->status = 'No data was returned from the WS..';
+        $respObj->timeTaken = $totalTimeTaken;
         return $respObj;
     }
     try {        
@@ -79,12 +83,14 @@ function parseResponse($ch, $resultObj) {
         $resultObj = json_decode($resultObj);
         $respObj->status = $resultObj->status;
         $respObj->data = $resultObj->data;
+        $respObj->timeTaken = $totalTimeTaken;
         if (!empty($resultObj->message)) {
             $respObj->message = $resultObj->message;
         }
     } catch (Exception $ex) {
         $respObj->status = 'Error';
         $respObj->status = 'There was an error while parsing the data.';
+        $respObj->timeTaken = $totalTimeTaken;
     }
     return $respObj;
 }
@@ -92,6 +98,7 @@ function parseResponse($ch, $resultObj) {
  * Sends data to the server ($url) based on the $dataType paramter and the
  * @global type $tagSN - Tag serial number
  * @global type $orgID - Organization ID
+ * @global type $dfltData - Tag default data
  * @global type $wifiFirmware - WIFI Firmware
  * @global type $bleFirmware - BLE Firmware
  * @global type $hostFirmware - Host Firmware
@@ -101,50 +108,51 @@ function parseResponse($ch, $resultObj) {
  * @return type object
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
-    global $tagSN, $orgID, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog;
+    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog, $tagHistogramData;
     $finalResult = false;    
     switch ($dataType) {
         case MAINTENANCE_TYPE :
-            $mainObj = new Maintenance();
-            $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID));
+            $mainObj = new Maintenance($dfltData);
+            $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($mntnceData, $url);
             break;
         case HISTOGRAM_TYPE :
-            $histogramObj = new Histogram();
-            $histogramData = json_encode($histogramObj->getHistogramDataFormat($tagSN, $orgID));
+            $histogramObj = new Histogram($dfltData);
+            $histogramObj->histData = $tagHistogramData;
+            $histogramData = json_encode($histogramObj->getHistogramDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($histogramData, $url);
             break;
         case PIM_TYPE :
-            $pimObj = new PIM();
-            $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID));
+            $pimObj = new PIM($dfltData);
+            $pimData = json_encode($pimObj->getPIMDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($pimData, $url);
             break;
         case CURRENT_TYPE :
-            $currentObj = new Current();
-            $currentData = json_encode($currentObj->getCurrentDataFormat($tagSN, $orgID));
+            $currentObj = new Current($dfltData);
+            $currentData = json_encode($currentObj->getCurrentDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($currentData, $url);
             break;
         case TAGINFO_TYPE :
-            $tagObj = new TagInfo();
+            $tagObj = new TagInfo($dfltData);
             $tagObj->wifiFirmwareVer = $wifiFirmware;
             $tagObj->bleFirwareVer = $bleFirmware;
             $tagObj->hostFirmwareVer = $hostFirmware;
-            $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID));
+            $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($tagInfoData, $url);
             break;
         case POWERPATH_UPDATE_CONFIG_PARAM :
             $finalResult = makeGETRequest($url);
             break;
         case POWERPATH_SEND_DEBUG_LOG :
-            $debugLogObj = new DebugLog();
+            $debugLogObj = new DebugLog($dfltData);
             $debugLogObj->log = $tagDebugLog;
-            $debugLogData = json_encode($debugLogObj->getDebugLog($tagSN, $orgID));
+            $debugLogData = json_encode($debugLogObj->getDebugLog($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($debugLogData, $url);
             break;
         case POWERPATH_REPORT_USD_DEBUG_DATA:
-            $usdDebugObj = new USDDebug();
+            $usdDebugObj = new USDDebug($dfltData);
             $usdDebugObj->data = $tagUSDData;
-            $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID));
+            $usdDebugData = json_encode($usdDebugObj->getUsdDebugData($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($usdDebugData, $url);            
             break;
     }    
@@ -169,5 +177,19 @@ function processTagPendingEvents($data) {
                 }
             }
         }
+    }
+}
+/**
+ * To start timer
+ * @return type
+ */
+function timeCalculation(){
+    try {
+        $time = microtime();
+        $time = explode(' ', $time);
+        $time = $time[1] + $time[0];
+        return $time;
+    } catch (Exception $exc) {
+        //echo $exc->getTraceAsString();
     }
 }

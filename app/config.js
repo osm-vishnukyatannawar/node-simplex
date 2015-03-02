@@ -5,7 +5,7 @@ var PRODUCTION = false;
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
-  'app_code_path' : __dirname + '/code/',
+  'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': 'http://10.0.0.15:3000/',
@@ -20,9 +20,9 @@ global.__CONFIG__ = {
     'maxMsgPerCon': 20,
     'emailsToSend': 'abijeet.p@osmosys.asia'
   },
-  'maintenance' : {
-    'run_maria_on_main' : true,
-    'max_tries' : 2,
+  'maintenance': {
+    'run_maria_on_main': true,
+    'max_tries': 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
@@ -43,7 +43,7 @@ global.__CONFIG__ = {
   },
   'firmware': {
     'folder': 'firmwares',
-    'maxFileSizeMB' : 10,
+    'maxFileSizeMB': 2,
     'baseFirmwareFileStrs': {
       'ble_fw_version': 'PowerPath_BLE_FW_',
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
@@ -52,7 +52,7 @@ global.__CONFIG__ = {
     'firmwareFileExtension': {
       'ble_fw_version': '.bin',
       'wifi_fw_version': '.bin',
-      'host_fw_version' : '.bin'
+      'host_fw_version': '.bin'
     },
     'baseVersionFolderName': 'Powerpath_FW_version_'
 
@@ -96,8 +96,8 @@ global.__CONFIG__ = {
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv',
-    'defaultSerialNumber' : 'DEFAULT-',
-    'factorySerialNumber' : '0000000000',
+    'defaultSerialNumber': 'DEFAULT-',
+    'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000'
   },
   'currentSampleTime': 5, // in minutes
@@ -135,10 +135,10 @@ global.__CONFIG__ = {
     'configured': 2
   },
   'tagBlobFiles': {
-	  'tagDebugLog' : 'tag-debug-log.csv',
-	  'tagUSDDebug' : 'tag-usd-debug.csv',
-	  'tagHistogram': 'tag-histogram.csv',
-	  'tagCurrUtil' : 'tag-current-util.csv'
+    'tagDebugLog': 'tag-debug-log.csv',
+    'tagUSDDebug': 'tag-usd-debug.csv',
+    'tagHistogram': 'tag-histogram.csv',
+    'tagCurrUtil': 'tag-current-util.csv'
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -153,8 +153,12 @@ global.__CONFIG__ = {
     'key': '2',
     'value': 'dev_col_export'
   }],
+  'storedProcedures': {
+    'currentDataProcess': 'sp_process_current_data',
+  },
   'clientSideDateFormat': 'YYYY-MM-DD',
-  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm'
+  'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
+  'limitString': ' LIMIT 0,5'
 };
 
 __CONFIG__.isProduction = PRODUCTION;

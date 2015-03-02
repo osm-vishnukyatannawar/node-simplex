@@ -32,35 +32,35 @@ class Current {
     public $currentTimeStamp_tm_year;
     public $CurrentDataUtil;
 
-    public function __construct() {
+    public function __construct($dfltData) {
         $this->type = CURRENT_TYPE;
-        $this->currentRms = DEFAULT_VALUES;
-        $this->utilVal = DEFAULT_VALUES;
-        $this->usageState = DEFAULT_VALUES;
-        $this->numSamples = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->currentTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_sec = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_min = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_hour = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_mday = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_mon = DEFAULT_VALUES;
-        $this->startTimeStamp_tm_year = DEFAULT_VALUES;
-        $this->numBlocks = DEFAULT_VALUES;
+        $this->currentRms = DEFAULT_ADDED_RMS_VALUE + $dfltData;
+        $this->utilVal = DEFAULT_UTIL_VALUE + $dfltData;
+        $this->usageState = rand(1, 4);
+        $this->numSamples = DEFAULT_NUMBER_OF_SAMPLES;
+        $this->currentTimeStamp_tm_sec = (int) date("s");
+        $this->currentTimeStamp_tm_min = (int) date("i");
+        $this->currentTimeStamp_tm_hour = (int) date("H");
+        $this->currentTimeStamp_tm_mday = (int) date("d");
+        $this->currentTimeStamp_tm_mon = (int) date("m");
+        $this->currentTimeStamp_tm_year = (int) date("Y");
+        $this->startTimeStamp_tm_sec = $dfltData;
+        $this->startTimeStamp_tm_min = $dfltData;
+        $this->startTimeStamp_tm_hour = $dfltData;
+        $this->startTimeStamp_tm_mday = $dfltData;
+        $this->startTimeStamp_tm_mon = $dfltData;
+        $this->startTimeStamp_tm_year = $dfltData;
+        $this->numBlocks = $dfltData;
     }
 
-    public function getCurrentDataFormat($tagSN, $orgID) {
-        $baseObj = new Base($tagSN, $orgID);
+    public function getCurrentDataFormat($tagSN, $orgID, $dfltData) {
+        $baseObj = new Base($tagSN, $orgID, $dfltData);
         
         $utilArr = ['currentRms' => $this->currentRms,
            'utilVal' => $this->utilVal,
            'usageState' =>  $this->usageState];
         
-        for($i = 0; $i <= 9; ++$i) {
+        for($i = 1; $i <= $this->numSamples; ++$i) {
             array_push($this->currentUtilMeasurements, (object) $utilArr);
         }
         
@@ -73,25 +73,36 @@ class Current {
         
         $this->currentHeader = (object) ['currentTimeStamp' => $this->currentTimeStamp, 'numBlocks' => $this->numBlocks];
         
-        $this->startTimeStamp = (object) ['tm_sec' => $this->startTimeStamp_tm_sec,
-            'tm_min' => $this->startTimeStamp_tm_min,
-            'tm_hour' => $this->startTimeStamp_tm_hour,
-            'tm_mday' => $this->startTimeStamp_tm_sec,
-            'tm_mon' => $this->startTimeStamp_tm_mon,
-            'tm_year' => $this->startTimeStamp_tm_year];
+//        $this->startTimeStamp = (object) ['tm_sec' => $this->startTimeStamp_tm_sec,
+//            'tm_min' => $this->startTimeStamp_tm_min,
+//            'tm_hour' => $this->startTimeStamp_tm_hour,
+//            'tm_mday' => $this->startTimeStamp_tm_sec,
+//            'tm_mon' => $this->startTimeStamp_tm_mon,
+//            'tm_year' => $this->startTimeStamp_tm_year];
+        $this->startTimeStamp = (object) ['tm_sec' => $this->currentTimeStamp_tm_sec,
+            'tm_min' => $this->currentTimeStamp_tm_min,
+            'tm_hour' => $this->currentTimeStamp_tm_hour,
+            'tm_mday' => $this->currentTimeStamp_tm_mday,
+            'tm_mon' => $this->currentTimeStamp_tm_mon,
+            'tm_year' => $this->currentTimeStamp_tm_year];
 
         $this->currentUtilHeader = (object) ['startTimestamp' => $this->startTimeStamp,
                     'numSamples' => $this->numSamples];
         
-        $this->currentUtilization[] = (object) ['currentUtilHeader' => $this->currentUtilHeader,
-            'currentUtilMeasurements' => (object) $this->currentUtilMeasurements];
+//        $this->currentUtilization[] = (object) ['currentUtilHeader' => $this->currentUtilHeader,
+//            'currentUtilMeasurements' => (object) $this->currentUtilMeasurements];
         
+        for($i = 1; $i <= DEFAULT_NUMBER_OF_SAMPLES; ++$i) {
+            $this->currentUtilization[$i] = (object) ['currentUtilHeader' => $this->currentUtilHeader,
+            'currentUtilMeasurements' => (object) $this->currentUtilMeasurements];
+        }
 
         $this->data = (object) ['currentHeader' => $this->currentHeader,
                     'currentUtilization' => (object) $this->currentUtilization];
 
         $this->dataToSend = (object) ['customerID' => $baseObj->customerID,
                     'serialNum' => $baseObj->serialNum,
+                    'defaultData' => $baseObj->defaultData,
                     'type' => $this->type,
                     'data' => $this->data];
 

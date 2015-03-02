@@ -7,17 +7,18 @@ require_once __DIR__. '/../config.php';
  */
 class USDDebug {
     
-    public function __construct() {
+    public function __construct($dfltData) {
         $this->type = POWERPATH_REPORT_USD_DEBUG_DATA;
-        $this->data = 'default data = ' . DEFAULT_VALUES;
+        $this->data = 'default data = ' . $dfltData;
     }
     
-    public function getUsdDebugData($tagSN, $orgID) {
-        $baseObj = new Base($tagSN, $orgID);
+    public function getUsdDebugData($tagSN, $orgID, $dfltData) {
+        $baseObj = new Base($tagSN, $orgID, $dfltData);
         
         return (object) [
             'customerID' => $baseObj->customerID,
             'serialNum' => $baseObj->serialNum,
+            'defaultData' => $baseObj->defaultData,
             'type' => $this->type,
             'data' => $this->data            
         ];
