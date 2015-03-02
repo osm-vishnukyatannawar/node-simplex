@@ -140,6 +140,17 @@ require_once 'ws-call.php';
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
             }
+            .pure-text-lengthy {
+                padding: .4em .5em;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-shadow: inset 0 1px 3px #ddd;
+                border-radius: 4px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                width: 500px;
+            }
             .footer {
                 min-height: 10px;
             }
@@ -154,8 +165,9 @@ require_once 'ws-call.php';
         <h1>Emanate Simulator</h1>
         <hr>                
         <?php
-        $tagSN = empty($_POST['tagSN']) ? TAG_SN : intval($_POST['tagSN']);
+        $tagSN = empty($_POST['tagSN']) ? TAG_SN : $_POST['tagSN'];
         $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
+        $baseURL = empty($_POST['baseURL']) ? BASE_URL : $_POST['baseURL'];
         if(ctype_digit($_POST['dfltData'])) {
             $dfltData = intval($_POST['dfltData']);
         } else {
@@ -169,6 +181,17 @@ require_once 'ws-call.php';
         $tagHistogramData = empty($_POST['tagHistogramData']) ? 'Histogram Data == ' . DEFAULT_VALUES : $_POST['tagHistogramData'];
         ?>
         <form method ="POST" enctype="multipart/form-data">
+        	<div class="clear-div">
+        		<h2>URL</h2>
+        		<table>
+        			<tbody>
+                        <tr>
+                            <td width="22%">Base URL</td>
+                            <td><input class="pure-text-lengthy" type='text' value="<?php echo $baseURL ?>" name="baseURL"></td>
+                        </tr>
+                    </tbody>
+        		</table>
+        	</div>
             <div class="form-left">                
                 <h2>Tag Info</h2>
                 <table class="zebra">
@@ -269,16 +292,17 @@ require_once 'ws-call.php';
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
             $firmwareLookupIds = unserialize(LOOKUP_VALUES);
+            $wsURL = $_POST['baseURL'] . 'tag/maintenance/';
             if ($nmbrOfCalls > 0) {
                 for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
-                    $respObj = sendDataBasedOnDataType($type);
-                    // If it's a maintenance type process the pending events                    
+                    $respObj = sendDataBasedOnDataType($type,$wsURL);
+                    // If its a maintenance type process the pending events                    
                     if (intval($type) === MAINTENANCE_TYPE) {
                         processTagPendingEvents($respObj->data);
                     }
                 }
             } else {
-                $respObj = sendDataBasedOnDataType($type);
+                $respObj = sendDataBasedOnDataType($type,$wsURL);
                 if (intval($type) === MAINTENANCE_TYPE) {
                     processTagPendingEvents($respObj->data);
                 }
