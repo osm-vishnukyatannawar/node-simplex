@@ -176,4 +176,66 @@
         }
     }
 }
-````
+```
+
+## Debug logs
+```json
+{"customerID":1273,"serialNum":95550,"deviceID":20,"type":9,"data":["main] wlan evt = 8
+
+[main] WEVT = 8, 769
+
+[main] wlan evt = 9
+
+","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]}
+```
+---
+
+```json
+{"customerID":1273,"serialNum":95550,"deviceID":20,"type":9,"data":["ppapp] evt done=29, pend=1, busy=0
+
+[ppapp] sleepbusy=0
+
+[ppapp] evt done=29, pend=0, busy=0
+
+[ppapp] keep alive=900
+
+[ppapp] evt post=21
+
+[ppapp] sleep rx
+
+[ppapp] reason=5
+
+[ppapp] c_time=2, m_time=-3
+
+[ppapp] no sleep maint
+
+[ppapp] pending=0, saved=0, sleepbusy=1
+
+[ppapp] ccx/maint wlan_rdy=0x1
+
+[main] EVT: 2
+
+[ppapp] Q server = 4, 5
+
+[ppapp] evt done=21, pend=0, busy=1
+
+[main] wlan evt = 31
+
+[main] Power save exit
+
+[main] wlan rdy = 0x81
+
+[main] config network
+
+[main] network=OSSPL 1234567890
+
+[ppapp] evt post=5
+
+[main] wlan evt = 8
+
+[main] WEVT = 8, 900
+
+[main] wlan evt = 9
+
+","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]}
+```
