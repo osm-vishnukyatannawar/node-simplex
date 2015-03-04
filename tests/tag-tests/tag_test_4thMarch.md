@@ -1,7 +1,7 @@
 #Tag test results 
 
-**Customer ID** - 1273
-**Tag Serial Number** - 95550
+**Customer ID** - 1273  
+**Tag Serial Number** - 95550  
 
 ## Maintenance
 ```json
@@ -91,4 +91,89 @@
         "tm_year": 0
     }
 }
-```
+``` 
+
+
+## Current
+```json
+{
+    "currentHeader": {
+        "currentTimeStamp": {
+            "tm_sec": 53,
+            "tm_min": 12,
+            "tm_hour": 0,
+            "tm_mday": 1,
+            "tm_mon": 0,
+            "tm_year": 70
+        },
+        "numBlocks": 1
+    },
+    "currentUtilization": {
+        "0": {
+            "currentUtilHeader": {
+                "startTimestamp": {
+                    "tm_sec": 53,
+                    "tm_min": 12,
+                    "tm_hour": 1,
+                    "tm_mday": 1,
+                    "tm_mon": 0,
+                    "tm_year": 70
+                },
+                "numSamples": 10
+            },
+            "currentUtilMeasurements": {
+                "0": {
+                    "currentRms": 10,
+                    "utilVal": 20,
+                    "usageState": 0
+                },
+                "1": {
+                    "currentRms": 20,
+                    "utilVal": 30,
+                    "usageState": 1
+                },
+                "2": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "3": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "4": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "5": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "6": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "7": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "8": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                },
+                "9": {
+                    "currentRms": 2000,
+                    "utilVal": 100,
+                    "usageState": 3
+                }
+            }
+        }
+    }
+}
+````
