@@ -146,6 +146,7 @@ global.__CONFIG__ = {
   'filesFolderName': 'files',
   'tagBlobFileName': 'tag-blob-data.csv',
   'maxDecimalLength': 2,
+  'reportProblemFolder': 'report_problem',
   'logs': [{
     'key': '1',
     'value': 'dev_col_import'
