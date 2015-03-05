@@ -1,14 +1,37 @@
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
-var PRODUCTION = false;
+
+var PRODUCTION = process.env.NODE_ENV;
+var isStaging = process.env.NODE_ENV_STAGING;
+
+var emailsToSend = 'vamsi.m@osmosys.asia';
+var app_http_base_url = 'http://dev.emanate.osmosys.in:8889/';
+var ipAddress = '10.0.0.159';
+var port = 80;
+
+if (PRODUCTION === 'production') {
+  if (isStaging === 'true') {
+    app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
+    ipAddress = '10.0.0.6';
+    port = 80;
+  } else {
+    emailsToSend = 'support.emanate@osmosys.asia';
+    app_http_base_url = 'http://cloud.emanatewireless.com/';
+    ipAddress = '167.114.117.212';
+    port = 80;
+  }
+  PRODUCTION = true;
+} else {
+  PRODUCTION = false;
+}
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -18,7 +41,7 @@ global.__CONFIG__ = {
     'fromName': 'Emanate Wireless',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'abijeet.p@osmosys.asia'
+    'emailsToSend': emailsToSend
   },
   'maintenance': {
     'run_maria_on_main': true,
@@ -176,7 +199,7 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CO
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 config.express = {
-  port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  port: process.env.EXPRESS_PORT || port,
+  ip: ipAddress,
   isProduction: PRODUCTION
 };

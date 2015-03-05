@@ -168,7 +168,7 @@ require_once 'ws-call.php';
         $tagSN = empty($_POST['tagSN']) ? TAG_SN : $_POST['tagSN'];
         $orgID = empty($_POST['orgID']) ? ORG_ID : intval($_POST['orgID']);
         $baseURL = empty($_POST['baseURL']) ? BASE_URL : $_POST['baseURL'];
-        if(ctype_digit($_POST['dfltData'])) {
+        if(!empty($_POST['dfltData']) && ctype_digit($_POST['dfltData'])) {
             $dfltData = intval($_POST['dfltData']);
         } else {
             $dfltData = DEFAULT_VALUES;
