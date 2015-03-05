@@ -4,7 +4,6 @@ var cluster = require('cluster');
 // Osm Includes
 var config = require('./config');
 var logger = require('./logger');
-var middleware = require('./middleware/index');
 var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
 var loadViews = require('./code/views.js');
 var loadApi = require('./code/api.js');
@@ -38,8 +37,6 @@ if (config.express.isProduction && cluster.isMaster) {
 
   app.use(function(err, req, res, next) {
     if (err) {
-      console.log(err);
-      console.log('----------\n\n');
       res.set('Connection', 'close');
       res.status(getStatus('badRequest')).json({
         status: 'fail',
@@ -57,7 +54,7 @@ if (config.express.isProduction && cluster.isMaster) {
   loadViews(app);
 
   // 404 error
-  app.use('/api', middleware.notFound);
+  app.use('/api', helper.notFound);
 
   app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
 

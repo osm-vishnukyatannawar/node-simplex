@@ -50,4 +50,102 @@
             }
         ]
     }
-}</con:request><con:originalUri>http://10.0.0.15/api/v1/tag</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="histogram" path="/api/v1/496f147ee78811da/histogram"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404 403</con:status><con:params/><con:element xmlns:his="http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram">his:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:his="http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram">his:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="pim" path="/api/v1/496f147ee78811da/pim"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:pim="http://10.0.0.15/api/v1/496f147ee78811da/pim">pim:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:pim="http://10.0.0.15/api/v1/496f147ee78811da/pim">pim:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/496f147ee78811da/pim</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="current" path="/api/v1/9d60dc264373c328/current"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:cur="http://10.0.0.15/api/v1/9d60dc264373c328/current">cur:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:cur="http://10.0.0.15/api/v1/9d60dc264373c328/current">cur:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/9d60dc264373c328/current</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="Fetch user organizations" path="/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:org="http://10.0.0.15/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations">org:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+}</con:request><con:originalUri>http://10.0.0.15/api/v1/tag</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="histogram" path="/api/v1/496f147ee78811da/histogram"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404 403</con:status><con:params/><con:element xmlns:his="http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram">his:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:his="http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram">his:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/29b5fa529458f4f3/histogram</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="pim" path="/api/v1/496f147ee78811da/pim"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:pim="http://10.0.0.15/api/v1/496f147ee78811da/pim">pim:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:pim="http://10.0.0.15/api/v1/496f147ee78811da/pim">pim:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/496f147ee78811da/pim</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="current" path="/api/v1/tag/maintenance"><con:settings/><con:parameters/><con:method name="Method 1" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:cur="http://10.0.0.15/api/v1/9d60dc264373c328/current">cur:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:cur="http://10.0.0.15/api/v1/9d60dc264373c328/current">cur:Response</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request>{
+  "customerID": "1",
+  "serialNum": "8686",
+  "type": 4,
+  "data": {
+    "currentHeader": {
+      "currentTimeStamp": {
+        "tm_sec": 2,
+        "tm_min": 9,
+        "tm_hour": 0,
+        "tm_mday": 1,
+        "tm_mon": 0,
+        "tm_year": 70
+      },
+      "numBlocks": 1
+    },
+    "currentUtilization": {
+      "0": {
+        "currentUtilHeader": {
+          "startTimestamp": {
+            "tm_sec": 2,
+            "tm_min": 9,
+            "tm_hour": 1,
+            "tm_mday": 1,
+            "tm_mon": 0,
+            "tm_year": 70
+          },
+          "numSamples": 10
+        },
+        "currentUtilMeasurements": {
+          "0": {
+            "currentRms": 10,
+            "utilVal": 20,
+            "usageState": 0
+          },
+          "1": {
+            "currentRms": 20,
+            "utilVal": 30,
+            "usageState": 1
+          },
+          "2": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "3": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "4": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "5": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "6": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "7": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "8": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          },
+          "9": {
+            "currentRms": 2000,
+            "utilVal": 100,
+            "usageState": 3
+          }
+        }
+      },
+      "1": {
+        "currentUtilHeader": {
+          "startTimestamp": {
+            "tm_sec": 2,
+            "tm_min": 9,
+            "tm_hour": 1,
+            "tm_mday": 1,
+            "tm_mon": 0,
+            "tm_year": 70
+          },
+          "numSamples": 10
+        },
+        "currentUtilMeasurements": {}
+      }
+    }
+  }
+}</con:request><con:originalUri>http://10.0.0.15/api/v1/9d60dc264373c328/current</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="Fetch user organizations" path="/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations"><con:settings/><con:parameters/><con:method name="Method 1" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>500</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:org="http://10.0.0.15/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations">org:Response</con:element></con:representation><con:request name="Request 1" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://10.0.0.15:3000</con:endpoint><con:request/><con:originalUri>http://10.0.0.15/api/v1/user/aee1705f-683b-492a-9c3d-0b82659ab341/organizations</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
