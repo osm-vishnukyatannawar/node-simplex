@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('UTC');
 define('CONFIG', serialize(array(1, 2, 3, 4, 5)));
 
 /***
