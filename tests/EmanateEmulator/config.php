@@ -40,3 +40,12 @@ define('SLEEP_TIME', 0);
 //Look up values for powerpath firmware updation commands
 
 define('LOOKUP_VALUES', serialize(array(7,11,15)));
+
+// Default values to be added in Rms value
+define('DEFAULT_ADDED_RMS_VALUE', 60);
+
+// Default values to be added in util value
+define('DEFAULT_UTIL_VALUE', 20);
+
+// Default values of number of blocks i.e. number of time currentUtilMeasurement will be calculated.
+define('DEFAULT_NUMBER_OF_SAMPLES', 4);
