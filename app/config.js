@@ -1,29 +1,30 @@
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
+
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
+
 var emailsToSend = 'vamsi.m@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.159:3000/' ; 
+var app_http_base_url = 'http://dev.emanate.osmosys.in:8889/';
 var ipAddress = '10.0.0.159';
-var port = 3000;
-if(PRODUCTION === 'production'){
-    if(isStaging === 'true'){
-        emailsToSend = 'support.emanate@osmosys.asia';
-        app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
-        ipAddress = '10.0.0.6';  
-        port = 3000;
-    }else{
-        emailsToSend = 'support.emanate@osmosys.asia';
-        app_http_base_url = 'http://cloud.emanatewireless.com/';
-        ipAddress = '167.114.117.212';  
-        port = 80;
-    }
+var port = 80;
+
+if (PRODUCTION === 'production') {
+  if (isStaging === 'true') {
+    app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
+    ipAddress = '10.0.0.6';
+    port = 80;
+  } else {
+    emailsToSend = 'support.emanate@osmosys.asia';
+    app_http_base_url = 'http://cloud.emanatewireless.com/';
+    ipAddress = '167.114.117.212';
+    port = 80;
+  }
   PRODUCTION = true;
-}else {
+} else {
   PRODUCTION = false;
 }
-
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
