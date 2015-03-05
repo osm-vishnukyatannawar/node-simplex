@@ -8,10 +8,10 @@ if(PRODUCTION === 'production'){
   PRODUCTION = false;
 }
 var emailsToSend = 'abijeet.p@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.159:3000/' ; 
+var app_http_base_url = 'http://10.0.0.15:3000/' ; 
 if(PRODUCTION){
   emailsToSend = 'support.emanate@osmosys.asia';
-  app_http_base_url = 'http://stagging.emanate.osmosys.in:8888/'
+  app_http_base_url = 'http://cloud.emanatewireless.com/'
 }
 
 global.__CONFIG__ = {
@@ -188,6 +188,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] =
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.159',
+  ip: '10.0.0.15',
   isProduction: PRODUCTION
 };
