@@ -1,14 +1,25 @@
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
-var PRODUCTION = false;
+var PRODUCTION = process.env.NODE_ENV;
+if(PRODUCTION === 'production'){
+  PRODUCTION = true;
+}else{
+  PRODUCTION = false;
+}
+var emailsToSend = 'abijeet.p@osmosys.asia';
+var app_http_base_url = 'http://10.0.0.159:3000/' ; 
+if(PRODUCTION){
+  emailsToSend = 'support.emanate@osmosys.asia';
+  app_http_base_url = 'http://stagging.emanate.osmosys.in:8888/'
+}
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
@@ -18,7 +29,7 @@ global.__CONFIG__ = {
     'fromName': 'Emanate Wireless',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'abijeet.p@osmosys.asia'
+    'emailsToSend': emailsToSend
   },
   'maintenance': {
     'run_maria_on_main': true,
@@ -177,6 +188,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] =
 
 config.express = {
   port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  ip: '10.0.0.159',
   isProduction: PRODUCTION
 };
