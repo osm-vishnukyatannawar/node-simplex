@@ -11,7 +11,7 @@ var emailsToSend = 'abijeet.p@osmosys.asia';
 var app_http_base_url = 'http://10.0.0.15:3000/' ; 
 if(PRODUCTION){
   emailsToSend = 'support.emanate@osmosys.asia';
-  app_http_base_url = 'http://cloud.emanatewireless.com/'
+  app_http_base_url = 'http://cloud.emanatewireless.com/';
 }
 
 global.__CONFIG__ = {
