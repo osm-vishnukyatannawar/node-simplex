@@ -6,9 +6,9 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'vamsi.m@osmosys.asia';
-var app_http_base_url = 'http://dev.emanate.osmosys.in:8889/';
-var ipAddress = '10.0.0.159';
-var port = 80;
+var app_http_base_url = 'http://10.0.0.15:3000/';
+var ipAddress = '10.0.0.15';
+var port = 3000;
 
 if (PRODUCTION === 'production') {
   if (isStaging === 'true') {
