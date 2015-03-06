@@ -21,7 +21,8 @@ module.exports = function(grunt) {
     "plugins/jqxwidgets/jqxcheckbox.js",
     "plugins/jqxwidgets/jqxgrid.storage.js",
     "plugins/jqxwidgets/jqxdraw.js",
-    "plugins/jqxwidgets/jqxchart.core.js"
+    "plugins/jqxwidgets/jqxchart.core.js",
+    "plugins/jqxwidgets/jqxgrid.filter.js"
   ];
   
   for (var i = 0; i < gridFiles.length; ++i) {
