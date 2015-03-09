@@ -7,7 +7,7 @@ var dbConfig = {
     host: '10.0.0.66',
     user: 'osmosys',
     password: 'Change123',
-    db: 'dev_emanate_db',
+    db: 'emanate_prod',
     connTimeout: 15,
     multiStatements: true
   },
