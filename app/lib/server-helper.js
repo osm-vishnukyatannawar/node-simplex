@@ -91,18 +91,18 @@ var serverHelper = function() {
     }
     return finalUrl;
   };
-  
+
   var notFound = function(request, response) {
     response.status(appStatus('notFound')).json({
       'status': 'fail',
       'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
     });
   };
-  
+
   return {
     parseBodyType: parseBodyTypeValues,
     init: init,
-    notFound : notFound
+    notFound: notFound
   };
 };
 
