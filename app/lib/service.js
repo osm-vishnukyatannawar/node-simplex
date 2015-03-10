@@ -61,11 +61,13 @@ Service.prototype.UnzipFilesTofolder = function(sourcePath, destPath, cb) {
   });
 };
 
-Service.prototype.getTimePeriod = function(timePeriod) {
+Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
   timePeriod = timePeriod.toLowerCase();
   var endDate = getPrevDateTime(true);
   var interval = 1;
   var iterations = 7;
+  var dateTimeArr = [];
+  var timeArr = [];
   if (timePeriod === 'month') {
     interval = 7;
     iterations = 5;
@@ -80,6 +82,17 @@ Service.prototype.getTimePeriod = function(timePeriod) {
     dtArr.push(dt);
   }
   var startDate = dtArr[dtArr.length - 1];
+  for (var i = 0; i < 24; ++i) {
+	timeArr.push(i);  
+  }
+  if (isHourly) {
+	for(var i = 0; i < dtArr.length; ++i) {
+	  for(var j = 0; j < timeArr.length; ++j) {
+		dateTimeArr.push(moment(dtArr[i]).format('MMM DD') + ' ' + timeArr[j] + ':00');
+	  }
+	}
+	dtArr = dateTimeArr;
+  }
   var obj = {
     interval: interval,
     iterations: iterations,
