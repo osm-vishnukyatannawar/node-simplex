@@ -1,28 +1,51 @@
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
-var PRODUCTION = false;
+
+var PRODUCTION = process.env.NODE_ENV;
+var isStaging = process.env.NODE_ENV_STAGING;
+
+var emailsToSend = 'vamsi.m@osmosys.asia';
+var app_http_base_url = 'http://10.0.0.159:3000/';
+var ipAddress = '10.0.0.159';
+var port = 3000;
+
+if (PRODUCTION === 'production') {
+  if (isStaging === 'true') {
+    app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
+    ipAddress = '10.0.0.6';
+    port = 80;
+  } else {
+    emailsToSend = 'support.emanate@osmosys.asia';
+    app_http_base_url = 'http://cloud.emanatewireless.com/';
+    ipAddress = '167.114.117.212';
+    port = 80;
+  }
+  PRODUCTION = true;
+} else {
+  PRODUCTION = false;
+}
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
-  'app_code_path' : __dirname + '/code/',
+  'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': 'http://10.0.0.15:3000/',
+  'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
     'password': 'Emanat3!1',
     'port': 587,
-    'fromName': 'Emanate Wireless',
+    'fromName': 'The Emanate Wireless Team',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': 'abijeet.p@osmosys.asia'
+    'emailsToSend': emailsToSend
   },
-  'maintenance' : {
-    'run_maria_on_main' : true,
-    'max_tries' : 2,
+  'maintenance': {
+    'run_maria_on_main': true,
+    'max_tries': 2,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
@@ -43,7 +66,7 @@ global.__CONFIG__ = {
   },
   'firmware': {
     'folder': 'firmwares',
-    'maxFileSizeMB' : 2,
+    'maxFileSizeMB': 2,
     'baseFirmwareFileStrs': {
       'ble_fw_version': 'PowerPath_BLE_FW_',
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
@@ -52,7 +75,7 @@ global.__CONFIG__ = {
     'firmwareFileExtension': {
       'ble_fw_version': '.bin',
       'wifi_fw_version': '.bin',
-      'host_fw_version' : '.bin'
+      'host_fw_version': '.bin'
     },
     'baseVersionFolderName': 'Powerpath_FW_version_'
 
@@ -96,8 +119,8 @@ global.__CONFIG__ = {
   },
   'tags': {
     'tagsCsvFileName': 'PowerPathTags.csv',
-    'defaultSerialNumber' : 'DEFAULT-',
-    'factorySerialNumber' : '0000000000',
+    'defaultSerialNumber': 'DEFAULT-',
+    'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000'
   },
   'currentSampleTime': 5, // in minutes
@@ -135,10 +158,10 @@ global.__CONFIG__ = {
     'configured': 2
   },
   'tagBlobFiles': {
-	  'tagDebugLog' : 'tag-debug-log.csv',
-	  'tagUSDDebug' : 'tag-usd-debug.csv',
-	  'tagHistogram': 'tag-histogram.csv',
-	  'tagCurrUtil' : 'tag-current-util.csv'
+    'tagDebugLog': 'tag-debug-log.csv',
+    'tagUSDDebug': 'tag-usd-debug.csv',
+    'tagHistogram': 'tag-histogram.csv',
+    'tagCurrUtil': 'tag-current-util.csv'
   },
   'tokenLength': 16,
   'fwTokenLength': 16,
@@ -146,6 +169,7 @@ global.__CONFIG__ = {
   'filesFolderName': 'files',
   'tagBlobFileName': 'tag-blob-data.csv',
   'maxDecimalLength': 2,
+  'reportProblemFolder': 'report_problem',
   'logs': [{
     'key': '1',
     'value': 'dev_col_import'
@@ -153,12 +177,12 @@ global.__CONFIG__ = {
     'key': '2',
     'value': 'dev_col_export'
   }],
-  'storedProcedures' : {
-    'currentDataProcess' : 'sp_process_current_data',
+  'storedProcedures': {
+    'currentDataProcess': 'sp_process_current_data',
   },
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
-  'limitString' : ' LIMIT 0,5'
+  'limitString': ' LIMIT 0,5'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -175,7 +199,7 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CO
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 config.express = {
-  port: process.env.EXPRESS_PORT || 3000,
-  ip: '10.0.0.15',
+  port: process.env.EXPRESS_PORT || port,
+  ip: ipAddress,
   isProduction: PRODUCTION
 };

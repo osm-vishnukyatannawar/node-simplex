@@ -1,6 +1,7 @@
 var formidable = require('formidable');
 var bodyParser = require('body-parser');
 var loadApi = require(__CONFIG__.app_code_path + 'api.js');
+var appStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
 var serverHelper = function() {
   var app = null;
@@ -50,7 +51,7 @@ var serverHelper = function() {
     if (isMultipart > -1) {
       var form = new formidable.IncomingForm({
         uploadDir: __dirname + '/../../uploads/',
-        keepExtensions : true
+        keepExtensions: true
       });
       form.parse(request, function(err, fields, files) {
         request.fields = fields;
@@ -91,9 +92,17 @@ var serverHelper = function() {
     return finalUrl;
   };
 
+  var notFound = function(request, response) {
+    response.status(appStatus('notFound')).json({
+      'status': 'fail',
+      'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
+    });
+  };
+
   return {
     parseBodyType: parseBodyTypeValues,
     init: init,
+    notFound: notFound
   };
 };
 

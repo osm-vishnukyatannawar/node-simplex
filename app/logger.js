@@ -37,7 +37,7 @@ var logger = (function() {
     })]
   });
 
-  var logAppErrors = function(error, logLevel, severity) {
+  var logAppErrors = function(error) {
     errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + '\n Severity : ' + error.severity + '\n----\n');
   };
 
