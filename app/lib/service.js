@@ -76,22 +76,23 @@ Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
     iterations = 12;
   }
   var dtArr = [];
-  for (var i = 0; i < iterations; ++i) {
+  var i = 0;
+  for (i = 0; i < iterations; ++i) {
     var dt = getPrevDateTime(true);
     dt.setDate(dt.getDate() - (interval * i));
     dtArr.push(dt);
   }
   var startDate = dtArr[dtArr.length - 1];
-  for (var i = 0; i < 24; ++i) {
-	timeArr.push(i);  
+  for (i = 0; i < 24; ++i) {
+    timeArr.push(i);
   }
   if (isHourly) {
-	for(var i = 0; i < dtArr.length; ++i) {
-	  for(var j = 0; j < timeArr.length; ++j) {
-		dateTimeArr.push(moment(dtArr[i]).format('MMM DD') + ' ' + timeArr[j] + ':00');
-	  }
-	}
-	dtArr = dateTimeArr;
+    for (i = 0; i < dtArr.length; ++i) {
+      for (var j = 0; j < timeArr.length; ++j) {
+        dateTimeArr.push(moment(dtArr[i]).format('MMM DD') + ' ' + timeArr[j] + ':00');
+      }
+    }
+    dtArr = dateTimeArr;
   }
   var obj = {
     interval: interval,
