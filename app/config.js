@@ -81,9 +81,9 @@ global.__CONFIG__ = {
 
   },
   'organizationBleConfig': {
-    'bleEnable': 0,
+    'bleEnable': 1,
     'bleGapRoleMinConnIntervalms': 8,
-    'bleGapRoleMaxConnIntervalms': 10,
+    'bleGapRoleMaxConnIntervalms': 8,
     'bleGapRoleSlaveLatency': 9,
     'bleLimitedAdvertOnTimeSec': 120,
     'bleLimitedAdvertIntervalTimems': 1600,
