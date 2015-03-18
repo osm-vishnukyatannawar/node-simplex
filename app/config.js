@@ -82,15 +82,15 @@ global.__CONFIG__ = {
   },
   'organizationBleConfig': {
     'bleEnable': 0,
-    'bleGapRoleMinConnIntervalms': 10,
+    'bleGapRoleMinConnIntervalms': 8,
     'bleGapRoleMaxConnIntervalms': 10,
     'bleGapRoleSlaveLatency': 9,
     'bleLimitedAdvertOnTimeSec': 120,
-    'bleLimitedAdvertIntervalTimems': 1000,
-    'bleGeneralAdvertIntervalTimems': 3000,
-    'bleLowBattAdvertIntervalTimems': 5000,
+    'bleLimitedAdvertIntervalTimems': 1600,
+    'bleGeneralAdvertIntervalTimems': 1600,
+    'bleLowBattAdvertIntervalTimems': 1600,
     'bleDesiredConnectionTimeoutms': 1000,
-    'advertOffTimems': 300,
+    'advertOffTimems': 0,
     'blePasskey': 19655
   },
   'organizationFindParams': {
