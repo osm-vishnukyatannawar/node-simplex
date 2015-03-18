@@ -6,3 +6,10 @@ td {
 	padding-right: 30px;
 	padding-left: 10px;
 }
+.labelDesc {
+	padding-left: 12px;
+	font-weight: bold;
+}
+.contentDesc {
+	padding-left: 30px;
+}
