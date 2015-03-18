@@ -40,7 +40,16 @@ var logger = (function() {
   var logAppErrors = function(error) {
     errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + '\n Severity : ' + error.severity + '\n----\n');
   };
-
+  
+  var logUncaughtError = function(error) {
+    errLogger.error('\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
+      'Message : ' + error.message  + '\n--\n' +
+      'Type : ' + error.type  + '\n--\n' +
+      'StackTrace : ' + error.stack + '\n--\n' + 
+      '----------------------------------\n'
+    );
+  };
+  
   var logAppInfo = function(info) {
     infoLogger.info(info + '\n----\n');
   };
@@ -59,7 +68,8 @@ var logger = (function() {
     logAppErrors: logAppErrors,
     logAppInfo: logAppInfo,
     writeLogErr: writeErrLog,
-    logMaintError: logMaintError
+    logMaintError: logMaintError,
+    logUncaughtError : logUncaughtError
   };
 }());
 

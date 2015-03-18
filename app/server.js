@@ -11,6 +11,7 @@ var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
+
 helper.init(app);
 
 app.set('json spaces', 0);
@@ -24,6 +25,10 @@ if (config.express.isProduction && cluster.isMaster) {
   for (var i = 0; i < cpuCount; i += 1) {
     cluster.fork();
   }
+  
+  cluster.on('exit', function() {    
+    cluster.fork();
+  });
 } else {
   // A worker process
   app.use(function(req, res, next) {
@@ -66,3 +71,13 @@ if (config.express.isProduction && cluster.isMaster) {
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
   });
 }
+
+process.on('uncaughtException', function (err) {
+  try {
+    logger.logUncaughtError(err);
+  } catch(e) {
+    // nothing to do...
+  }
+  // Eventually write code to send a mail.
+  process.exit(1);
+});
