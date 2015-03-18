@@ -3,9 +3,9 @@ var cassandraDb = require(__CONFIG__.app_base_path +
   'lib/db-connector/cassandradb');
 
 var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
-var logger = require(__CONFIG__.app_base_path + 'logger');
 
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var logger = require(__CONFIG__.app_base_path + 'logger');
 
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
@@ -18,7 +18,7 @@ var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
-
+var util = require('util');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
@@ -65,7 +65,7 @@ Model.prototype.getActiveID = function() {
 
 Model.prototype.getResults = function(objQuery) {
   var cbProcess = function(err, data) {
-    processError(err);
+    processError(err, objQuery);
     objQuery.cb(err, data);
   };
   if (objQuery.isCassandra) {
@@ -77,7 +77,7 @@ Model.prototype.getResults = function(objQuery) {
 
 Model.prototype.getResult = function(objQuery) {
   var cbProcess = function(err, data) {
-    processError(err);
+    processError(err, objQuery);
     objQuery.cb(err, data);
   };
   if (objQuery.isCassandra) {
@@ -317,15 +317,24 @@ function getDefaultTagDateObj() {
 }
 
 
-function processError(err) {
+function processError(err, objQuery) {
+  'use strict';
   if (err && err.isInternalErr) {
     err.writeToLog();
+    if(objQuery) {
+      var strError = 'Query Failed : ' + objQuery.query + ' \n';
+      if(objQuery.hasOwnProperty('data')) {
+        strError += 'Data : ' + util.inspect(objQuery.data, {depth : 4}) + '\n';
+      }       
+      strError += '-----------\n\n';
+      logger.writeLogErr(strError);
+    }    
   }
 }
 
 function runQuery(objQuery, self) {
   var cbProcess = function(err, data) {
-    processError(err);
+    processError(err, objQuery);
     objQuery.cb(err, data);
   };
   if (objQuery.isCassandra) {
