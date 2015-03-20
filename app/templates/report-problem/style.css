@@ -11,5 +11,6 @@ td {
 	font-weight: bold;
 }
 .contentDesc {
+	text-indent: 30px;
 	padding-left: 30px;
 }
