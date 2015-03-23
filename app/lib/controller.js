@@ -83,9 +83,11 @@ Controller.prototype.download = function(response, fileNameToShow, folderPath, f
   response.sendFile(fileToDownload,
     options,
     function(err) {
-      if (err) {
-        that.sendResponse(err, null, response);
-      }
+	  if (err) {
+		if(!response.headersSent) { 
+		  that.sendResponse(err, null, response);
+		}
+      }  
     });
 };
 
