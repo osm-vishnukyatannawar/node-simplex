@@ -84,7 +84,9 @@ Controller.prototype.download = function(response, fileNameToShow, folderPath, f
     options,
     function(err) {
       if (err) {
+        if(!response.headersSent) { 
         that.sendResponse(err, null, response);
+        }
       }
     });
 };

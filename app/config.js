@@ -121,7 +121,8 @@ global.__CONFIG__ = {
     'tagsCsvFileName': 'PowerPathTags.csv',
     'defaultSerialNumber': 'DEFAULT-',
     'factorySerialNumber': '0000000000',
-    'factoryOrgId': '0000000000'
+    'factoryOrgId': '0000000000',
+    'macTwoBytes' : '00:50'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -161,8 +162,10 @@ global.__CONFIG__ = {
     'tagDebugLog': 'tag-debug-log.csv',
     'tagUSDDebug': 'tag-usd-debug.csv',
     'tagHistogram': 'tag-histogram.csv',
-    'tagCurrUtil': 'tag-current-util.csv'
+    'tagCurrUtil': 'tag-current-util.csv',
+    'tagDebugLogTxt': 'tag-debug-log.txt'
   },
+  'logTxtFormat': true,
   'tokenLength': 16,
   'fwTokenLength': 16,
   'firmwareFileExtension': '.zip',
