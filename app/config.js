@@ -5,9 +5,9 @@ var config = module.exports;
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
-var emailsToSend = 'vamsi.m@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.159:3000/';
-var ipAddress = '10.0.0.159';
+var emailsToSend = 'abijeet.p@osmosys.asia';
+var app_http_base_url = 'http://10.0.0.15:3000/';
+var ipAddress = '10.0.0.15';
 var port = 3000;
 
 if (PRODUCTION === 'production') {
@@ -121,7 +121,8 @@ global.__CONFIG__ = {
     'tagsCsvFileName': 'PowerPathTags.csv',
     'defaultSerialNumber': 'DEFAULT-',
     'factorySerialNumber': '0000000000',
-    'factoryOrgId': '0000000000'
+    'factoryOrgId': '0000000000',
+    'macTwoBytes' : '00:50'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -161,8 +162,10 @@ global.__CONFIG__ = {
     'tagDebugLog': 'tag-debug-log.csv',
     'tagUSDDebug': 'tag-usd-debug.csv',
     'tagHistogram': 'tag-histogram.csv',
-    'tagCurrUtil': 'tag-current-util.csv'
+    'tagCurrUtil': 'tag-current-util.csv',
+    'tagDebugLogTxt': 'tag-debug-log.txt'
   },
+  'logTxtFormat': true,
   'tokenLength': 16,
   'fwTokenLength': 16,
   'firmwareFileExtension': '.zip',
@@ -197,6 +200,10 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+
+__CONFIG__.getFilesFolderPath = function() {
+  return global.__CONFIG__.app_base_path + '../' + global.__CONFIG__.filesFolderName + '/';
+};
 
 config.express = {
   port: process.env.EXPRESS_PORT || port,

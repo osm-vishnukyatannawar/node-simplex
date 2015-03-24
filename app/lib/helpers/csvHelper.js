@@ -1,7 +1,5 @@
 var csv = require('csv');
 var fs = require('fs');
-var uuid = require('node-uuid');
-var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
 var async = require('async');
 
 function csvHelper() {
@@ -38,6 +36,7 @@ csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
   for (var index in data) {
     var valuesArray = [];
     var element = data[index];
+    // @Vamsi - Use triple equal to.
     if (labelsArray.length == 0) {
       for (var key in element) {
         if (properties) {
@@ -55,6 +54,8 @@ csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
       }
       baseArray.push(labelsArray);
     }
+    // @Vamsi - Either remove the var, or rename the variable. the name key matches what you have 
+    // declared on line 41. Scope of a variable is the parent function.
     for (var key in element) {
       valuesArray.push(element[key]);
     }
@@ -77,6 +78,8 @@ function getPropertyCsvName(key, props) {
 
 csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
   cb) {
+  // @Vamsi, use single quotes, no need to use global variable.
+  // @Vamsi, to get the path of the files folder, use __CONFIG__.getFilesFolderPath() function.
   fs.writeFile(global.__CONFIG__.app_base_path + "../" + global.__CONFIG__.filesFolderName +
     "/" + fileName,
     data,

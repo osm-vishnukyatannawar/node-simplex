@@ -69,7 +69,7 @@ Validator.prototype.isEmail = function(str) {
   return validatorLib.isEmail(str);
 };
 Validator.prototype.chkPswrdLength = function(str) {
-  if (!str || str.length <= 7) {
+  if (!str || str.length < 7) {
     return false;
   }
   return true;
