@@ -121,7 +121,8 @@ global.__CONFIG__ = {
     'tagsCsvFileName': 'PowerPathTags.csv',
     'defaultSerialNumber': 'DEFAULT-',
     'factorySerialNumber': '0000000000',
-    'factoryOrgId': '0000000000'
+    'factoryOrgId': '0000000000',
+    'macTwoBytes' : '00:50'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
