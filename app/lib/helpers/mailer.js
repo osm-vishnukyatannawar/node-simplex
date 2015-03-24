@@ -6,6 +6,7 @@ var emailTemplates = require('email-templates');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var async = require('async');
 var fs = require('fs');
+var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
 var transport = nodemailer.createTransport(smtpTransport({
   'host': __CONFIG__.email.server,
@@ -45,23 +46,25 @@ var mailer = function() {
 
     emailTemplates(templatesDir, function(err, template) {
       if (err) {
-        return cb(new AppError(that.getStatusCode('i'),
+        return cb(new AppError(getStatus('internalError'),
           'There was an error while reading the templates', {}));
       }
       for (var i = 0; i < allEmailsLen; ++i) {
-        processAttachments(arrObjEmails[i], function(err, mailObj) {
-          if (err) {
-            return processResponse(false, {
-              'id': mailObj.emailID,
-              'error': 'Error while performing file system checks.'
-            });
-          }
-          if (!mailObj.templateName) {
-            sendNormalMail(mailObj, processResponse);
-          } else {
-            sendTemplateMail(mailObj, template, processResponse);
-          }
-        });
+        processAttachments(arrObjEmails[i], processAttachmentCb);
+      }
+
+      function processAttachmentCb(err, mailObj) {
+        if (err) {
+          return processResponse(false, {
+            'id': mailObj.emailID,
+            'error': 'Error while performing file system checks.'
+          });
+        }
+        if (!mailObj.templateName) {
+          sendNormalMail(mailObj, processResponse);
+        } else {
+          sendTemplateMail(mailObj, template, processResponse);
+        }
       }
     });
   };
@@ -162,7 +165,7 @@ var mailer = function() {
       mailObj.attachments = results;
       return cb(null, mailObj);
     });
-  };
+  }
 
   return {
     sendMails: sendMails

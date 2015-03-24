@@ -5,9 +5,9 @@ var config = module.exports;
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
-var emailsToSend = 'surendra.b@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.247:3000/';
-var ipAddress = '10.0.0.247';
+var emailsToSend = 'abijeet.p@osmosys.asia';
+var app_http_base_url = 'http://10.0.0.15:3000/';
+var ipAddress = '10.0.0.15';
 var port = 3000;
 
 if (PRODUCTION === 'production') {
@@ -199,6 +199,10 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+
+__CONFIG__.getFilesFolderPath = function() {
+  return global.__CONFIG__.app_base_path + '../' + global.__CONFIG__.filesFolderName + '/';
+};
 
 config.express = {
   port: process.env.EXPRESS_PORT || port,
