@@ -185,7 +185,8 @@ global.__CONFIG__ = {
   },
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
-  'limitString': ' LIMIT 0,5'
+  'limitString': ' LIMIT 0,5',
+  'excludedControllers' : []
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -234,6 +235,10 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
   return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
     + __CONFIG__.firmware.baseVersionFolderName + version;
+};
+
+__CONFIG__.getUploadsFolderPath = function() {
+  return __dirname + '/../uploads';
 };
 
 config.express = {
