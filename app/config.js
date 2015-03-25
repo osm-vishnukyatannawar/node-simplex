@@ -201,8 +201,39 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONF
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
+
+// Functions to retrieve filenames/URLS
+
+/**
+ * Returns the path the files folder
+ */
 __CONFIG__.getFilesFolderPath = function() {
-  return global.__CONFIG__.app_base_path + '../' + global.__CONFIG__.filesFolderName + '/';
+  return __CONFIG__.app_base_path + '../' + __CONFIG__.filesFolderName + '/';
+};
+
+/**
+ * Returns the path to the firmware folder
+ */
+__CONFIG__.getFirmwareFolderPath = function() {
+  return __CONFIG__.getFilesFolderPath() + __CONFIG__.firmware.folder + '/';
+};
+
+/**
+ * Returns folder name for firmware based on version
+ * @param version
+ */
+__CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
+  return __CONFIG__.getFirmwareFolderPath() + __CONFIG__.firmware.baseVersionFolderName + version + '/';
+};
+
+/**
+ * Get the URL for based on version
+ * @param version
+ * @returns
+ */
+__CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
+  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
+    + __CONFIG__.firmware.baseVersionFolderName + version;
 };
 
 config.express = {
