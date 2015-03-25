@@ -17,13 +17,10 @@ Service.prototype.buildTransactionObj = function(transactionID, data) {
 
 /**
  * This method is used to get the details of the files in the zip file
- *
  * @param : path
  *        -path of the zip file that you want to read.
- *
  * @param : cb
  *        -Callback
- *
  */
 Service.prototype.getDetailsFromZip = function(path, cb) {
   var that = this;
@@ -37,15 +34,13 @@ Service.prototype.getDetailsFromZip = function(path, cb) {
   });
 };
 
+// @vamsi - why is this function name in caps??
 /**
  * This method is used to unzip the zipped files
- *
  * @param sourcePath
  *        -Path of the file that you want to unzip
- *
  * @param destPath
  *        -Destination path to which you want to extract all the files
- *
  * @param cb
  *        -Callback
  */
@@ -53,6 +48,10 @@ Service.prototype.UnzipFilesTofolder = function(sourcePath, destPath, cb) {
   var that = this;
   this.zipper.extractFiles(sourcePath, destPath, function(err) {
     if (err) {
+      // @vamsi - The service is suppose to be generalized, you can't put this
+      // firmware specific error message here. Also Please **remember** for future
+      // errors as well send the Error object to AppError as the first parameter, 
+      // in this case err. Why is this a badRequest.
       var e = new AppError(that.getStatusCode('badRequest'),
         'Version number already user. Please give a unique version number.', err);
       return cb(e);

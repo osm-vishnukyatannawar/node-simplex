@@ -3,8 +3,6 @@ var fs = require('fs');
 var async = require('async');
 
 function csvHelper() {
-
-
 }
 
 csvHelper.prototype.readCsvHelper = function(path, cb) {
