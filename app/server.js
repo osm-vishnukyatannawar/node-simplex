@@ -6,7 +6,6 @@ var config = require('./config');
 var logger = require('./logger');
 var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
 var loadViews = require('./code/views.js');
-var loadApi = require('./code/api.js');
 var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
@@ -50,28 +49,31 @@ if (config.express.isProduction && cluster.isMaster) {
     }
   });
 
+  
   // Bind the api routes.
-  loadApi(app);
-
+  helper.loadRoutes(app);
+  
   // Bind the views.
   loadViews(app);
-
+    
   // 404 error
   app.use('/api', helper.notFound);
 
   app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
 
   app.listen(config.express.port, config.express.ip, function(error) {
+    
     if (error) {
       logger.logAppErrors(error);
       process.exit(10);
     }
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
   });
+  
 }
 
 process.on('uncaughtException', function (err) {
-  try {
+  try {    
     logger.logUncaughtError(err);
   } catch(e) {
     // nothing to do...
