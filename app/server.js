@@ -5,7 +5,6 @@ var cluster = require('cluster');
 var config = require('./config');
 var logger = require('./logger');
 var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
-var loadViews = require('./code/views.js');
 var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
@@ -54,7 +53,7 @@ if (config.express.isProduction && cluster.isMaster) {
   helper.loadRoutes(app);
   
   // Bind the views.
-  loadViews(app);
+  helper.loadViews(app);
     
   // 404 error
   app.use('/api', helper.notFound);

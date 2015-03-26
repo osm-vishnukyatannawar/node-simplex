@@ -1,10 +1,11 @@
 var formidable = require('formidable');
 var bodyParser = require('body-parser');
-var loadApi = require(__CONFIG__.app_code_path + 'api.js');
+var loadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
 var appStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var fs = require('fs');
 var path = require('path');
 var colors = require('colors/safe');
+var loadCustomViews = require(__CONFIG__.app_code_path + 'views.js');
 
 var internalExclusionApi = ['public_html'];
 internalExclusionApi.concat(__CONFIG__.excludedControllers);
@@ -14,6 +15,7 @@ var serverHelper = function() {
   var validMethodTypes = ['get', 'post', 'delete', 'put'];
 
   // The initialization method.
+  // Binds a wrapper around the express app variable.
   var init = function(baseApp) {
     app = baseApp;
     app.httpPost = function(url, route, isPublic, isAdmin) {
@@ -62,10 +64,14 @@ var serverHelper = function() {
 
   // Not found handler.
   var notFound = function(request, response) {
-    response.status(appStatus('notFound')).json({
-      'status': 'fail',
-      'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
-    });
+    if(typeof loadCustomApi.notFound === 'function') {
+      loadCustomApi.notFound(request, response);
+    } else {
+      response.status(appStatus('notFound')).json({
+        'status': 'fail',
+        'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
+      });
+    }    
   };
 
   var loadRoutes = function(app) {
@@ -105,10 +111,21 @@ var serverHelper = function() {
       console.log(colors.red('Error while loading controller - ' + path.basename(allControllers[i])));
       console.log(colors.bold('\n-----------------------\n'));
     }
+    console.log(colors.green('\nFinished loading all controllers.\n'));
+    console.log(colors.bold('\n-----------------------\n'));
     loadedControllersObj.length = 0;
   };
 
-  // Common method to bind all the different type of requests  
+  var loadViews = function(app) {
+    if(typeof loadCustomViews === 'function') {      
+      loadCustomViews(app);
+    }
+  };
+  
+  /**
+   * Common method to bind different type of requests to the express app
+   * Checks 
+   */
   var bindHttpRequest = function(url, route, isPublic, isAdmin, method) {
     var urlMethod = method.toUpperCase() + ' : ' + url;
     if (isPublic) {
@@ -124,9 +141,11 @@ var serverHelper = function() {
     if (isPublic) {
       app[method](url, route);
     } else {
-      app[method](url, loadApi.validate);
-      if (isAdmin) {
-        app[method](url, loadApi.checkIfAdmin);
+      if(typeof loadCustomApi.validate === 'function') {
+        app[method](url, loadCustomApi.validate);
+      }     
+      if (isAdmin && typeof loadCustomApi.checkIfAdmin === 'function') {
+        app[method](url, loadCustomApi.checkIfAdmin);
       }
       app[method](url, route);
     }
@@ -187,12 +206,13 @@ var serverHelper = function() {
     }
     return modifiedFolderName.join('') + 'Controller.js';
   };
-
+  
   return {
     parseBodyType: parseBodyTypeValues,
     init: init,
     notFound: notFound,
-    loadRoutes: loadRoutes
+    loadRoutes: loadRoutes,
+    loadViews : loadViews
   };
 };
 
