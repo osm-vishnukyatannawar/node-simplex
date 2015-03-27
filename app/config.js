@@ -7,7 +7,7 @@ var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia';
 var app_http_base_url = 'http://10.0.0.159:3000/';
-var ipAddress = '10.0.0.159';
+var ipAddress = '10.0.0.15';
 var port = 3000;
 
 if (PRODUCTION === 'production') {
