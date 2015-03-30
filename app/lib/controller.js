@@ -72,6 +72,7 @@ Controller.prototype.determineSuccess = function(data) {
 Controller.prototype.download = function(response, fileNameToShow, folderPath, fileToDownload) {
   var that = this;
   response.attachment(fileNameToShow);
+  response.setHeader("Set-Cookie", "fileDownload=true; path=/");
   var options = {
     root: folderPath,
     dotfiles: 'deny',
