@@ -11,7 +11,6 @@ var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
-var slogerr = require('./code/slogerr/slogerr.js');
 
 helper.init(app);
 
@@ -36,7 +35,7 @@ if (config.express.isProduction && cluster.isMaster) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     next();
   });
-
+  
   new ExclusionController(app);
 
   app.use(helper.parseBodyType);
@@ -51,13 +50,6 @@ if (config.express.isProduction && cluster.isMaster) {
     } else {
       next();
     }
-  });
-  
-  app.use(function(req, res, next){
-	if(__CONFIG__.logToSlogerr) {
-	  slogerr.logToSlogerr(req, '');
-	}
-	next();
   });
 
   // Bind the api routes.
