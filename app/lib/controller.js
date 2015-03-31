@@ -1,4 +1,5 @@
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
+var slogerr = require('../code/slogerr/slogerr.js');
 
 'use strict';
 
@@ -22,6 +23,9 @@ Controller.prototype.sendResponse = function(err, data, response) {
       'application/json': this.jsonSuccess.bind(this),
       'default': this.jsonSuccess.bind(this)
     });
+  }
+  if(__CONFIG__.logToSlogerr) {
+    slogerr.logToSlogerr('', this.responseObj);
   }
 };
 
