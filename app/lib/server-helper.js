@@ -121,7 +121,7 @@ var serverHelper = function() {
     var logMessage = '';
     var stackTrace = '\n\n----- REQUEST ----\n\n'; 
     stackTrace += 'HTTP Method : ' + request.method + '\n';
-    stackTrace += 'Request Headers : ' + request.headers + '\n';
+    stackTrace += 'Request Headers : ' + util.inspect(request.headers, { depth : 3 }) + '\n';
     getRequestData(request, function(err, data) {
       if(err) {
         return;

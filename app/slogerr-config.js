@@ -8,7 +8,7 @@ var sloggerConfig = {
     'User' :  'Osmosys',
     'Customer' : 'Emanate Wireless',
     'PageOrModuleName' : '',
-    'Application' : '551537eb-28a4-41b3-bc80-0e405a0bc003',
+    'Application' : __CONFIG__.slogerrAppID,
     'Subscription' : null,
     'Reserve1' : null,
     'Reserve2' : null,

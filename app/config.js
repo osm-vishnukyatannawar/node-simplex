@@ -9,17 +9,20 @@ var emailsToSend = 'abijeet.p@osmosys.asia';
 var app_http_base_url = 'http://10.0.0.247:3000/';
 var ipAddress = '10.0.0.247';
 var port = 3000;
+var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
 if (PRODUCTION === 'production') {
   if (isStaging === 'true') {
     app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
     ipAddress = '10.0.0.6';
     port = 80;
+    slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
   } else {
     emailsToSend = 'support.emanate@osmosys.asia';
     app_http_base_url = 'http://cloud.emanatewireless.com/';
     ipAddress = '167.114.117.212';
     port = 80;
+    slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
   }
   PRODUCTION = true;
 } else {
@@ -187,7 +190,8 @@ global.__CONFIG__ = {
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
-  'logToSlogerr' : true
+  'logToSlogerr' : true,
+  'slogerrAppID' : slogerrAppID
 };
 
 __CONFIG__.isProduction = PRODUCTION;
