@@ -169,10 +169,7 @@ var serverHelper = function() {
     // Detect if it's a maintenance call...
     for(var prop in __CONFIG__.maintenance.necessary_tag_events) {
       if(__CONFIG__.maintenance.necessary_tag_events[prop].indexOf(requestUrl) !== -1) {
-        isMaintCall = true;
-        if(callType === 'POWERPATH_INFO') {
-          callType = 'POWERPATH_INFO, POWERPATH_REPORT_CURRENT_UTIL_DATA or MAINTENANCE_EVENT';
-        }
+        isMaintCall = true;        
         callType = prop;
         if(__.isObject(requestObj.body) && 
             requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
@@ -182,6 +179,9 @@ var serverHelper = function() {
       }
     }
     if(isMaintCall) {
+      if(callType === 'POWERPATH_INFO') {
+        callType = 'POWERPATH_INFO, POWERPATH_REPORT_CURRENT_UTIL_DATA or MAINTENANCE_EVENT';
+      }
       logMessage = 'Maintenance LOG from TAG - ' 
         + tagSN + ' for ' + callType;
       severity = 2;      
