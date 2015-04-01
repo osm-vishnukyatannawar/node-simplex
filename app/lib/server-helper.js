@@ -171,10 +171,17 @@ var serverHelper = function() {
       if(__CONFIG__.maintenance.necessary_tag_events[prop].indexOf(requestUrl) !== -1) {
         isMaintCall = true;        
         callType = prop;
+        if(__.isString(requestObj.body)) {
+          try {
+        	requestObj.body = JSON.parse(requestObj.body);
+          } catch (e) {
+        	//Unable to parse the json.
+          }
+        }  
         if(__.isObject(requestObj.body) && 
             requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
           tagSN = requestObj.body.serialNum;
-        }         
+        }       
         break;
       }
     }
