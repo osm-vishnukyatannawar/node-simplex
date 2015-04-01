@@ -4,6 +4,7 @@ var loadApi = require(__CONFIG__.app_code_path + 'api.js');
 var appStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var slogger = require(__CONFIG__.app_base_path + 'lib/slogerr');
 var util = require('util');
+var __ = require('underscore');
 
 var serverHelper = function() {
   var app = null;
@@ -119,40 +120,74 @@ var serverHelper = function() {
       return;
     }
     var logMessage = '';
+    
+    // Request
     var stackTrace = '\n\n----- REQUEST ----\n\n'; 
     stackTrace += 'HTTP Method : ' + request.method + '\n';
     stackTrace += 'Request Headers : ' + util.inspect(request.headers, { depth : 3 }) + '\n';
-    getRequestData(request, function(err, data) {
-      if(err) {
-        return;
+    var requestObj = { body : {}, params : {}, query : {} };
+    if(request.body) {
+      requestObj.body = request.body;
+    }
+    
+    if(request.params) {
+      requestObj.params = request.params;
+    }
+    
+    if(request.query) {
+      requestObj.query = request.query;
+    }
+    stackTrace += 'Data Received : ' + util.inspect(requestObj, { depth : 3 });
+    
+    
+    // Response
+    var responseBody = '';
+    var responseMessage = '';   
+    
+    if(response.dataSentToClient) {
+      responseBody = util.inspect(response.dataSentToClient, { depth : 3 });
+    } else {
+      responseBody = 'Was this a file download request?? If not, ' +
+        'there was an error while reading the response body!';
+    }
+    if(response.msgSentToClient) {
+      responseMessage = util.inspect(response.msgSentToClient, { depth : 3 });
+    }
+        
+    stackTrace += '\n\n----- RESPONSE ----\n\n';
+    stackTrace += 'Status : ' + response.statusCode + '\n';
+    stackTrace += 'Message : ' + responseMessage + '\n';
+    stackTrace += 'Response Data: \n\n' + responseBody;
+    var requestUrl = request.originalUrl;
+    if(requestUrl) {
+      requestUrl = requestUrl.replace(/\/+$/, '');
+    }
+    var severity = 1;
+    var isMaintCall = false;
+    var tagSN = 'UNKNOWN';
+    var callType = request.originalUrl;
+    // Detect if it's a maintenance call...
+    for(var prop in __CONFIG__.maintenance.necessary_tag_events) {
+      if(__CONFIG__.maintenance.necessary_tag_events[prop].indexOf(requestUrl) !== -1) {
+        isMaintCall = true;
+        callType = prop;
+        if(__.isObject(requestObj.body) && 
+            requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
+          tagSN = requestObj.body.serialNum;
+        }         
+        break;
       }
-      if(data) {
-        if(typeof data === 'string') {
-          stackTrace += 'Data Sent : ' + data;
-        } else {
-          stackTrace += 'Data Sent : ' + util.inspect(data, { depth : 3 });
-        }
-      }
-      var responseBody = '';
-      var responseMessage = '';      
-      if(response.dataSentToClient) {
-        responseBody = util.inspect(response.dataSentToClient, { depth : 3 });
-      } else {
-        responseBody = 'Was this a file download request?? If not, ' +
-          'there was an error while reading the response body!';
-      }
-      if(response.msgSentToClient) {
-        responseMessage = util.inspect(response.msgSentToClient, { depth : 3 });
-      }
-       
-      stackTrace += '\n\n----- RESPONSE ----\n\n';
-      stackTrace += 'Status : ' + response.statusCode + '\n';
-      stackTrace += 'Message : ' + responseMessage + '\n';
-      stackTrace += 'Response Data: \n\n' + responseBody;
+    }
+    if(isMaintCall) {
+      logMessage = 'Maintenance LOG from TAG - ' 
+        + tagSN + ' for ' + callType;
+      severity = 2;      
+    } else {
       logMessage = '[' + new Date().toUTCString() + '] Logging REQUEST/RESPONSE to ' 
         + request.ip + ' for ' + request.originalUrl;
-      slogger.log(logMessage, stackTrace, 1);
-    });
+    }
+    
+    slogger.log(logMessage, stackTrace, severity);    
   };
   
   var getRequestData = function(request, cb) {
@@ -170,12 +205,18 @@ var serverHelper = function() {
 
       request.on('error', function(e) {
         request.end();
+        if(__.isEmpty(request.body)) {
+          request.body = { error : 'Couldn\'t parse BODY.' };
+        }
         hasError = true;
         return cb(e);
       });
 
       request.on('end', function() {
         if (!hasError) {
+          if(__.isEmpty(request.body)) {
+            request.body = body;
+          }
           cb(null, body);
         }
       });
