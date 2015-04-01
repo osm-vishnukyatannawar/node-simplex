@@ -170,6 +170,9 @@ var serverHelper = function() {
     for(var prop in __CONFIG__.maintenance.necessary_tag_events) {
       if(__CONFIG__.maintenance.necessary_tag_events[prop].indexOf(requestUrl) !== -1) {
         isMaintCall = true;
+        if(callType === 'POWERPATH_INFO') {
+          callType = 'POWERPATH_INFO, POWERPATH_REPORT_CURRENT_UTIL_DATA or MAINTENANCE_EVENT';
+        }
         callType = prop;
         if(__.isObject(requestObj.body) && 
             requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
