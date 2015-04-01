@@ -6,8 +6,8 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.247:3000/';
-var ipAddress = '10.0.0.247';
+var app_http_base_url = 'http://10.0.0.15:3000/';
+var ipAddress = '10.0.0.15';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -191,7 +191,8 @@ global.__CONFIG__ = {
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
   'logToSlogerr' : true,
-  'slogerrAppID' : slogerrAppID
+  'slogerrAppID' : slogerrAppID,
+  'excludedControllers' : []
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -240,6 +241,10 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
   return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
     + __CONFIG__.firmware.baseVersionFolderName + version;
+};
+
+__CONFIG__.getUploadsFolderPath = function() {
+  return __dirname + '/../uploads';
 };
 
 config.express = {
