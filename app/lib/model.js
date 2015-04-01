@@ -273,7 +273,7 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
 
 Model.prototype.convertTagTimeStamp = function(timeStamp) {
   timeStamp = __.defaults(timeStamp, getDefaultTagDateObj());
-  var convDate = new Date(timeStamp.tm_year, timeStamp.tm_mon,
+  var convDate = new Date(timeStamp.tm_year, parseInt(timeStamp.tm_mon)-1,
     timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
     timeStamp.tm_sec, 0);
   return convDate.toISOString().slice(0, 19).replace('T', ' ');

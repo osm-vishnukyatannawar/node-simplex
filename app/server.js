@@ -31,7 +31,7 @@ if (config.express.isProduction && cluster.isMaster) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     next();
   });
-
+  
   new ExclusionController(app);
 
   app.use(helper.parseBodyType);
@@ -67,8 +67,7 @@ if (config.express.isProduction && cluster.isMaster) {
       process.exit(10);
     }
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
-  });
-  
+  });  
 }
 
 process.on('uncaughtException', function (err) {

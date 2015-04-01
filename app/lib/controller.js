@@ -1,5 +1,4 @@
 var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
-
 'use strict';
 
 function Controller() {
@@ -12,16 +11,20 @@ Controller.prototype.sendResponse = function(err, data, response) {
   this.responseObj = response;
   if (err) {
     this.determineError(err);
+    response.dataSentToClient = this.err.objToSend;
+    response.msgSentToClient = this.err.message;
     response.format({
       'application/json': this.jsonError.bind(this),
       'default': this.jsonError.bind(this)
-    });
+    });    
   } else {
     this.determineSuccess(data);
+    response.dataSentToClient = this.success.dataToSend;
+    response.msgSentToClient = '';
     response.format({
       'application/json': this.jsonSuccess.bind(this),
       'default': this.jsonSuccess.bind(this)
-    });
+    });    
   }
 };
 
@@ -71,7 +74,10 @@ Controller.prototype.determineSuccess = function(data) {
 
 Controller.prototype.download = function(response, fileNameToShow, folderPath, fileToDownload) {
   var that = this;
-  response.attachment(fileNameToShow);
+  response.attachment(fileNameToShow);  
+  response.setHeader('Set-Cookie', 'fileDownload=true; path=/');
+  response.dataSentToClient = 'File to download : ' + fileToDownload;
+  response.msgSentToClient = 'Downloading file...';
   var options = {
     root: folderPath,
     dotfiles: 'deny',
@@ -83,11 +89,11 @@ Controller.prototype.download = function(response, fileNameToShow, folderPath, f
   response.sendFile(fileToDownload,
     options,
     function(err) {
-	  if (err) {
-		if(!response.headersSent) { 
-		  that.sendResponse(err, null, response);
-		}
-      }  
+      if (err) {
+        if (!response.headersSent) {
+          that.sendResponse(err, null, response);
+        }
+      }
     });
 };
 
