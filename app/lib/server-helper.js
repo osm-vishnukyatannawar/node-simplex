@@ -174,10 +174,17 @@ var serverHelper = function() {
           callType = 'POWERPATH_INFO, POWERPATH_REPORT_CURRENT_UTIL_DATA or MAINTENANCE_EVENT';
         }
         callType = prop;
+        if(__.isString(requestObj.body)) {
+          try {
+        	requestObj.body = JSON.parse(requestObj.body);
+          } catch (e) {
+        	//Unable to parse the json.
+          }
+        }  
         if(__.isObject(requestObj.body) && 
             requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
           tagSN = requestObj.body.serialNum;
-        }         
+        }       
         break;
       }
     }
