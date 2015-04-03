@@ -191,7 +191,8 @@ global.__CONFIG__ = {
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
   'logToSlogerr' : true,
-  'slogerrAppID' : slogerrAppID
+  'slogerrAppID' : slogerrAppID,
+  'iphoneConfigFileName' : 'iphone-config.json'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
