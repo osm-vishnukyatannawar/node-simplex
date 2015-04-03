@@ -13,6 +13,7 @@ var Slogerr = {
     var dataToSend = slogerrConfig.data;
     dataToSend.LogMessage = logMessage;
     dataToSend.StackTrace = stackTrace;
+    dataToSend.Severity = severity;
     var options = {
       url: slogerrConfig.url,
       method: slogerrConfig.method,
