@@ -192,6 +192,10 @@ var serverHelper = function() {
       logMessage = 'Maintenance LOG from TAG - ' 
         + tagSN + ' for ' + callType;
       severity = 2;      
+    } else if(request.method === 'GET' && requestUrl.indexOf('config') !== -1) {
+      logMessage = 'Sending config parameters to the TAG - '
+    	+ request.params.sn;
+      severity = 2;
     } else {
       logMessage = '[' + new Date().toUTCString() + '] Logging REQUEST/RESPONSE to ' 
         + request.ip + ' for ' + request.originalUrl;
