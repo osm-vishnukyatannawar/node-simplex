@@ -29,10 +29,10 @@ define('DEFAULT_VALUES', 101);
 // Config Params
 define('POWERPATH_UPDATE_CONFIG_PARAM', 6);
 
-define('BASE_URL', 'http://10.0.0.15:3000/api/v1/');
+define('BASE_URL', 'http://10.0.0.247:3000/api/v1/');
 
 // WS URL
-define('WS_URL', 'http://10.0.0.15:3000/api/v1/tag/maintenance/');
+define('WS_URL', 'http://10.0.0.247:3000/api/v1/tag/maintenance/');
 
 // Sleep time in seconds
 define('SLEEP_TIME', 0);
@@ -49,3 +49,13 @@ define('DEFAULT_UTIL_VALUE', 20);
 
 // Default values of number of blocks i.e. number of time currentUtilMeasurement will be calculated.
 define('DEFAULT_NUMBER_OF_SAMPLES', 4);
+
+// Starting the series
+define('SERIES_START', 90000);
+
+// Count
+define('SERIES_COUNT', 5);
+
+// Multiple tags
+define('MULTIPLE_TAGS', false);
+

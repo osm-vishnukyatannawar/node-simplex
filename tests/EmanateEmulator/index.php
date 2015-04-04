@@ -288,23 +288,33 @@ require_once 'ws-call.php';
         require_once 'response.php';
 
         $allOutput = array();
+        $seriesCount = 1;
+        if(MULTIPLE_TAGS) {
+          $seriesStart = SERIES_START;
+          $seriesCount = SERIES_COUNT;
+        }
         if (isset($_POST['submit'])) {
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
             $firmwareLookupIds = unserialize(LOOKUP_VALUES);
             $wsURL = $_POST['baseURL'] . 'tag/maintenance/';
-            if ($nmbrOfCalls > 0) {
-                for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
+            for($j = 0; $j < $seriesCount; ++$j) {
+                if(MULTIPLE_TAGS) {
+                  $tagSN = $seriesStart + $j;
+                }
+                if ($nmbrOfCalls > 0) {
+                    for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
+                        $respObj = sendDataBasedOnDataType($type,$wsURL);
+                        // If its a maintenance type process the pending events                    
+                        if (intval($type) === MAINTENANCE_TYPE) {
+                            processTagPendingEvents($respObj->data);
+                        }
+                    }
+                } else {
                     $respObj = sendDataBasedOnDataType($type,$wsURL);
-                    // If its a maintenance type process the pending events                    
                     if (intval($type) === MAINTENANCE_TYPE) {
                         processTagPendingEvents($respObj->data);
                     }
-                }
-            } else {
-                $respObj = sendDataBasedOnDataType($type,$wsURL);
-                if (intval($type) === MAINTENANCE_TYPE) {
-                    processTagPendingEvents($respObj->data);
                 }
             }
         }
