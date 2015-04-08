@@ -11,6 +11,7 @@ var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
+var compression = require('compression');
 
 helper.init(app);
 
@@ -29,7 +30,7 @@ if (config.express.isProduction && cluster.isMaster) {
   cluster.on('exit', function() {    
     cluster.fork();
   });
-} else {
+} else { 
   // A worker process
   app.use(function(req, res, next) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
@@ -55,6 +56,12 @@ if (config.express.isProduction && cluster.isMaster) {
   // Bind the api routes.
   loadApi(app);
 
+  // Compression here...
+  if(__CONFIG__.enable_compression) {    
+    app.use(compression());
+  }
+  
+  
   // Bind the views.
   loadViews(app);
 
