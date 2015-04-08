@@ -26,7 +26,7 @@ if (PRODUCTION === 'production') {
   }
   PRODUCTION = true;
 } else {
-  PRODUCTION = true;
+  PRODUCTION = false;
 }
 
 global.__CONFIG__ = {
