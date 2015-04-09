@@ -29,10 +29,10 @@ define('DEFAULT_VALUES', 101);
 // Config Params
 define('POWERPATH_UPDATE_CONFIG_PARAM', 6);
 
-define('BASE_URL', 'http://10.0.0.247:3000/api/v1/');
+define('BASE_URL', 'http://staging.emanate.osmosys.in:8888/api/v1/');
 
 // WS URL
-define('WS_URL', 'http://10.0.0.247:3000/api/v1/tag/maintenance/');
+define('WS_URL', 'http://staging.emanate.osmosys.in:8888/api/v1/tag/maintenance/');
 
 // Sleep time in seconds
 define('SLEEP_TIME', 0);
@@ -51,11 +51,14 @@ define('DEFAULT_UTIL_VALUE', 20);
 define('DEFAULT_NUMBER_OF_SAMPLES', 4);
 
 // Starting the series
-define('SERIES_START', 90000);
+define('SERIES_START', 5939693101);
 
 // Count
-define('SERIES_COUNT', 5);
+define('SERIES_COUNT', 11);
 
 // Multiple tags
-define('MULTIPLE_TAGS', false);
+define('MULTIPLE_TAGS', true);
+
+//Mac address series
+define('MAC_ADDRESS_START', 5939693101);
 

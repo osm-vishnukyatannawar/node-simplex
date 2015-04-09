@@ -174,7 +174,7 @@ require_once 'ws-call.php';
             $dfltData = DEFAULT_VALUES;
         }
         $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
-        $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
+        $bleFirmware = !isset($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
         $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
         $tagUSDData = empty($_POST['tagUSDData']) ? 'default data = ' . DEFAULT_VALUES : $_POST['tagUSDData'];
         $tagDebugLog = empty($_POST['tagDebugLog']) ? 'Log == ' . DEFAULT_VALUES : $_POST['tagDebugLog'];
@@ -302,6 +302,7 @@ require_once 'ws-call.php';
                 if(MULTIPLE_TAGS) {
                   $tagSN = $seriesStart + $j;
                 }
+                $macAddress = MAC_ADDRESS_START + $j;
                 if ($nmbrOfCalls > 0) {
                     for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                         $respObj = sendDataBasedOnDataType($type,$wsURL);

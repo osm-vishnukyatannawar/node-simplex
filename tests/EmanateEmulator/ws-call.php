@@ -108,7 +108,8 @@ function parseResponse($ch, $resultObj, $totalTimeTaken = NULL) {
  * @return type object
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
-    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog, $tagHistogramData;
+    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog, $tagHistogramData,
+            $macAddress;
     $finalResult = false;    
     switch ($dataType) {
         case MAINTENANCE_TYPE :
@@ -137,6 +138,7 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             $tagObj->wifiFirmwareVer = $wifiFirmware;
             $tagObj->bleFirwareVer = $bleFirmware;
             $tagObj->hostFirmwareVer = $hostFirmware;
+            $tagObj->wifiMacAddr = $macAddress;
             $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($tagInfoData, $url);
             break;
