@@ -288,6 +288,7 @@ require_once 'ws-call.php';
         require_once 'response.php';
 
         $allOutput = array();
+        $tagSerialNumbersArray  = array();
         $seriesCount = 1;
         if(MULTIPLE_TAGS) {
           $seriesStart = SERIES_START;
@@ -298,11 +299,15 @@ require_once 'ws-call.php';
             $nmbrOfCalls = intval($_POST['callsNmber']);
             $firmwareLookupIds = unserialize(LOOKUP_VALUES);
             $wsURL = $_POST['baseURL'] . 'tag/maintenance/';
+                if(MULTIPLE_TAGS){
+                 $tagSerialNumbersArray = getTagSerialNumbers($seriesStart,$seriesCount);
+                }
+
             for($j = 0; $j < $seriesCount; ++$j) {
                 if(MULTIPLE_TAGS) {
-                  $tagSN = $seriesStart + $j;
+                  $tagSN = $tagSerialNumbersArray[$j];
                 }
-                $macAddress = MAC_ADDRESS_START + $j;
+                $macAddress = $tagSN;
                 if ($nmbrOfCalls > 0) {
                     for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
                         $respObj = sendDataBasedOnDataType($type,$wsURL);
