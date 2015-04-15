@@ -192,7 +192,10 @@ global.__CONFIG__ = {
   'limitString': ' LIMIT 0,5',
   'logToSlogerr' : true,
   'slogerrAppID' : slogerrAppID,
-  'excludedControllers' : []
+  'excludedControllers' : [],
+  'non_super_user_pending_events' : ['POWERPATH_MAINT_CALL',	'POWERPATH_REPORT_CURRENT_UTIL_DATA', 
+    'POWERPATH_UPDATE_CONFIG_PARAM', 'POWERPATH_UPDATE_BLE_FIRMWARE', 'POWERPATH_UPDATE_WIFI_FIRMWARE',
+    'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED', 'POWERPATH_UPDATE_MCU_FIRMWARE']
 };
 
 __CONFIG__.isProduction = PRODUCTION;
