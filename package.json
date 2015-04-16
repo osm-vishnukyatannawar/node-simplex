@@ -46,7 +46,8 @@
     "validator": "3.22.0",
     "winston": "0.8.0",
     "jshint" : "2.6.2",
-    "compression" : "1.4.3"
+    "compression" : "1.4.3",
+    "colors" : "1.0.3"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

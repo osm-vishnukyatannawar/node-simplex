@@ -128,6 +128,4 @@ function getPrevDateTime(isPrevDay) {
   return dt;
 }
 
-
-
 module.exports = Service;
