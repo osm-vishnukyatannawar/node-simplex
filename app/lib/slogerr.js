@@ -20,9 +20,9 @@ var Slogerr = {
       body: JSON.stringify(dataToSend)
     };
     request(options, function(err, response, body) {
-      if(cb) {
+      if (cb) {
         return cb(err, response, body);
-      }      
+      }
     });
   }
 };

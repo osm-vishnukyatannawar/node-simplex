@@ -12,26 +12,27 @@ var helper = require('./lib/server-helper');
 
 helper.init(app);
 
+// Count the machine's CPUs
+var cpuCount = require('os').cpus().length;
+
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster) {
-  // Count the machine's CPUs
-  var cpuCount = require('os').cpus().length;
-
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
     cluster.fork();
   }
-  
-  cluster.on('exit', function() {    
+
+  cluster.on('exit', function() {
     cluster.fork();
   });
+
 } else {
   // A worker process
   app.use(function(req, res, next) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     next();
   });
-  
+
   new ExclusionController(app);
 
   app.use(helper.parseBodyType);
@@ -48,32 +49,34 @@ if (config.express.isProduction && cluster.isMaster) {
     }
   });
 
-  
+
   // Bind the api routes.
   helper.loadRoutes(app);
-  
+
   // Bind the views.
   helper.loadViews(app);
-    
+
+  helper.writeServerStartupLogs();
+
   // 404 error
   app.use('/api', helper.notFound);
 
   app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
 
   app.listen(config.express.port, config.express.ip, function(error) {
-    
+
     if (error) {
       logger.logAppErrors(error);
       process.exit(10);
     }
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
-  });  
+  });
 }
 
-process.on('uncaughtException', function (err) {
-  try {    
+process.on('uncaughtException', function(err) {
+  try {
     logger.logUncaughtError(err);
-  } catch(e) {
+  } catch (e) {
     // nothing to do...
   }
   // Eventually write code to send a mail.

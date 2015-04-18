@@ -36,7 +36,8 @@ global.__CONFIG__ = {
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
-  'httpProtocol' : 'http://',
+  'httpProtocol': 'http://',
+  'log_folder_path': __dirname + '/../logs/',
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
@@ -126,7 +127,7 @@ global.__CONFIG__ = {
     'defaultSerialNumber': 'DEFAULT-',
     'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000',
-    'macTwoBytes' : '00:50'
+    'macTwoBytes': '00:50'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -190,12 +191,15 @@ global.__CONFIG__ = {
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
-  'logToSlogerr' : true,
-  'slogerrAppID' : slogerrAppID,
-  'excludedControllers' : [],
-  'non_super_user_pending_events' : ['POWERPATH_MAINT_CALL',	'POWERPATH_REPORT_CURRENT_UTIL_DATA', 
-    'POWERPATH_UPDATE_CONFIG_PARAM', 'POWERPATH_UPDATE_BLE_FIRMWARE', 'POWERPATH_UPDATE_WIFI_FIRMWARE',
-    'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED', 'POWERPATH_UPDATE_MCU_FIRMWARE']
+  'logToSlogerr': true,
+  'slogerrAppID': slogerrAppID,
+  'excludedControllers': [],
+  'non_super_user_pending_events': ['POWERPATH_MAINT_CALL',
+    'POWERPATH_REPORT_CURRENT_UTIL_DATA', 'POWERPATH_UPDATE_CONFIG_PARAM',
+    'POWERPATH_UPDATE_BLE_FIRMWARE', 'POWERPATH_UPDATE_WIFI_FIRMWARE',
+    'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED',
+    'POWERPATH_UPDATE_MCU_FIRMWARE'
+  ]
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -210,7 +214,6 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
-
 
 // Functions to retrieve filenames/URLS
 
@@ -230,6 +233,7 @@ __CONFIG__.getFirmwareFolderPath = function() {
 
 /**
  * Returns folder name for firmware based on version
+ *
  * @param version
  */
 __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
@@ -238,12 +242,12 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
 
 /**
  * Get the URL for based on version
+ *
  * @param version
  * @returns
  */
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
-  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
-    + __CONFIG__.firmware.baseVersionFolderName + version;
+  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder + __CONFIG__.firmware.baseVersionFolderName + version;
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
