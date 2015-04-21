@@ -151,7 +151,8 @@ global.__CONFIG__ = {
     'tag_update_config': 'POWERPATH_UPDATE_CONFIG_PARAM',
     'tag_not_commissioned': 'POWERPATH_TAG_NOT_COMMISSIONED',
     'tag_maintenance': 'POWERPATH_MAINT_CALL',
-    'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED'
+    'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
+    'tag_no_commands': 'POWERPATH_NO_COMMANDS'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
