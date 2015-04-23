@@ -6,8 +6,8 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.15:3000/';
-var ipAddress = '10.0.0.15';
+var app_http_base_url = 'http://10.0.0.159:3000/';
+var ipAddress = '10.0.0.159';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -188,6 +188,7 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
   },
+  'iphoneConfigFileName' : 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
