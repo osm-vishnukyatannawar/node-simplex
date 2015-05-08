@@ -82,13 +82,13 @@ Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
     dtArr.push(dt);
   }
   var startDate = dtArr[dtArr.length - 1];
-  for (i = 0; i < 24; ++i) {
+  for (i = 0; i < 48; ++i) {
     timeArr.push(i);
   }
   if (isHourly) {
     for (i = 0; i < dtArr.length; ++i) {
       for (var j = 0; j < timeArr.length; ++j) {
-        dateTimeArr.push(moment(dtArr[i]).format('MMM DD') + ' ' + timeArr[j] + ':00');
+        dateTimeArr.push(moment(dtArr[i]).format('MMM DD'));
       }
     }
     dtArr = dateTimeArr;
