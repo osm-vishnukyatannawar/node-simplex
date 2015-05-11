@@ -10,7 +10,6 @@ var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
 var compression = require('compression');
-
 helper.init(app);
 
 // Count the machine's CPUs
@@ -18,9 +17,6 @@ var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster) {
-  // Count the machine's CPUs
-  var cpuCount = require('os').cpus().length;
-
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
     cluster.fork();
@@ -53,12 +49,6 @@ if (config.express.isProduction && cluster.isMaster) {
     }
   });
 
-  
-  // Compression here...
-  if(__CONFIG__.enable_compression) {    
-    app.use(compression());
-  }
-  
 
   // Bind the api routes.
   helper.loadRoutes(app);

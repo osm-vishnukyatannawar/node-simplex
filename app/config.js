@@ -5,7 +5,7 @@ var config = module.exports;
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
-var emailsToSend = 'abijeet.p@osmosys.asia';
+var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
 var app_http_base_url = 'http://10.0.0.159:3000/';
 var ipAddress = '10.0.0.159';
 var port = 3000;
@@ -72,7 +72,7 @@ global.__CONFIG__ = {
   },
   'firmware': {
     'folder': 'firmwares',
-    'maxFileSizeMB': 2,
+    'maxFileSizeMB': 2097152,
     'baseFirmwareFileStrs': {
       'ble_fw_version': 'PowerPath_BLE_FW_',
       'wifi_fw_version': 'PowerPath_WIFI_FW_',
@@ -251,7 +251,8 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
  * @returns
  */
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
-  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder + __CONFIG__.firmware.baseVersionFolderName + version;
+  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
+    + __CONFIG__.firmware.baseVersionFolderName + version;
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
