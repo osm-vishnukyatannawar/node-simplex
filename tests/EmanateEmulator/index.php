@@ -174,7 +174,7 @@ require_once 'ws-call.php';
             $dfltData = DEFAULT_VALUES;
         }
         $wifiFirmware = empty($_POST['wifiFirmware']) ? DEFAULT_VALUES : $_POST['wifiFirmware'];
-        $bleFirmware = empty($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
+        $bleFirmware = !isset($_POST['bleFirmware']) ? DEFAULT_VALUES : $_POST['bleFirmware'];
         $hostFirmware = empty($_POST['hostFirmware']) ? DEFAULT_VALUES : $_POST['hostFirmware'];
         $tagUSDData = empty($_POST['tagUSDData']) ? 'default data = ' . DEFAULT_VALUES : $_POST['tagUSDData'];
         $tagDebugLog = empty($_POST['tagDebugLog']) ? 'Log == ' . DEFAULT_VALUES : $_POST['tagDebugLog'];
@@ -288,23 +288,39 @@ require_once 'ws-call.php';
         require_once 'response.php';
 
         $allOutput = array();
+        $tagSerialNumbersArray  = array();
+        $seriesCount = 1;
+        if(MULTIPLE_TAGS) {
+          $seriesStart = SERIES_START;
+          $seriesCount = SERIES_COUNT;
+        }
         if (isset($_POST['submit'])) {
             $type = $_POST['dataType'];
             $nmbrOfCalls = intval($_POST['callsNmber']);
             $firmwareLookupIds = unserialize(LOOKUP_VALUES);
             $wsURL = $_POST['baseURL'] . 'tag/maintenance/';
-            if ($nmbrOfCalls > 0) {
-                for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
+                if(MULTIPLE_TAGS){
+                 $tagSerialNumbersArray = getTagSerialNumbers($seriesStart,$seriesCount);
+                }
+
+            for($j = 0; $j < $seriesCount; ++$j) {
+                if(MULTIPLE_TAGS) {
+                  $tagSN = $tagSerialNumbersArray[$j];
+                }
+                $macAddress = $tagSN;
+                if ($nmbrOfCalls > 0) {
+                    for ($i = 1; $i <= $nmbrOfCalls; ++$i) {
+                        $respObj = sendDataBasedOnDataType($type,$wsURL);
+                        // If its a maintenance type process the pending events                    
+                        if (intval($type) === MAINTENANCE_TYPE) {
+                            processTagPendingEvents($respObj->data);
+                        }
+                    }
+                } else {
                     $respObj = sendDataBasedOnDataType($type,$wsURL);
-                    // If its a maintenance type process the pending events                    
                     if (intval($type) === MAINTENANCE_TYPE) {
                         processTagPendingEvents($respObj->data);
                     }
-                }
-            } else {
-                $respObj = sendDataBasedOnDataType($type,$wsURL);
-                if (intval($type) === MAINTENANCE_TYPE) {
-                    processTagPendingEvents($respObj->data);
                 }
             }
         }

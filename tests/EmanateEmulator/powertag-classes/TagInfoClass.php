@@ -37,7 +37,7 @@ class TagInfo {
         $this->type = TAGINFO_TYPE;
         $this->deviceID = $dfltData;
         $this->hardwareVersion = 'Tag - '.$dfltData;
-        $this->wifiMacAddr = 'Tag - '.$dfltData;
+        $this->wifiMacAddr = $macAddress;
         $this->tagConfigState = $dfltData;
         $this->hwPeripherals = 'Tag - '.$dfltData;
         $this->hostFirmwareVer = 'Tag - '.$dfltData;
@@ -84,7 +84,7 @@ class TagInfo {
                     'hwPeripherals' => $this->hwPeripherals,
                     'hostFirmwareVer' => $this->hostFirmwareVer,
                     'wifiFirmwareVer' => $this->wifiFirmwareVer,
-                    'bleFirwareVer' => $this->bleFirwareVer,
+                    'bleFirmwareVer' => $this->bleFirwareVer,
                     'powerPathConfigVer' => $this->powerPathConfigVer,
                     'factoryTestTime' => $this->factoryTestTime,
                     'configTime' => $this->configTime];

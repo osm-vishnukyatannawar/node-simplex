@@ -4,6 +4,7 @@ var loadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
 var appStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var slogger = require(__CONFIG__.app_base_path + 'lib/slogerr');
 var util = require('util');
+var __ = require('underscore');
 var fs = require('fs');
 var path = require('path');
 var loadCustomViews = require(__CONFIG__.app_code_path + 'views.js');
@@ -84,6 +85,7 @@ var serverHelper = function() {
         request.files = files;
         next();
       });
+
     } else {
       jsonParser(request, response, next);
     }

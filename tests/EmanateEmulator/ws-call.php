@@ -1,5 +1,6 @@
 <?php
-
+//error_reporting (E_ALL);
+//ini_set('display_errors',1);
 require_once 'config.php';
 require_once 'response.php';
 /**
@@ -108,11 +109,13 @@ function parseResponse($ch, $resultObj, $totalTimeTaken = NULL) {
  * @return type object
  */
 function sendDataBasedOnDataType($dataType, $url = NULL) {
-    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog, $tagHistogramData;
+    global $tagSN, $orgID, $dfltData, $wifiFirmware, $bleFirmware, $hostFirmware, $tagUSDData, $tagDebugLog, $tagHistogramData,
+            $macAddress;
     $finalResult = false;    
     switch ($dataType) {
         case MAINTENANCE_TYPE :
             $mainObj = new Maintenance($dfltData);
+            $mainObj->batteryInfo_batteryLevelPercent = rand(100, 10000) / 100;
             $mntnceData = json_encode($mainObj->getMntceDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($mntnceData, $url);
             break;
@@ -137,6 +140,9 @@ function sendDataBasedOnDataType($dataType, $url = NULL) {
             $tagObj->wifiFirmwareVer = $wifiFirmware;
             $tagObj->bleFirwareVer = $bleFirmware;
             $tagObj->hostFirmwareVer = $hostFirmware;
+            $tagObj->hardwareVersion = $hostFirmware;
+            $tagObj->wifiMacAddr = $macAddress;
+            $tagObj->wifiMacAddr = $macAddress;
             $tagInfoData = json_encode($tagObj->getTagInfoDataFormat($tagSN, $orgID, $dfltData));
             $finalResult = makeCallToMaintURL($tagInfoData, $url);
             break;
@@ -192,4 +198,48 @@ function timeCalculation(){
     } catch (Exception $exc) {
         //echo $exc->getTraceAsString();
     }
+}
+
+
+function getTagSerialNumbers($seriesStart , $seriesCount){
+     $lstNumbers = $seriesStart;
+     $series = array();
+     $numbersFound = 0;
+    for ($cnt = $lstNumbers; $cnt <= 9999999999; ++$cnt) {
+        $rem1 = $cnt % 16;
+        $quo1 = 0;
+    if($rem1 === 2) {  
+        $quo1 = intval($cnt / 16);
+        if($quo1 % 16 === 4) {
+           
+            $byteSwaped = byteSwap($cnt);
+            if(strlen($byteSwaped) === 10){
+               array_push($series , $byteSwaped); 
+                ++$numbersFound;
+            }
+            
+            //$series.push(cnt);
+            if($numbersFound === $seriesCount) {
+                break;
+            }
+        }
+    }   
+}
+return $series;
+}
+
+function byteSwap($number){
+    $binaryVal = decbin($number);
+    $binaryVal32 = str_pad($binaryVal, 32, '0', STR_PAD_LEFT);
+    $splitArray = str_split($binaryVal32, 8);
+    if (count($splitArray) !== 4) {
+        continue;
+    }
+    $firstByte = $splitArray[0];
+    $thirdByte = $splitArray[2];
+    $splitArray[0] = $thirdByte;
+    $splitArray[2] = $firstByte;
+    $finalStr = implode('', $splitArray);
+    $finalSN = bindec($finalStr);
+    return $finalSN;
 }

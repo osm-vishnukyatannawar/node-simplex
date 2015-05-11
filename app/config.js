@@ -7,7 +7,7 @@ var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia';
 var app_http_base_url = 'http://10.0.0.159:3000/';
-var ipAddress = '10.0.0.15';
+var ipAddress = '10.0.0.159';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -36,6 +36,7 @@ global.__CONFIG__ = {
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
+  'enable_compression' : true,
   'httpProtocol': 'http://',
   'log_folder_path': __dirname + '/../logs/',
   'email': {
@@ -216,6 +217,7 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+
 
 // Functions to retrieve filenames/URLS
 
