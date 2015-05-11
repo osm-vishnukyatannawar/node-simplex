@@ -21,7 +21,7 @@ define('POWERPATH_REPORT_USD_DEBUG_DATA', 16);
 define('TAG_SN', 8600);
 
 // USE THIS AS THE ORGANIZATION ID EVERYWHERE
-define('ORG_ID', 1268);
+define('ORG_ID', 1271);
 
 // Default values
 define('DEFAULT_VALUES', 101);
@@ -29,10 +29,10 @@ define('DEFAULT_VALUES', 101);
 // Config Params
 define('POWERPATH_UPDATE_CONFIG_PARAM', 6);
 
-define('BASE_URL', 'http://10.0.0.15:3000/api/v1/');
+define('BASE_URL', 'http://cloud.emanatewireless.com/api/v1/');
 
 // WS URL
-define('WS_URL', 'http://10.0.0.15:3000/api/v1/tag/maintenance/');
+define('WS_URL', 'http://cloud.emanatewireless.com/api/v1/tag/maintenance/');
 
 // Sleep time in seconds
 define('SLEEP_TIME', 0);
@@ -49,3 +49,16 @@ define('DEFAULT_UTIL_VALUE', 20);
 
 // Default values of number of blocks i.e. number of time currentUtilMeasurement will be calculated.
 define('DEFAULT_NUMBER_OF_SAMPLES', 4);
+
+// Starting the series
+define('SERIES_START', 1696194626);
+
+// Count
+define('SERIES_COUNT', 58);
+
+// Multiple tags
+define('MULTIPLE_TAGS', true);
+
+//Mac address series
+define('MAC_ADDRESS_START', 4496078144);
+
