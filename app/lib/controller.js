@@ -16,7 +16,7 @@ Controller.prototype.sendResponse = function(err, data, response) {
     response.format({
       'application/json': this.jsonError.bind(this),
       'default': this.jsonError.bind(this)
-    });    
+    });
   } else {
     this.determineSuccess(data);
     response.dataSentToClient = this.success.dataToSend;
@@ -24,7 +24,7 @@ Controller.prototype.sendResponse = function(err, data, response) {
     response.format({
       'application/json': this.jsonSuccess.bind(this),
       'default': this.jsonSuccess.bind(this)
-    });    
+    });
   }
 };
 
@@ -74,7 +74,7 @@ Controller.prototype.determineSuccess = function(data) {
 
 Controller.prototype.download = function(response, fileNameToShow, folderPath, fileToDownload) {
   var that = this;
-  response.attachment(fileNameToShow);  
+  response.attachment(fileNameToShow);
   response.setHeader('Set-Cookie', 'fileDownload=true; path=/');
   response.dataSentToClient = 'File to download : ' + fileToDownload;
   response.msgSentToClient = 'Downloading file...';

@@ -37,7 +37,8 @@ global.__CONFIG__ = {
   'app_http_base_url': app_http_base_url,
   'app_transaction_prop': 'transactionID',
   'enable_compression' : true,
-  'httpProtocol' : 'http://',
+  'httpProtocol': 'http://',
+  'log_folder_path': __dirname + '/../logs/',
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
@@ -127,7 +128,7 @@ global.__CONFIG__ = {
     'defaultSerialNumber': 'DEFAULT-',
     'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000',
-    'macTwoBytes' : '00:50'
+    'macTwoBytes': '00:50'
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -193,12 +194,15 @@ global.__CONFIG__ = {
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'limitString': ' LIMIT 0,5',
-  'logToSlogerr' : true,
-  'slogerrAppID' : slogerrAppID,
-  'excludedControllers' : [],
-  'non_super_user_pending_events' : ['POWERPATH_MAINT_CALL',	'POWERPATH_REPORT_CURRENT_UTIL_DATA', 
-    'POWERPATH_UPDATE_CONFIG_PARAM', 'POWERPATH_UPDATE_BLE_FIRMWARE', 'POWERPATH_UPDATE_WIFI_FIRMWARE',
-    'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED', 'POWERPATH_UPDATE_MCU_FIRMWARE']
+  'logToSlogerr': true,
+  'slogerrAppID': slogerrAppID,
+  'excludedControllers': [],
+  'non_super_user_pending_events': ['POWERPATH_MAINT_CALL',
+    'POWERPATH_REPORT_CURRENT_UTIL_DATA', 'POWERPATH_UPDATE_CONFIG_PARAM',
+    'POWERPATH_UPDATE_BLE_FIRMWARE', 'POWERPATH_UPDATE_WIFI_FIRMWARE',
+    'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED',
+    'POWERPATH_UPDATE_MCU_FIRMWARE'
+  ]
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -233,6 +237,7 @@ __CONFIG__.getFirmwareFolderPath = function() {
 
 /**
  * Returns folder name for firmware based on version
+ *
  * @param version
  */
 __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
@@ -241,6 +246,7 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
 
 /**
  * Get the URL for based on version
+ *
  * @param version
  * @returns
  */

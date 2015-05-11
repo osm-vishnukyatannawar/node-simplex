@@ -2,8 +2,7 @@ var csv = require('csv');
 var fs = require('fs');
 var async = require('async');
 
-function csvHelper() {
-}
+function csvHelper() {}
 
 csvHelper.prototype.readCsvHelper = function(path, cb) {
   var fileStream = fs.createReadStream(path);

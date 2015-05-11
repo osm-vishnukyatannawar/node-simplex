@@ -7,11 +7,11 @@ var util = require('util');
 var __ = require('underscore');
 var fs = require('fs');
 var path = require('path');
-var colors = require('colors/safe');
 var loadCustomViews = require(__CONFIG__.app_code_path + 'views.js');
 
 var internalExclusionApi = ['public_html'];
 internalExclusionApi.concat(__CONFIG__.excludedControllers);
+var cntrlOutput = '';
 
 var serverHelper = function() {
   var app = null;
@@ -44,18 +44,18 @@ var serverHelper = function() {
     if (isAdmin) {
       isPublic = false;
     }
-    
+
     var modifiedRoute = function(request, response, next) {
-      if(__CONFIG__.logToSlogerr) {
+      if (__CONFIG__.logToSlogerr) {
         response.on('finish', function() {
           logRequestResponse(request, response);
         });
       }
-      if(route) {
+      if (route) {
         route(request, response, next);
-      }      
+      }
     };
-    
+
     if (validMethodTypes.indexOf(methodType) !== -1) {
       bindHttpRequest(getFinalUrl(url, isPublic), modifiedRoute, isPublic, isAdmin, methodType);
     } else {
@@ -95,10 +95,10 @@ var serverHelper = function() {
     // get all the folder names
     var files = fs.readdirSync(__CONFIG__.app_code_path);
     if (!files) {
-      console.log('There was an error while reading the folders inside the \'code\' directory.');      
+      console.log('There was an error while reading the folders inside the \'code\' directory.');
       process.exit(1);
     }
-    
+
     // We don't really care about speed, so doing a sync execution
     var statObj = null;
     var controllerName = '';
@@ -117,51 +117,51 @@ var serverHelper = function() {
     var loadedControllersObj;
     loadedControllersObj = [];
     for (i = 0; i < allControllers.length; ++i) {
+      cntrlOutput += '\n\n';
       var cntrlObj = require(allControllers[i]);
       if (cntrlObj) {
         loadedControllersObj.push(cntrlObj);
-        console.log('Loading Controller - ' + path.basename(allControllers[i] + ' - \n'));
+        cntrlOutput += 'Controller Name |' + path.basename(allControllers[i] + '\n');
         new loadedControllersObj[loadedControllersObj.length - 1](app);
-        console.log(colors.green('\nFinished loading controller.\n'));
-        console.log(colors.bold('-----------------------\n'));
+        cntrlOutput += '\n';
         continue;
       }
-      console.log(colors.red('Error while loading controller - ' + path.basename(allControllers[i])));
-      console.log(colors.bold('\n-----------------------\n'));
+      cntrlOutput += 'Error while loading controller - ' + path.basename(allControllers[i]);
+      cntrlOutput += '\n';
     }
-    console.log(colors.green('\nFinished loading all controllers.\n'));
-    console.log(colors.bold('\n-----------------------\n'));
+    cntrlOutput += '\nDone.\n';
+    cntrlOutput += '\n';
     loadedControllersObj.length = 0;
   };
 
   var loadViews = function(app) {
-    if(typeof loadCustomViews === 'function') {      
+    if (typeof loadCustomViews === 'function') {
       loadCustomViews(app);
     }
   };
-  
+
   /**
    * Common method to bind different type of requests to the express app
-   * Checks 
+   * Checks
    */
   var bindHttpRequest = function(url, route, isPublic, isAdmin, method) {
-    var urlMethod = method.toUpperCase() + ' : ' + url;
+    var urlMethod = method.toUpperCase() + '|' + url;
     if (isPublic) {
-      urlMethod += ' - PUBLIC';
+      urlMethod += '|Public';
     } else {
-      urlMethod += ' - NOT PUBLIC';
+      urlMethod += '|Not Public';
       if (isAdmin) {
-        urlMethod += ' - ADMIN';
+        urlMethod += '|Admin';
       }
     }
+    cntrlOutput += urlMethod + '\n';
 
-    console.log(urlMethod);
     if (isPublic) {
       app[method](url, route);
     } else {
-      if(typeof loadCustomApi.validate === 'function') {
+      if (typeof loadCustomApi.validate === 'function') {
         app[method](url, loadCustomApi.validate);
-      }     
+      }
       if (isAdmin && typeof loadCustomApi.checkIfAdmin === 'function') {
         app[method](url, loadCustomApi.checkIfAdmin);
       }
@@ -188,14 +188,14 @@ var serverHelper = function() {
 
   // Not found handler.
   var notFound = function(request, response) {
-    if(typeof loadCustomApi.notFound === 'function') {
+    if (typeof loadCustomApi.notFound === 'function') {
       loadCustomApi.notFound(request, response);
     } else {
       response.status(appStatus('notFound')).json({
         'status': 'fail',
         'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
       });
-    }    
+    }
   };
 
   var isValidControllerFolder = function(folderName) {
@@ -224,95 +224,54 @@ var serverHelper = function() {
   };
 
   var logRequestResponse = function(request, response) {
-    if(!__CONFIG__.logToSlogerr) {
+    if (!__CONFIG__.logToSlogerr) {
       // Logging is turned off.
       return;
     }
     var logMessage = '';
-    
-    // Request
-    var stackTrace = '\n\n----- REQUEST ----\n\n'; 
+    var stackTrace = '\n\n----- REQUEST ----\n\n';
     stackTrace += 'HTTP Method : ' + request.method + '\n';
-    stackTrace += 'Request Headers : ' + util.inspect(request.headers, { depth : 3 }) + '\n';
-    var requestObj = { body : {}, params : {}, query : {} };
-    if(request.body) {
-      requestObj.body = request.body;
-    }
-    
-    if(request.params) {
-      requestObj.params = request.params;
-    }
-    
-    if(request.query) {
-      requestObj.query = request.query;
-    }
-    stackTrace += 'Data Received : ' + util.inspect(requestObj, { depth : 3 });
-    
-    
-    // Response
-    var responseBody = '';
-    var responseMessage = '';   
-    
-    if(response.dataSentToClient) {
-      responseBody = util.inspect(response.dataSentToClient, { depth : 3 });
-    } else {
-      responseBody = 'Was this a file download request?? If not, ' +
-        'there was an error while reading the response body!';
-    }
-    if(response.msgSentToClient) {
-      responseMessage = util.inspect(response.msgSentToClient, { depth : 3 });
-    }
-        
-    stackTrace += '\n\n----- RESPONSE ----\n\n';
-    stackTrace += 'Status : ' + response.statusCode + '\n';
-    stackTrace += 'Message : ' + responseMessage + '\n';
-    stackTrace += 'Response Data: \n\n' + responseBody;
-    var requestUrl = request.originalUrl;
-    if(requestUrl) {
-      requestUrl = requestUrl.replace(/\/+$/, '');
-    }
-    var severity = 1;
-    var isMaintCall = false;
-    var tagSN = 'UNKNOWN';
-    var callType = request.originalUrl;
-    // Detect if it's a maintenance call...
-    for(var prop in __CONFIG__.maintenance.necessary_tag_events) {
-      if(__CONFIG__.maintenance.necessary_tag_events[prop].indexOf(requestUrl) !== -1) {
-        isMaintCall = true;        
-        callType = prop;
-        if(__.isString(requestObj.body)) {
-          try {
-        	requestObj.body = JSON.parse(requestObj.body);
-          } catch (e) {
-        	//Unable to parse the json.
-          }
-        }  
-        if(__.isObject(requestObj.body) && 
-            requestObj.body.hasOwnProperty('serialNum') && requestObj.body.serialNum) {          
-          tagSN = requestObj.body.serialNum;
-        }       
-        break;
+    stackTrace += 'Request Headers : ' + util.inspect(request.headers, {
+      depth: 3
+    }) + '\n';
+    getRequestData(request, function(err, data) {
+      if (err) {
+        return;
       }
-    }
-    if(isMaintCall) {
-      if(callType === 'POWERPATH_INFO') {
-        callType = 'POWERPATH_INFO, POWERPATH_REPORT_CURRENT_UTIL_DATA or MAINTENANCE_EVENT';
+      if (data) {
+        if (typeof data === 'string') {
+          stackTrace += 'Data Sent : ' + data;
+        } else {
+          stackTrace += 'Data Sent : ' + util.inspect(data, {
+            depth: 3
+          });
+        }
       }
-      logMessage = 'Maintenance LOG from TAG - ' 
-        + tagSN + ' for ' + callType;
-      severity = 2;      
-    } else if(request.method === 'GET' && requestUrl.indexOf('config') !== -1) {
-      logMessage = 'Sending config parameters to the TAG - '
-    	+ request.params.sn;
-      severity = 2;
-    } else {
-      logMessage = '[' + new Date().toUTCString() + '] Logging REQUEST/RESPONSE to ' 
-        + request.ip + ' for ' + request.originalUrl;
-    }
-    
-    slogger.log(logMessage, stackTrace, severity);    
+      var responseBody = '';
+      var responseMessage = '';
+      if (response.dataSentToClient) {
+        responseBody = util.inspect(response.dataSentToClient, {
+          depth: 3
+        });
+      } else {
+        responseBody = 'Was this a file download request?? If not, ' +
+          'there was an error while reading the response body!';
+      }
+      if (response.msgSentToClient) {
+        responseMessage = util.inspect(response.msgSentToClient, {
+          depth: 3
+        });
+      }
+
+      stackTrace += '\n\n----- RESPONSE ----\n\n';
+      stackTrace += 'Status : ' + response.statusCode + '\n';
+      stackTrace += 'Message : ' + responseMessage + '\n';
+      stackTrace += 'Response Data: \n\n' + responseBody;
+      logMessage = '[' + new Date().toUTCString() + '] Logging REQUEST/RESPONSE to ' + request.ip + ' for ' + request.originalUrl;
+      slogger.log(logMessage, stackTrace, 1);
+    });
   };
-  
+
   var getRequestData = function(request, cb) {
     if (request.method === 'POST') {
       var body = '';
@@ -328,39 +287,47 @@ var serverHelper = function() {
 
       request.on('error', function(e) {
         request.end();
-        if(__.isEmpty(request.body)) {
-          request.body = { error : 'Couldn\'t parse BODY.' };
-        }
         hasError = true;
         return cb(e);
       });
 
       request.on('end', function() {
         if (!hasError) {
-          if(__.isEmpty(request.body)) {
-            request.body = body;
-          }
           cb(null, body);
         }
       });
-    } else if(request.method === 'GET') {
+    } else if (request.method === 'GET') {
       return cb(null, {
-        params : request.params,
-        query : request.query
+        params: request.params,
+        query: request.query
       });
     } else {
       cb(null, null);
-    }    
+    }
   };
-  
+
+  var writeServerStartupLogs = function() {
+    // TODO : will be called many times, not a good model, need to find alternative.
+    var now = new Date();
+    var serverLogFile = 'server-startup-log.csv';
+    var nowUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(),
+      now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    if (fs.existsSync(__CONFIG__.log_folder_path + serverLogFile)) {
+      fs.unlinkSync(__CONFIG__.log_folder_path + serverLogFile);
+    }
+    fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' + 'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
+  };
+
   return {
     parseBodyType: parseBodyTypeValues,
     init: init,
-    notFound: notFound,    
-    logRequestResponse : logRequestResponse,
-    getRequestData : getRequestData,
+    notFound: notFound,
+    logRequestResponse: logRequestResponse,
+    getRequestData: getRequestData,
     loadRoutes: loadRoutes,
-    loadViews : loadViews
+    loadViews: loadViews,
+    writeServerStartupLogs: writeServerStartupLogs
   };
 };
 
