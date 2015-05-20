@@ -1,3 +1,5 @@
+/* global __CONFIG__ */
+/// <reference path="../typings/node/node.d.ts"/>
 var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
@@ -6,8 +8,8 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
-var app_http_base_url = 'http://10.0.0.159:3000/';
-var ipAddress = '10.0.0.159';
+var app_http_base_url = 'http://10.0.0.15:3000/';
+var ipAddress = '10.0.0.15';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -153,7 +155,9 @@ global.__CONFIG__ = {
     'tag_not_commissioned': 'POWERPATH_TAG_NOT_COMMISSIONED',
     'tag_maintenance': 'POWERPATH_MAINT_CALL',
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
-    'tag_no_commands': 'POWERPATH_NO_COMMANDS'
+    'tag_no_commands': 'POWERPATH_NO_COMMANDS',
+    'tag_maint_reboot' : 'POWERPATH_MAINT_REBOOT',
+    'tag_firmware_upgrade' : 'POWERPATH_MAINT_FIRMWARE_UPGRADE'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -203,7 +207,8 @@ global.__CONFIG__ = {
     'POWERPATH_NO_COMMANDS', 'POWERPATH_TAG_NOT_COMMISSIONED',
     'POWERPATH_UPDATE_MCU_FIRMWARE'
   ],
-  'default_timezone': 'America/New_York'
+  'default_timezone': 'America/New_York',
+  'tagTimePadding' : 1000
 };
 
 __CONFIG__.isProduction = PRODUCTION;
