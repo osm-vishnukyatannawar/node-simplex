@@ -8,7 +8,7 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
-var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, srinivas.m@osmosys.asia';
+var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, saroja.k@osmosys.asia';
 
 var app_http_base_url = 'http://10.0.0.15:3000/';
 var ipAddress = '10.0.0.15';
