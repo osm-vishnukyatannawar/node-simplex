@@ -53,17 +53,19 @@ global.__CONFIG__ = {
   },
   'maintenance': {
     'run_maria_on_main': true,
-    'max_tries': 2,
+    'max_tries': 5,
+    'max_records' : 20,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
+    'sync_time' : '* * * * *',
     'necessary_tag_events': {
       'POWERPATH_INFO': '',
       'POWERPATH_REPORT_USD_DEBUG_DATA': '',
       'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
       'POWERPATH_SEND_DEBUG_LOG': '',
       'POWERPATH_REPORT_HIST_DATA': ''
-    }
+    }    
   },
   'user': {
     'default_password': 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',

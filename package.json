@@ -45,7 +45,7 @@
     "winston": "1.0.0",
     "jshint" : "2.7.0",
     "compression" : "1.4.3",
-    "colors" : "1.0.3"
+    "cron" : "1.0.9"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
