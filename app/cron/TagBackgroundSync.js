@@ -9,6 +9,9 @@ var Maintenance = require(__CONFIG__.app_code_path + 'maintenance/Maintenance');
 var async = require('async');
 var logger = require(__CONFIG__.app_base_path + 'logger');
 var BackgroundTaskService = require(__CONFIG__.app_code_path + 'background_task/BackgroundTaskService.js');
+var Email = require(__CONFIG__.app_code_path + 'email/Email.js');
+var EmailService = require(__CONFIG__.app_code_path + 'email/EmailService.js');
+var __ = require('underscore');
 
 var maintenanceString = '';
 var currentSpString = '';
@@ -17,6 +20,8 @@ var errRecords = [];
 var TagDataBackgroundSync = (function() {
 	var mMaintenance = new Maintenance();	
 	var sMaintenance = new MaintenanceService();
+	var mEmail = new Email();
+	var sEmail = new EmailService();
 	var sBackgroundTask = new BackgroundTaskService();
 	
 	/**
@@ -35,7 +40,11 @@ var TagDataBackgroundSync = (function() {
 			maintenanceString += '\n\n' + '[' + dtEnd.toUTCString() + '] ' + 'Sync ended.\n\n';
 			if(errRecords.length !== 0) {				
 				maintenanceString += util.inspect(errRecords, {depth : 4});
-				// TODO : Send email to recepients...
+				sendLogMails({
+					subject : 'Logs for failed records during maintenance call',
+					title: 'The following information is about the tag data records that are not yet processed in Cassandra.',
+					dataString : maintenanceString
+				});
 			}
 			logger.logMaintError(maintenanceString);
 		});
@@ -102,10 +111,34 @@ var TagDataBackgroundSync = (function() {
 			}
 			var dtEnd = new Date();
 			currentSpString += '[' + dtEnd.toUTCString() + '] ' + 'SP Processing ended.\n\n';
-			// TODO : Send mail.
+			sendLogMails({
+				subject: 'Logs for current data processing stored procedure',
+				title: 'The following information is about the response of the current data stored procedure.',
+				dataString: currentSpString
+			});
 		});
 	};
 		
+	function sendLogMails(dataToSend) {
+	  var dataToMail = {
+		title: dataToSend.title,
+		dataString : dataToSend.dataString
+	  };
+	  var mailObj = __.defaults({
+		 toEmail: __CONFIG__.email.debugMails,
+		 templateName: 'maintenance-failed-log',
+		 subject: dataToSend.subject,
+		 data: dataToMail 
+	  }, mEmail.getDefaultObj());
+	  mEmail.queueMail(mailObj, function(err) {
+		 if(err) {
+			 logger.logAppErrors(err);
+		 } else {
+			 sEmail.sendUnsentMails();
+		 }
+	  });
+	}
+	
 	return {
 		syncErrorRecords : syncErrorRecords,
 		runCurrentSP : runCurrentSP
