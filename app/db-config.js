@@ -4,7 +4,7 @@ var dbConfig = {
     maxConn: 40,
     minConn: 20,
     idleTimeout: 30000,
-    host: '10.0.0.646',
+    host: '10.0.0.66',
     user: 'osmosys',
     password: 'Change123',
     db: 'emanate_prod',
