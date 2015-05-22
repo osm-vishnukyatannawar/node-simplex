@@ -8,6 +8,7 @@ var MaintenanceService = require(__CONFIG__.app_code_path + 'maintenance/Mainten
 var Maintenance = require(__CONFIG__.app_code_path + 'maintenance/Maintenance');
 var async = require('async');
 var logger = require(__CONFIG__.app_base_path + 'logger');
+var BackgroundTaskService = require(__CONFIG__.app_code_path + 'background_task/BackgroundTaskService.js');
 
 var maintenanceString = '';
 var currentSpString = '';
@@ -16,6 +17,7 @@ var errRecords = [];
 var TagDataBackgroundSync = (function() {
 	var mMaintenance = new Maintenance();	
 	var sMaintenance = new MaintenanceService();
+	var sBackgroundTask = new BackgroundTaskService();
 	
 	/**
 	 * Syncs current records that might have crashed.
@@ -26,11 +28,11 @@ var TagDataBackgroundSync = (function() {
 		// 2. Send them to Maintenance Service's process record.			
 		async.waterfall([function getFailedRecords(next) {
 			var dtStart = new Date();
-			maintenanceString += '[' + dtStart.toUTCString() + ']' + 'Start sync...\n\n';
+			maintenanceString += '[' + dtStart.toUTCString() + '] ' + 'Start sync.\n\n';
 			mMaintenance.getLastXFailedLogs(__CONFIG__.maintenance.max_records, next);
 		}, checkAndProcess], function(err, data) {						
 			var dtEnd = new Date();
-			maintenanceString += '\n\n' + '[' + dtEnd.toUTCString() + ']' + 'Sync ended...\n\n';
+			maintenanceString += '\n\n' + '[' + dtEnd.toUTCString() + '] ' + 'Sync ended.\n\n';
 			if(errRecords.length !== 0) {				
 				maintenanceString += util.inspect(errRecords, {depth : 4});
 				// TODO : Send email to recepients...
@@ -91,14 +93,15 @@ var TagDataBackgroundSync = (function() {
 	 */
 	var runCurrentSP = function() {
 		var dtStart = new Date();
-		currentSpString += '[' + dtStart.toUTCString() + ']' + 'Calling current SP\n\n';	
-		mMaintenance.callCurrentSP(function(err, data) {
+		currentSpString += '[' + dtStart.toUTCString() + '] ' + 'Calling current SP\n\n';	
+		sBackgroundTask.syncCurrentData(function(err, data) {
 			if(err) {
-				currentSpString += 'ERROR Response : ' + util.inspect(err, {depth : 4});
+				currentSpString += 'ERROR running SP : ' + util.inspect(err, {depth : 4});
 			} else {
-				currentSpString += 'SUCCESS Response : ' + util.inspect(data, {depth : 4});
+				currentSpString += 'Process LOG : ' + util.inspect(data, {depth : 5});
 			}
-			currentSpString += '[' + dtStart.toUTCString() + ']' + '\n\nSP Processing ended.';
+			var dtEnd = new Date();
+			currentSpString += '[' + dtEnd.toUTCString() + '] ' + 'SP Processing ended.\n\n';
 			// TODO : Send mail.
 		});
 	};
@@ -109,12 +112,14 @@ var TagDataBackgroundSync = (function() {
 	};
 }());
 
+// Runs the background sync for failed current records.
 var job = new CronJob({
   cronTime: __CONFIG__.maintenance.sync_time,
   onTick: TagDataBackgroundSync.syncErrorRecords,
   start : true  
 });
 
+// Calls the Current SP every X hours.
 var spJob = new CronJob({
   cronTime: __CONFIG__.maintenance.current_sp_time,
   onTick: TagDataBackgroundSync.runCurrentSP,
