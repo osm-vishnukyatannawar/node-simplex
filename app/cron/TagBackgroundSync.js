@@ -47,12 +47,7 @@ var TagDataBackgroundSync = (function() {
       if (errRecords.length !== 0) {
         maintenanceString += util.inspect(errRecords, {
           depth: 4
-        });
-        sendLogMails({
-          subject: 'Logs for failed records during maintenance call',
-          title: 'The following information is about the tag data records that are not yet processed in Cassandra.',
-          dataString: maintenanceString
-        });
+        });        
       }
       logger.logMaintError(maintenanceString);
     });
@@ -127,11 +122,7 @@ var TagDataBackgroundSync = (function() {
       var dtEnd = new Date();
       currentSpString += '[' + dtEnd.toUTCString() + '] ' +
         'SP Processing ended.\n\n';
-      sendLogMails({
-        subject: 'Logs for current data processing stored procedure',
-        title: 'The following information is about the response of the current data stored procedure.',
-        dataString: currentSpString
-      });
+      logger.logMaintError(currentSpString);
     });
   };
 

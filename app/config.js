@@ -61,7 +61,7 @@ global.__CONFIG__ = {
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
-    'current_sp_time' : '* */1 * * *',
+    'current_sp_time' : '0 */1 * * *',
     'sync_time' : '*/5 * * * *',  
     'necessary_tag_events': {
       'POWERPATH_INFO': '',

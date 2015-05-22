@@ -17,6 +17,10 @@ var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster) {
+  
+  // Load the cron jobs on the master thread if it's production.
+  helper.loadCronJobs(app);
+  
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
     cluster.fork();
@@ -54,10 +58,12 @@ if (config.express.isProduction && cluster.isMaster) {
   helper.loadRoutes(app);
 
   // Bind the views.
-  helper.loadViews(app);
+  helper.loadViews(app);    
   
-  // Load the cron jobs
-  helper.loadCronJobs(app);
+  if(!config.express.isProduction) {
+    // Load the cron jobs on the child thread if it's NOT production.
+    helper.loadCronJobs(app);
+  }
   
   helper.writeServerStartupLogs();
 
@@ -78,6 +84,7 @@ if (config.express.isProduction && cluster.isMaster) {
 
 process.on('uncaughtException', function(err) {
   try {
+    console.log(err);
     logger.logUncaughtError(err);
   } catch (e) {
     // nothing to do...
