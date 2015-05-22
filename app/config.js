@@ -274,5 +274,5 @@ __CONFIG__.getUploadsFolderPath = function() {
 config.express = {
   port: process.env.EXPRESS_PORT || port,
   ip: ipAddress,
-  isProduction: true
+  isProduction: PRODUCTION
 };
