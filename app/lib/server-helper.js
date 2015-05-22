@@ -78,7 +78,8 @@ var serverHelper = function() {
     if (isMultipart > -1) {
       var form = new formidable.IncomingForm({
         uploadDir: __CONFIG__.getUploadsFolderPath(),
-        keepExtensions: true
+        keepExtensions: true,
+        multiples : true
       });
       form.parse(request, function(err, fields, files) {
         request.fields = fields;
@@ -128,10 +129,18 @@ var serverHelper = function() {
       }
       cntrlOutput += 'Error while loading controller - ' + path.basename(allControllers[i]);
       cntrlOutput += '\n';
-    }
+    }    
     cntrlOutput += '\nDone.\n';
     cntrlOutput += '\n';
     loadedControllersObj.length = 0;
+  };
+  
+  var loadCronJobs = function() {
+    var cronDir = __CONFIG__.app_base_path + 'cron/';
+    var files = fs.readdirSync(cronDir);
+    for(var i = 0; i !== files.length; ++i) {
+      require(cronDir + files[i]);
+    }
   };
 
   var loadViews = function(app) {
@@ -327,6 +336,7 @@ var serverHelper = function() {
     getRequestData: getRequestData,
     loadRoutes: loadRoutes,
     loadViews: loadViews,
+    loadCronJobs : loadCronJobs,
     writeServerStartupLogs: writeServerStartupLogs
   };
 };

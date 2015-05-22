@@ -55,7 +55,10 @@ if (config.express.isProduction && cluster.isMaster) {
 
   // Bind the views.
   helper.loadViews(app);
-
+  
+  // Load the cron jobs
+  helper.loadCronJobs(app);
+  
   helper.writeServerStartupLogs();
 
   // 404 error
