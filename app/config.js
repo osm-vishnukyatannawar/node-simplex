@@ -8,6 +8,8 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 
 var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
+var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, srinivas.m@osmosys.asia';
+
 var app_http_base_url = 'http://10.0.0.15:3000/';
 var ipAddress = '10.0.0.15';
 var port = 3000;
@@ -49,7 +51,8 @@ global.__CONFIG__ = {
     'fromName': 'The Emanate Wireless Team',
     'maxCon': 5,
     'maxMsgPerCon': 20,
-    'emailsToSend': emailsToSend
+    'emailsToSend': emailsToSend,
+    'debugMails' : debugSupportMails
   },
   'maintenance': {
     'run_maria_on_main': true,
@@ -58,6 +61,7 @@ global.__CONFIG__ = {
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
+    'current_sp_time' : '0 */1 * * *',
     'sync_time' : '* * * * *',
     'necessary_tag_events': {
       'POWERPATH_INFO': '',

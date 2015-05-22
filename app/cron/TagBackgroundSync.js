@@ -10,12 +10,18 @@ var async = require('async');
 var logger = require(__CONFIG__.app_base_path + 'logger');
 
 var maintenanceString = '';
+var currentSpString = '';
 var errRecords = [];
 
 var TagDataBackgroundSync = (function() {
 	var mMaintenance = new Maintenance();	
 	var sMaintenance = new MaintenanceService();
-	var runSync = function() {
+	
+	/**
+	 * Syncs current records that might have crashed.
+	 */	
+	var syncErrorRecords = function() {
+		maintenanceString = '';
 		// 1. Get all failed records.
 		// 2. Send them to Maintenance Service's process record.			
 		async.waterfall([function getFailedRecords(next) {
@@ -80,16 +86,39 @@ var TagDataBackgroundSync = (function() {
 		});
 	}
 	
+	/**
+	 * Calls the stored procedure for processing current data.
+	 */
+	var runCurrentSP = function() {
+		var dtStart = new Date();
+		currentSpString += '[' + dtStart.toUTCString() + ']' + 'Calling current SP\n\n';	
+		mMaintenance.callCurrentSP(function(err, data) {
+			if(err) {
+				currentSpString += 'ERROR Response : ' + util.inspect(err, {depth : 4});
+			} else {
+				currentSpString += 'SUCCESS Response : ' + util.inspect(data, {depth : 4});
+			}
+			currentSpString += '[' + dtStart.toUTCString() + ']' + '\n\nSP Processing ended.';
+			// TODO : Send mail.
+		});
+	};
+		
 	return {
-		runSync : runSync
+		syncErrorRecords : syncErrorRecords,
+		runCurrentSP : runCurrentSP
 	};
 }());
 
 var job = new CronJob({
   cronTime: __CONFIG__.maintenance.sync_time,
-  onTick: TagDataBackgroundSync.runSync,
+  onTick: TagDataBackgroundSync.syncErrorRecords,
   start : true  
 });
 
+var spJob = new CronJob({
+  cronTime: __CONFIG__.maintenance.current_sp_time,
+  onTick: TagDataBackgroundSync.runCurrentSP,
+  start : true  
+});
 
 module.exports = TagDataBackgroundSync;
