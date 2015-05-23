@@ -45,6 +45,12 @@ var util = {
     } catch(e) {
       return false;
     }
+  },
+  toMySQLDateTimeWithoutISO : function(dt) {
+    if (!dt) {
+      dt = new Date();
+    }
+    return moment(dt).format('YYYY-MM-DD HH:mm:ss');
   }
 };
 
