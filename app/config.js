@@ -43,6 +43,7 @@ global.__CONFIG__ = {
   'enable_compression' : true,
   'httpProtocol': 'http://',
   'log_folder_path': __dirname + '/../logs/',
+  'package_file_path': __dirname + '/../package.json',
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
