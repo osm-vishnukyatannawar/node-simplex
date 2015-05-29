@@ -215,7 +215,8 @@ global.__CONFIG__ = {
     'POWERPATH_UPDATE_MCU_FIRMWARE'
   ],
   'default_timezone': 'America/New_York',
-  'tagTimePadding' : 1000
+  'tagTimePadding' : 1000,
+  'cs_keyspace' : 'emanate'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
