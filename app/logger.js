@@ -42,7 +42,7 @@ var logger = (function() {
     errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + '\n Severity : ' + error.severity + '\n----\n');
   };
 
-  var logUncaughtError = function(error,cb) {
+  var logUncaughtError = function(error) {
     var filename =  __CONFIG__.app_base_path + '../logs/uncaught-exceptions.log';
     var message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
       'Message : ' + error.message + '\n--\n' +
