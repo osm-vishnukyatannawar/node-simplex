@@ -1,4 +1,5 @@
 var winston = require('winston');
+var fs = require('fs');
 
 var logger = (function() {
   var errLogger = new(winston.Logger)({
@@ -42,12 +43,14 @@ var logger = (function() {
   };
 
   var logUncaughtError = function(error) {
-    errLogger.error('\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
+    var filename =  __CONFIG__.app_base_path + '../logs/uncaught-exceptions.log';
+    var message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
       'Message : ' + error.message + '\n--\n' +
       'Type : ' + error.type + '\n--\n' +
       'StackTrace : ' + error.stack + '\n--\n' +
-      '----------------------------------\n'
-    );
+      '----------------------------------\n';
+    fs.appendFileSync(filename,message);
+    
   };
 
   var logAppInfo = function(info) {
