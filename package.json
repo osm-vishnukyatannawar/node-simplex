@@ -46,7 +46,7 @@
     "jshint" : "2.7.0",
     "compression" : "1.4.3",
     "cron" : "1.0.9",
-    "request" : "2.56.1"
+    "request" : "2.56.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
