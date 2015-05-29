@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       },
       files: {
         expand: true,
-        src: [publicHTML + 'js/app/*.js']
+        src: [ publicHTML + 'js/app.js', publicHTML + 'js/app/*.js']
       }
     }
   });
