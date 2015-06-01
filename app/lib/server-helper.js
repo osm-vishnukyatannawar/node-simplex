@@ -8,6 +8,7 @@ var __ = require('underscore');
 var fs = require('fs');
 var path = require('path');
 var loadCustomViews = require(__CONFIG__.app_code_path + 'views.js');
+var compression = require('compression');
 
 var internalExclusionApi = ['public_html'];
 internalExclusionApi.concat(__CONFIG__.excludedControllers);
@@ -21,43 +22,49 @@ var serverHelper = function() {
   // Binds a wrapper around the express app variable.
   var init = function(baseApp) {
     app = baseApp;
-    app.httpPost = function(url, route, isPublic, isAdmin) {
-      bindRequest(url, route, isAdmin, isPublic, 'post');
+    app.httpPost = function(url, route, isPublic, isAdmin, enableCompression) {
+      bindRequest(url, route, isAdmin, isPublic, 'post', enableCompression);
     };
 
-    app.httpGet = function(url, route, isPublic, isAdmin) {
-      bindRequest(url, route, isAdmin, isPublic, 'get');
+    app.httpGet = function(url, route, isPublic, isAdmin, enableCompression) {
+      bindRequest(url, route, isAdmin, isPublic, 'get', enableCompression);
     };
 
-    app.httpDelete = function(url, route, isPublic, isAdmin) {
-      bindRequest(url, route, isAdmin, isPublic, 'delete');
+    app.httpDelete = function(url, route, isPublic, isAdmin, enableCompression) {
+      bindRequest(url, route, isAdmin, isPublic, 'delete', enableCompression);
     };
 
-    app.httpPut = function(url, route, isPublic, isAdmin) {
-      bindRequest(url, route, isAdmin, isPublic, 'put');
+    app.httpPut = function(url, route, isPublic, isAdmin, enableCompression) {
+      bindRequest(url, route, isAdmin, isPublic, 'put', enableCompression);
     };
   };
 
-  var bindRequest = function(url, route, isAdmin, isPublic, methodType) {
+  var bindRequest = function(url, route, isAdmin, isPublic, methodType, enableCompression) {
     url = normalizeUrl(url);
     methodType = methodType.toLowerCase();
     if (isAdmin) {
       isPublic = false;
     }
-
+    
+    if(enableCompression === false) {
+      enableCompression = false;
+    } else {
+      enableCompression = true;
+    }
+    
     var modifiedRoute = function(request, response, next) {
       if (__CONFIG__.logToSlogerr) {
         response.on('finish', function() {
           logRequestResponse(request, response);
         });
-      }
-      if (route) {
+      }      
+      if (route) {        
         route(request, response, next);
       }
     };
 
     if (validMethodTypes.indexOf(methodType) !== -1) {
-      bindHttpRequest(getFinalUrl(url, isPublic), modifiedRoute, isPublic, isAdmin, methodType);
+      bindHttpRequest(getFinalUrl(url, isPublic), modifiedRoute, isPublic, isAdmin, methodType, enableCompression);
     } else {
       console.log('Invalid method type for - ' + url);
     }
@@ -144,6 +151,9 @@ var serverHelper = function() {
   };
 
   var loadViews = function(app) {
+    if(__CONFIG__.enable_compression) {
+      app.use(compression());
+    }
     if (typeof loadCustomViews === 'function') {
       loadCustomViews(app);
     }
@@ -153,7 +163,7 @@ var serverHelper = function() {
    * Common method to bind different type of requests to the express app
    * Checks
    */
-  var bindHttpRequest = function(url, route, isPublic, isAdmin, method) {
+  var bindHttpRequest = function(url, route, isPublic, isAdmin, method, enableCompression) {
     var urlMethod = method.toUpperCase() + '|' + url;
     if (isPublic) {
       urlMethod += '|Public';
@@ -165,6 +175,10 @@ var serverHelper = function() {
     }
     cntrlOutput += urlMethod + '\n';
 
+    if(__CONFIG__.enable_compression && enableCompression) {
+        app[method](url, compression());    
+    }
+    
     if (isPublic) {
       app[method](url, route);
     } else {
@@ -173,7 +187,7 @@ var serverHelper = function() {
       }
       if (isAdmin && typeof loadCustomApi.checkIfAdmin === 'function') {
         app[method](url, loadCustomApi.checkIfAdmin);
-      }
+      }      
       app[method](url, route);
     }
   };
