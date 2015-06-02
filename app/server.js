@@ -9,7 +9,6 @@ var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
-var compression = require('compression');
 helper.init(app);
 
 // Count the machine's CPUs
@@ -53,10 +52,10 @@ if (config.express.isProduction && cluster.isMaster) {
     }
   });
 
-
   // Bind the api routes.
   helper.loadRoutes(app);
-
+    
+  //
   // Bind the views.
   helper.loadViews(app);    
   
