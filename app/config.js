@@ -66,10 +66,8 @@ global.__CONFIG__ = {
     'sync_time' : '*/5 * * * *',  
     'necessary_tag_events': {
       'POWERPATH_INFO': '',
-      'POWERPATH_REPORT_USD_DEBUG_DATA': '',
       'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
       'POWERPATH_SEND_DEBUG_LOG': '',
-      'POWERPATH_REPORT_HIST_DATA': ''
     }    
   },
   'user': {
@@ -229,8 +227,8 @@ __CONFIG__.cassandra_keyspace = dbConfig.cassandradb.keyspace;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
-__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
-__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+//__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
+//__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 
 // Functions to retrieve filenames/URLS
