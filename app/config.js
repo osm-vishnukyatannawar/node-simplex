@@ -216,7 +216,7 @@ global.__CONFIG__ = {
   'tagTimePadding' : 1000,
   'cs_keyspace' : 'emanate',
   'logMaintenanceInfo': true,
-  'maintInfoFileName' : 'tag_maintenance_info.log'
+  'maintInfoFileName' : 'tag_maintenance_info.csv'
 };
 
 __CONFIG__.isProduction = PRODUCTION;
