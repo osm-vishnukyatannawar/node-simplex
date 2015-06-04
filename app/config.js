@@ -202,6 +202,7 @@ global.__CONFIG__ = {
   'iphoneConfigFileName' : 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
+  'clientDisplayDateTimeFormat': 'MMM DD, YYYY HH:mm:ss',
   'limitString': ' LIMIT 0,5',
   'logToSlogerr': true,
   'slogerrAppID': slogerrAppID,
