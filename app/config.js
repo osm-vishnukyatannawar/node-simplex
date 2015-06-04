@@ -10,8 +10,8 @@ var isStaging = process.env.NODE_ENV_STAGING;
 var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
 var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, saroja.k@osmosys.asia';
 
-var app_http_base_url = 'http://10.0.0.15:3000/';
-var ipAddress = '10.0.0.15';
+var app_http_base_url = 'http://10.0.0.247:3000/';
+var ipAddress = '10.0.0.247';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -214,7 +214,18 @@ global.__CONFIG__ = {
   ],
   'default_timezone': 'America/New_York',
   'tagTimePadding' : 1000,
-  'cs_keyspace' : 'emanate'
+  'cs_keyspace' : 'emanate',
+  'logMaintenanceInfo': true,
+  'maintInfoFileName' : 'tag_maintenance_info.csv',
+  'tag_type_of_data' : {
+     1 : 'POWERPATH_MAINT_CALL',
+     2 : 'POWERPATH_REPORT_HIST_DATA',
+     4 : 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
+     5 : 'POWERPATH_INFO',
+     6 : 'POWERPATH_UPDATE_CONFIG_PARAM',
+     9 : 'POWERPATH_SEND_DEBUG_LOG',
+     16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
+  }
 };
 
 __CONFIG__.isProduction = PRODUCTION;
@@ -269,6 +280,10 @@ __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
 
 __CONFIG__.getUploadsFolderPath = function() {
   return __dirname + '/../uploads';
+};
+
+__CONFIG__.getLogsFolderPath = function() {
+  return __CONFIG__.app_base_path + '../logs/';
 };
 
 config.express = {
