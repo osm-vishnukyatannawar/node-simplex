@@ -216,7 +216,16 @@ global.__CONFIG__ = {
   'tagTimePadding' : 1000,
   'cs_keyspace' : 'emanate',
   'logMaintenanceInfo': true,
-  'maintInfoFileName' : 'tag_maintenance_info.csv'
+  'maintInfoFileName' : 'tag_maintenance_info.csv',
+  'tag_type_of_data' : {
+     1 : 'POWERPATH_MAINT_CALL',
+     2 : 'POWERPATH_REPORT_HIST_DATA',
+     4 : 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
+     5 : 'POWERPATH_INFO',
+     6 : 'POWERPATH_UPDATE_CONFIG_PARAM',
+     9 : 'POWERPATH_SEND_DEBUG_LOG',
+     16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
+  }
 };
 
 __CONFIG__.isProduction = PRODUCTION;
