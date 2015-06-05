@@ -33,6 +33,8 @@ if (config.express.isProduction && cluster.isMaster) {
   // A worker process
   app.use(function(req, res, next) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
+    res.performanceInfo = {};
+    res.performanceInfo.startTimestamp = new Date().getTime();
     next();
   });
 
@@ -72,7 +74,6 @@ if (config.express.isProduction && cluster.isMaster) {
   app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
 
   app.listen(config.express.port, config.express.ip, function(error) {
-
     if (error) {
       logger.logAppErrors(error);
       process.exit(10);
@@ -86,7 +87,7 @@ process.on('uncaughtException', function(err) {
     console.log(err);
     logger.logUncaughtError(err);
   } catch (e) {
-    // nothing to do...
+    console.log(e);
   }
   // Eventually write code to send a mail.
   process.exit(1);
