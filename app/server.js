@@ -33,6 +33,8 @@ if (config.express.isProduction && cluster.isMaster) {
   // A worker process
   app.use(function(req, res, next) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
+    res.performanceInfo = {};
+    res.performanceInfo.startTimestamp = new Date().getTime();
     next();
   });
 
