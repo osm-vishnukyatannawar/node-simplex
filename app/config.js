@@ -216,7 +216,7 @@ global.__CONFIG__ = {
   'default_timezone': 'America/New_York',
   'tagTimePadding' : 1000,
   'cs_keyspace' : 'emanate',
-  'logMaintenanceInfo': true,
+  'logPerformanceInfo': true,
   'maintInfoFileName' : 'tag_maintenance_info.csv',
   'tag_type_of_data' : {
      1 : 'POWERPATH_MAINT_CALL',
