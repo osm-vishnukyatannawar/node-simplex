@@ -10,8 +10,8 @@ var isStaging = process.env.NODE_ENV_STAGING;
 var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
 var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, saroja.k@osmosys.asia';
 
-var app_http_base_url = 'http://10.0.0.247:3000/';
-var ipAddress = '10.0.0.247';
+var app_http_base_url = 'http://10.0.0.159:3000/';
+var ipAddress = '10.0.0.159';
 var port = 3000;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
@@ -226,6 +226,11 @@ global.__CONFIG__ = {
      6 : 'POWERPATH_UPDATE_CONFIG_PARAM',
      9 : 'POWERPATH_SEND_DEBUG_LOG',
      16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
+  },
+  'perDayCount' : {
+    'week' : 48,
+    'month' : 360,
+    'year': 365
   }
 };
 
