@@ -15,6 +15,8 @@ var dbConfig = {
     name: 'cassandradb',
     host: '10.0.0.66',
     keyspace: 'emanate',
+    username : 'emanate',
+    password : 'Change123',
     connTimeout: 10,
   }
 };

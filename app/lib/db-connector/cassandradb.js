@@ -17,9 +17,11 @@ var client = false;
 
 function CassandraDB(dbConfig) {
   if (client === false) {
+   var authProvider = new cassandra.auth.PlainTextAuthProvider(dbConfig.username, dbConfig.password);
     client = new cassandra.Client({
-      contactPoints: [dbConfig.host]
-    });
+      contactPoints: [dbConfig.host],
+      authProvider : authProvider
+     });
   }
   this.client = client;
   this.msgStrings = defaultMsg;
