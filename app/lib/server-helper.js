@@ -194,7 +194,7 @@ var serverHelper = function() {
     }
     
     if (routeObj.isPublic) {
-      app[routeObj.method](routeObj.url, routeObj.route);
+      app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
     } else {
       if (typeof loadCustomApi.validate === 'function') {
         app[routeObj.method](routeObj.url, loadCustomApi.validate);
@@ -360,7 +360,10 @@ var serverHelper = function() {
     try {
       var endTimestamp = new Date().getTime();
       var processTime = (endTimestamp - response.performanceInfo.startTimestamp)/1000;
-      var requestSize = getbyteCount(util.inspect(request,  { depth : 5 }));
+      var requestSize = 0;
+      if(request.body) {
+        requestSize = getbyteCount(util.inspect(request.body,  { depth : 5 }));
+      }
       var responseSize = getbyteCount(util.inspect(response.dataSentToClient, { depth : 5 }));
       var path = __CONFIG__.getLogsFolderPath() + __CONFIG__.maintInfoFileName;
       var startTime = moment(new Date(response.performanceInfo.startTimestamp)).format('MMM DD YYYY HH:mm:ss:SSS');
