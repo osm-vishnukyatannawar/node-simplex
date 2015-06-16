@@ -1,9 +1,94 @@
 {
+	"login": {
+		"title": "Powerpath Server | Login",
+		"labels": {
+			"remember-me": "Stay logged in",
+			"forgot-password-link": "I forgot my password",
+			"new-account-link": "Create a new account",
+			"login": "Log in"
+		}
+	},
+	"register": {
+		"title": "Powerpath Server | Register",
+		"template-title": "Create a Powerpath server account.",
+		"labels": {
+			"full-name": "Full name",
+			"organization": "Organization",
+			"country": "Country",
+			"address": "Address",
+			"create-account": "Create Account",
+			"clear": "Clear"
+		}
+	},
+	"forgot-password": {
+		"title": "Powerpath Server | Forgot password",
+		"template-title": "Forgot your password?",
+		"labels": {
+			"email": "Enter your email address"
+		}
+	},
+	"reset-password": {
+		"title": "Powerpath Server | Reset password",
+		"template-title": "Password Reset"	
+	},
+	"labels": {
+		"email": "Email",
+		"password": "Password",
+		"confirm-password": "Confirm password",
+		"submit": "Submit"
+	},
 	"users": {
 		"invalid-creds": "Your username and password are incorrect.",
 		"invalid-uuid": "Please send a valid UUID v4.",
-		"no-user-org": "No user found with that organization ID.",
-		"no-user-id": "Please send the user ID."
+		"no-user-org": "No users found for the selected organization.",
+		"no-user-id": "Please send a valid user ID.",
+		"error-user-login": "There was an error while logging you in.",
+		"invalid-user-details": "Please provide proper user details.",
+		"invalid-password-length": "Please enter a password of length atleast 7 characters.",
+		"invalid-password-match": "Passwords do not match. Try Again?",
+		"invalid-password": "Your email matches with that of an existing user, but the password does not.",
+		"error-user-registration": "There was an error while registering the user.",
+		"error-user-logout": "There was an error while logging out the user.",
+		"user-belongs-to-org": "The user already belongs to this organization.",
+		"error-add-user-mail-sent": "The user was added, but there was an error while sending the mail.",
+		"error-register-user-mail-sent": "The user was registered but there was an error while sending them the mail.",
+		"no-token": "Please send a valid token.",
+		"invalid-email": "Please provide a valid email address.",
+		"no-password": "Please enter your password.",
+		"no-confirm-password": "Please enter the confirm password.",
+		"user-exists": "User already exists.",
+		"no-full-name": "Please enter full name.",
+		"no-org": "Please enter the organization.",
+		"no-country": "Please select the country.",
+		"no-address": "Please enter the company address.",
+		"invalid-address": "We only accept 200 characters, anything more than that will be trimmed.",
+		"error-update-user": "There was an error while updating the user.",
+		"user-not-belongs-org": "User does not belong to this organization.",
+		"error-fetch-user-info": "There was an error while fetching the user information.",
+		"server-error": "There was an error on the server.",
+		"delete-all-users": "You cannot delete all the users from an organization.",
+		"select-org-delete": "Please select organization to delete users from.",
+		"no-user-delete": "Please select user to delete.",
+		"error-update-password": "There was an error while updating your password.",
+		"no-new-password": "Please provide the new password and the user ID.",
+		"use-forgot-password": "You cannot change your password this way, please use the forgot password page instead.",
+		"no-token-password": "Please provide a token and the new password.",
+		"error-mail-sent": "There was an error while sending the email to the user.",
+		"mail-sent-details": "A mail with further details has been sent to your email address.",
+		"error-generate-password-token": "There was an error while generating the forgot password token.",
+		"success-add-user": "The user was added.",
+		"invalid-password-request": "Invalid request. Click %s to generate a forgot password link again.",
+		"password-link-expiry": "The link is invalid or it has expired. Click %s to generate a forgot password link again.",
+		"invalid-org-deployment": "Please send a valid organization id and deployment id.",
+		"user-no-longer-org": "You are no longer part of any organization.",
+		"error-validation": "Server encountered the following errors while processing the request --",
+		"no-valid-roles": "We could not find any roles/deployments to map the user to.",
+		"no-org-and-user": "Please provide the correct organization and user.",
+		"send-email-or-userid": "Please send the user email or user ID.",
+		"no-org-id": "Please provide the organization ID.",
+		"error-hash-password": "There was an error while hashing your password.",
+		"error-login-register-user": "The user was registerd, but we could not log them in.",
+		"email-not-exists": "The email address - %s does not exist."
 	},
 	"tags": {
 		"invalid-datatype": "Unknown data type sent by tag.",
@@ -13,9 +98,13 @@
 		"invalid-record-org": "Please check the record ID or organization ID.",
 		"failed-insert-histogram": "Failed to insert the histogram data. Please check the data and try again."
 	},
-	"users.no-user-org": "No user found with that organization ID.",
-	"users.invalid-creds": "Your username and password are incorrect.",
-	"users.invalid-uuid": "Please send a valid UUID v4.",
-	"tags.failed-set-errorflag": "tags.failed-set-errorflag",
-	"tags.failed-set-processedflag": "tags.failed-set-processedflag"
+	"organizations": {
+		"invalid-org-details": "Please provide proper organization details.",
+		"invalid-org-access": "Please select organization access.",
+		"error-fetch-org": "There was an error while retrieving the organization.",
+		"invalid-org": "Organization does not exist."
+	},
+	"deployments": {
+		"invalid-deployment-details": "Please provide proper deployment details."
+	}
 }

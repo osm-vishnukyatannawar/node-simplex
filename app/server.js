@@ -9,6 +9,7 @@ var getStatus = require('./lib/status');
 var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
+var i18n = require('i18n');
 helper.init(app);
 
 // Count the machine's CPUs
@@ -53,6 +54,15 @@ if (config.express.isProduction && cluster.isMaster) {
       next();
     }
   });
+  
+  i18n.configure({
+    locales: ['en'],
+    defaultLocale: 'en',
+    directory: __CONFIG__.app_base_path + '../locales',
+    objectNotation: true
+  });
+  
+  app.use(i18n.init);
 
   // Bind the api routes.
   helper.loadRoutes(app);
