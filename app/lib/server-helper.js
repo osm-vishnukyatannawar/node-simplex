@@ -315,7 +315,7 @@ var serverHelper = function() {
       var hasError = false;
       request.on('data', function(data) {
         body += data;
-
+        request.body = body;
         // Too much POST data, kill the connection!
         if (body.length > 1e6) {
           request.connection.destroy();
