@@ -59,7 +59,7 @@
 		"user-exists": "User already exists.",
 		"no-full-name": "Please enter full name.",
 		"no-org": "Please enter the organization.",
-		"no-country": "Please select the country.",
+		"no-country": "Please select a country.",
 		"no-address": "Please enter the company address.",
 		"invalid-address": "We only accept 200 characters, anything more than that will be trimmed.",
 		"error-update-user": "There was an error while updating the user.",
