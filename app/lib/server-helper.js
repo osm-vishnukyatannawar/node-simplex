@@ -192,7 +192,9 @@ var serverHelper = function() {
     if(__CONFIG__.enable_compression && routeObj.enableCompression) {
         app[routeObj.method](routeObj.url, compression());    
     }
-    
+    if(typeof loadCustomApi.beforeRouteLoad === 'function') {
+      loadCustomApi.beforeRouteLoad(routeObj.url, app);
+    }
     if (routeObj.isPublic) {
       app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
     } else {
