@@ -162,7 +162,8 @@ global.__CONFIG__ = {
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
     'tag_no_commands': 'POWERPATH_NO_COMMANDS',
     'tag_maint_reboot' : 'POWERPATH_MAINT_REBOOT',
-    'tag_firmware_upgrade' : 'POWERPATH_MAINT_FIRMWARE_UPGRADE'
+    'tag_firmware_upgrade' : 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
+    'maint_reboot' : 'POWERPATH_MAINT_REBOOT'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',

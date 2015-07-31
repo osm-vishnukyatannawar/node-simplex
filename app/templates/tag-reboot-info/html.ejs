@@ -1,0 +1,14 @@
+<p>Hello,</p>
+<p>
+	The tag with serial number  <strong><%= MaintainceErrorData.serialNumber %></strong> and in organization "<strong><%=MaintainceErrorData.organization %></strong>" has restarted at <%= MaintainceErrorData.dateAndTime %>.
+</p>
+
+JSON :  <pre > <%= MaintainceErrorData.json  %></pre>
+Thanks,
+<br>
+<strong><%= email.fromName %></strong>
+<hr>
+<p style="font-size: smaller">
+	Please do not reply to this email. Click <a
+		href="<%= email.baseURL %>help">here</a> to contact Emanate Support.
+</p>
