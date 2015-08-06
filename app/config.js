@@ -6,26 +6,33 @@ var config = module.exports;
 
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
+var isHttps = true;
 
-var emailsToSend = 'abijeet.p@osmosys.asia , vamsi.m@osmosys.asia , durgasravani.t@osmosys.asia';
-var debugSupportMails  = 'abijeet.p@osmosys.asia, vamsi.m@osmosys.asia, surendra.b@osmosys.asia, saroja.k@osmosys.asia';
+var emailsToSend = 'surendra.b@osmosys.asia';
+var debugSupportMails  = 'surendra.b@osmosys.asia';
 
-var app_http_base_url = 'http://10.0.0.159:3000/';
-var ipAddress = '10.0.0.159';
-var port = 3000;
+var app_http_base_url = 'http://10.0.0.247:3001/';
+var app_https_base_url = 'https://10.0.0.247:3002/';
+var port = 3001;
+var httpsPort = 3002;
+var ipAddress = '10.0.0.247'; 
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
 if (PRODUCTION === 'production') {
   if (isStaging === 'true') {
     app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
-    ipAddress = '10.0.0.6';
+    app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
     port = 80;
+    httpsPort = 443;
+    ipAddress = '10.0.0.6';
     slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
   } else {
     emailsToSend = 'support.emanate@osmosys.asia';
     app_http_base_url = 'http://cloud.emanatewireless.com/';
-    ipAddress = '167.114.117.212';
+    app_https_base_url = 'https://cloud.emanatewireless.com/';
     port = 80;
+    httpsPort = 443;
+    ipAddress = '167.114.117.212';
     slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
   }
   PRODUCTION = true;
@@ -38,12 +45,13 @@ global.__CONFIG__ = {
   'app_code_path': __dirname + '/code/',
   'app_base_url': '/api/v1/',
   'app_base_url_token': '/api/v1/:token/',
-  'app_http_base_url': app_http_base_url,
+  'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',
   'enable_compression' : true,
   'httpProtocol': 'http://',
   'log_folder_path': __dirname + '/../logs/',
   'package_file_path': __dirname + '/../package.json',
+  'isHttps': isHttps,
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
@@ -199,13 +207,15 @@ global.__CONFIG__ = {
   }],
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
+    'tagAvgProcess': 'sp_averages_tag',
+    'utilPercentGraph': 'sp_utilization_percent_graph'
   },
   'iphoneConfigFileName' : 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'clientDisplayDateTimeFormat': 'MMM DD, YYYY HH:mm:ss',
   'limitString': ' LIMIT 0,5',
-  'logToSlogerr': true,
+  'logToSlogerr': false,
   'slogerrAppID': slogerrAppID,
   'excludedControllers': [],
   'non_super_user_pending_events': ['POWERPATH_MAINT_CALL',
@@ -232,6 +242,10 @@ global.__CONFIG__ = {
     'week' : 48,
     'month' : 360,
     'year': 365
+  },
+  'sslConfig': {
+    'sslCert': 'ssl_https.pfx',
+    'passphrase': 'password'
   }
 };
 
@@ -296,5 +310,6 @@ __CONFIG__.getLogsFolderPath = function() {
 config.express = {
   port: process.env.EXPRESS_PORT || port,
   ip: ipAddress,
-  isProduction: PRODUCTION
+  isProduction: PRODUCTION,
+  httpsPort: httpsPort
 };
