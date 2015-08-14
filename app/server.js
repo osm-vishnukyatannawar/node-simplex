@@ -41,7 +41,7 @@ if (config.express.isProduction && cluster.isMaster) {
     res.performanceInfo.startTimestamp = new Date().getTime();
     if(__CONFIG__.isHttps) {
       if(!req.secure) {
-		    res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, ''));
+		    res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, '') + req.url);
 	    } else {
         next(); 
       }
