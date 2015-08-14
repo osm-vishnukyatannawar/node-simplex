@@ -10,6 +10,9 @@ var express = require('express');
 var app = express();
 var helper = require('./lib/server-helper');
 var i18n = require('i18n');
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
 helper.init(app);
 
 // Count the machine's CPUs
@@ -36,7 +39,15 @@ if (config.express.isProduction && cluster.isMaster) {
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     res.performanceInfo = {};
     res.performanceInfo.startTimestamp = new Date().getTime();
-    next();
+    if(__CONFIG__.isHttps) {
+      if(!req.secure) {
+		    res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, '') + req.url);
+	    } else {
+        next(); 
+      }
+    } else {
+      next();
+    }
   });
 
   new ExclusionController(app);
@@ -82,13 +93,27 @@ if (config.express.isProduction && cluster.isMaster) {
   app.use('/api', helper.notFound);
 
   app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
+  
+  var sslConfig = {
+    'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.sslConfig.sslCert),
+    'passphrase': __CONFIG__.sslConfig.passphrase
+  };
 
-  app.listen(config.express.port, config.express.ip, function(error) {
+
+  http.createServer(app).listen(config.express.port, config.express.ip, function(error) {
     if (error) {
       logger.logAppErrors(error);
       process.exit(10);
     }
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
+  });
+  
+  https.createServer(sslConfig, app).listen(config.express.httpsPort, config.express.ip, function(error) {
+    if (error) {
+      logger.logAppErrors(error);
+      process.exit(10);
+    }
+    logger.logAppInfo('Express is listening on https://' + config.express.ip + ':' + config.express.httpsPort);
   });
 }
 
