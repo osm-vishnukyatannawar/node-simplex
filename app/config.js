@@ -13,6 +13,8 @@ var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
+var app_http_base_url = 'http://' + ipAddress + ':3001/';
+var app_https_base_url = 'https://' + ipAddress + ':3002/';
 
 // validate and format the environment variable settings if needed
 if (logDir.slice(-1) != "/") {
@@ -24,8 +26,6 @@ var isHttps = true;
 var emailsToSend = 'surendra.b@osmosys.asia';
 var debugSupportMails  = 'surendra.b@osmosys.asia';
 
-var app_http_base_url = 'http://10.0.0.247:3001/';
-var app_https_base_url = 'https://10.0.0.247:3002/';
 var port = 3001;
 var httpsPort = 3002;
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
