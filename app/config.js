@@ -15,8 +15,10 @@ var httpsPort = process.env.EMANATE_HTTPS_PORT || 3002;
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
-var app_http_base_url = 'http://' + ipAddress + ':3001/';
-var app_https_base_url = 'https://' + ipAddress + ':3002/';
+
+// set the api base url's for the http and https interfaces
+var app_http_base_url = process.env.EMANATE_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
+var app_https_base_url = process.env.EMANATE_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
 
 // validate and format the environment variable settings if needed
 if (logDir.slice(-1) != "/") {
