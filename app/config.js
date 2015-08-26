@@ -1,6 +1,7 @@
 /* global __CONFIG__ */
 /// <reference path="../typings/node/node.d.ts"/>
 var dbConfig = require(__dirname + '/db-config.js');
+var networkUtils = require('./network_utils');
 
 var config = module.exports;
 
@@ -8,6 +9,10 @@ var config = module.exports;
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
+var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
+
+// get the ip-address associated with the configured network interface name
+var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
 
 // validate and format the environment variable settings if needed
 if (logDir.slice(-1) != "/") {
@@ -23,16 +28,15 @@ var app_http_base_url = 'http://10.0.0.247:3001/';
 var app_https_base_url = 'https://10.0.0.247:3002/';
 var port = 3001;
 var httpsPort = 3002;
-var ipAddress = '10.0.0.247'; 
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
+//
 if (PRODUCTION === 'production') {
   if (isStaging === 'true') {
     app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
     app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
     port = 80;
     httpsPort = 443;
-    ipAddress = '10.0.0.6';
     slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
   } else {
     emailsToSend = 'support.emanate@osmosys.asia';
@@ -40,7 +44,6 @@ if (PRODUCTION === 'production') {
     app_https_base_url = 'https://cloud.emanatewireless.com/';
     port = 80;
     httpsPort = 443;
-    ipAddress = '167.114.117.212';
     slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
   }
   PRODUCTION = true;
