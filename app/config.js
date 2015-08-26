@@ -4,8 +4,16 @@ var dbConfig = require(__dirname + '/db-config.js');
 
 var config = module.exports;
 
+// get the environment variables
 var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
+var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
+
+// validate and format the environment variable settings if needed
+if (logDir.slice(-1) != "/") {
+  logDir = logDir + "/";
+}
+
 var isHttps = true;
 
 var emailsToSend = 'surendra.b@osmosys.asia';
@@ -49,7 +57,7 @@ global.__CONFIG__ = {
   'app_transaction_prop': 'transactionID',
   'enable_compression' : true,
   'httpProtocol': 'http://',
-  'log_folder_path': __dirname + '/../logs/',
+  'log_folder_path': logDir,
   'package_file_path': __dirname + '/../package.json',
   'isHttps': isHttps,
   'email': {
