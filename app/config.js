@@ -10,8 +10,8 @@ var PRODUCTION = process.env.NODE_ENV;
 var isStaging = process.env.NODE_ENV_STAGING;
 var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
 var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
-var port = process.env.EMANATE_HTTP_PORT || 3001;
-var httpsPort = process.env.EMANATE_HTTPS_PORT || 3002;
+var port = process.env.EMANATE_HTTP_PORT || 80;
+var httpsPort = process.env.EMANATE_HTTPS_PORT || 443;
 var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 
