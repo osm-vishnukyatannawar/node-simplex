@@ -27,6 +27,12 @@ var app_https_base_url = process.env.EMANATE_API_HTTPS_BASE_URL || 'https://' + 
 if (logDir.slice(-1) != "/") {
   logDir = logDir + "/";
 }
+if (app_http_base_url.slice(-1) != "/") {
+  app_http_base_url = app_http_base_url + "/";
+}
+if (app_https_base_url.slice(-1) != "/") {
+  app_https_base_url = app_https_base_url + "/";
+}
 
 var isHttps = true;
 
