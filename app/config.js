@@ -14,6 +14,7 @@ var port = process.env.EMANATE_HTTP_PORT || 80;
 var httpsPort = process.env.EMANATE_HTTPS_PORT || 443;
 var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
@@ -34,17 +35,21 @@ var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 //
 if (PRODUCTION === 'production') {
   if (isStaging === 'true') {
+    /* these variables are now set with environment variables for all run-time modes
     app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
     app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
     port = 80;
     httpsPort = 443;
+    */
     slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
   } else {
+    /* these variables are now set with environment variables for all run-time modes
     emailsToSend = 'support.emanate@osmosys.asia';
     app_http_base_url = 'http://cloud.emanatewireless.com/';
     app_https_base_url = 'https://cloud.emanatewireless.com/';
     port = 80;
     httpsPort = 443;
+    */
     slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
   }
   PRODUCTION = true;
@@ -230,6 +235,7 @@ global.__CONFIG__ = {
   'limitString': ' LIMIT 0,5',
   'logToSlogerr': false,
   'slogerrAppID': slogerrAppID,
+  'slogerrUrl': slogerrUrl,
   'excludedControllers': [],
   'non_super_user_pending_events': ['POWERPATH_MAINT_CALL',
     'POWERPATH_REPORT_CURRENT_UTIL_DATA', 'POWERPATH_UPDATE_CONFIG_PARAM',
