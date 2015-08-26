@@ -12,6 +12,8 @@ var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
 var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
 var port = process.env.EMANATE_HTTP_PORT || 3001;
 var httpsPort = process.env.EMANATE_HTTPS_PORT || 3002;
+var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
@@ -26,9 +28,6 @@ if (logDir.slice(-1) != "/") {
 }
 
 var isHttps = true;
-
-var emailsToSend = 'surendra.b@osmosys.asia';
-var debugSupportMails  = 'surendra.b@osmosys.asia';
 
 var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 
