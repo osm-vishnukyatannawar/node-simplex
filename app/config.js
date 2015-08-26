@@ -30,7 +30,6 @@ if (logDir.slice(-1) != "/") {
 
 var isHttps = true;
 
-
 /**
  * These variables are now set with the environment variables
  * or the default settings if not given.  This block is commented
