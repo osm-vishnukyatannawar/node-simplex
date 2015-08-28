@@ -189,7 +189,8 @@ global.__CONFIG__ = {
     'tagUSDDebug': 'tag-usd-debug.csv',
     'tagHistogram': 'tag-histogram.csv',
     'tagCurrUtil': 'tag-current-util.csv',
-    'tagDebugLogTxt': 'tag-debug-log.txt'
+    'tagDebugLogTxt': 'tag-debug-log.txt',
+    'tagBatteryStatus': 'tag-battery-status.csv'
   },
   'logTxtFormat': true,
   'tokenLength': 16,
