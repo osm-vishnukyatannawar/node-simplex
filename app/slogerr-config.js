@@ -1,5 +1,5 @@
 var sloggerConfig = {
-  'url': 'http://log.osmosys.asia/api/log/WriteLog1',
+  'url': __CONFIG__.slogerrUrl,
   'method': 'POST',
   'headers': {
     'content-type': 'application/json'

@@ -1,30 +1,54 @@
 /* global __CONFIG__ */
 /// <reference path="../typings/node/node.d.ts"/>
 var dbConfig = require(__dirname + '/db-config.js');
+var networkUtils = require('./network_utils');
 
 var config = module.exports;
 
-var PRODUCTION = process.env.NODE_ENV;
-var isStaging = process.env.NODE_ENV_STAGING;
+// get the environment variables
+var isProduction = (process.env.NODE_ENV === 'production') ? true : false;
+var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
+var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
+var port = process.env.EMANATE_HTTP_PORT || 80;
+var httpsPort = process.env.EMANATE_HTTPS_PORT || 443;
+var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
+var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
+
+// get the ip-address associated with the configured network interface name
+var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
+
+// set the api base url's for the http and https interfaces
+var app_http_base_url = process.env.EMANATE_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
+var app_https_base_url = process.env.EMANATE_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
+
+// validate and format the environment variable settings if needed
+if (logDir.slice(-1) != "/") {
+  logDir = logDir + "/";
+}
+if (app_http_base_url.slice(-1) != "/") {
+  app_http_base_url = app_http_base_url + "/";
+}
+if (app_https_base_url.slice(-1) != "/") {
+  app_https_base_url = app_https_base_url + "/";
+}
+
 var isHttps = true;
 
-var emailsToSend = 'surendra.b@osmosys.asia';
-var debugSupportMails  = 'surendra.b@osmosys.asia';
-
-var app_http_base_url = 'http://10.0.0.247:3001/';
-var app_https_base_url = 'https://10.0.0.247:3002/';
-var port = 3001;
-var httpsPort = 3002;
-var ipAddress = '10.0.0.247'; 
-var slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
-
-if (PRODUCTION === 'production') {
+/**
+ * These variables are now set with the environment variables
+ * or the default settings if not given.  This block is commented
+ * so that the previously hard-coded values can be looked-up
+ * until we transition to the environment variable settings.
+ *
+var slogerrAppID;
+if (isProduction === 'production') {
   if (isStaging === 'true') {
     app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
     app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
     port = 80;
     httpsPort = 443;
-    ipAddress = '10.0.0.6';
     slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
   } else {
     emailsToSend = 'support.emanate@osmosys.asia';
@@ -32,13 +56,14 @@ if (PRODUCTION === 'production') {
     app_https_base_url = 'https://cloud.emanatewireless.com/';
     port = 80;
     httpsPort = 443;
-    ipAddress = '167.114.117.212';
     slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
   }
-  PRODUCTION = true;
+  isProduction = true;
 } else {
-  PRODUCTION = false;
+  isProduction = false;
+  slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 }
+*/
 
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
@@ -49,7 +74,7 @@ global.__CONFIG__ = {
   'app_transaction_prop': 'transactionID',
   'enable_compression' : true,
   'httpProtocol': 'http://',
-  'log_folder_path': __dirname + '/../logs/',
+  'log_folder_path': logDir,
   'package_file_path': __dirname + '/../package.json',
   'isHttps': isHttps,
   'email': {
@@ -219,6 +244,7 @@ global.__CONFIG__ = {
   'limitString': ' LIMIT 0,5',
   'logToSlogerr': false,
   'slogerrAppID': slogerrAppID,
+  'slogerrUrl': slogerrUrl,
   'excludedControllers': [],
   'non_super_user_pending_events': ['POWERPATH_MAINT_CALL',
     'POWERPATH_REPORT_CURRENT_UTIL_DATA', 'POWERPATH_UPDATE_CONFIG_PARAM',
@@ -251,7 +277,7 @@ global.__CONFIG__ = {
   }
 };
 
-__CONFIG__.isProduction = PRODUCTION;
+__CONFIG__.isProduction = isProduction;
 __CONFIG__.email.baseURL = __CONFIG__.app_http_base_url;
 __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CONFIG__.app_base_url;
 __CONFIG__.app_api_maint_url = __CONFIG__.app_api_url + 'tag/maintenance';
@@ -312,6 +338,6 @@ __CONFIG__.getLogsFolderPath = function() {
 config.express = {
   port: process.env.EXPRESS_PORT || port,
   ip: ipAddress,
-  isProduction: PRODUCTION,
+  isProduction: isProduction,
   httpsPort: httpsPort
 };
