@@ -1,6 +1,8 @@
 var csv = require('csv');
 var fs = require('fs');
 var async = require('async');
+var TagServiceHelper = require(__CONFIG__.app_code_path +
+  'tag/TagServiceHelper');
 
 function csvHelper() {}
 
@@ -30,6 +32,7 @@ csvHelper.prototype.readObjCreateCsv = function(arrayToRead, cb) {
 csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
   var baseArray = [];
   var labelsArray = [];
+  var tagColumnsArray = ['Tag S/N', 'serialNum', 'tag_srno'];
   for (var index in data) {
     var valuesArray = [];
     var element = data[index];
@@ -54,6 +57,9 @@ csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
     // @Vamsi - Either remove the var, or rename the variable. the name key matches what you have 
     // declared on line 41. Scope of a variable is the parent function.
     for (var key in element) {
+      if(tagColumnsArray.indexOf(key) !== -1) {
+        element[key] = TagServiceHelper.formatTagSerialNumber(element[key]);
+      }
       valuesArray.push(element[key]);
     }
     baseArray.push(valuesArray);
