@@ -61,13 +61,12 @@ var serverHelper = function() {
     
     var modifiedRoute = function(request, response, next) {
       
+      response.on('close', function() {      
+      	logServerPerformance(request, response, true); //True indicates that the log is written on connection close.
+      });
+        
       response.on('finish', function() {
-        if(__CONFIG__.logPerformanceInfo) {
-          if(response.hasOwnProperty('performanceInfo') && 
-              response.performanceInfo.logPerformance === true) {
-            writePerformanceLog(request, response);
-          }
-        }
+      	logServerPerformance(request, response, false); //False indicates that the log is written after response has been sent.
       });
             
       if (routeObj.route) {        
@@ -358,7 +357,18 @@ var serverHelper = function() {
     fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' + 'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
   };
   
-  var writePerformanceLog = function(request, response) {
+  var logServerPerformance = function(request,response, isClosed) {
+    if(__CONFIG__.logPerformanceInfo) {
+      if(response.hasOwnProperty('performanceInfo') && 
+          response.performanceInfo.logPerformance === true && 
+          !response.performanceInfo.isLogged) {
+        writePerformanceLog(request, response, isClosed);
+        response.performanceInfo.isLogged = true;
+      }
+    }
+  };
+  
+  var writePerformanceLog = function(request, response, isClosed) {
     try {
       var endTimestamp = new Date().getTime();
       var processTime = (endTimestamp - response.performanceInfo.startTimestamp)/1000;
@@ -370,6 +380,7 @@ var serverHelper = function() {
       var path = __CONFIG__.getLogsFolderPath() + __CONFIG__.maintInfoFileName;
       var startTime = moment(new Date(response.performanceInfo.startTimestamp)).format('MMM DD YYYY HH:mm:ss:SSS');
       endTimestamp = moment(new Date(endTimestamp)).format('MMM DD YYYY HH:mm:ss:SSS');
+      endTimestamp += (isClosed) ? ' [CLOSED]' : '';
       var performanceLog = '';
       if(!response.performanceInfo.performanceLog) {
         response.performanceInfo.performanceLog = '';
