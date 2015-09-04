@@ -15,7 +15,8 @@ var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosy
 var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
 var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
-var isClusterDisabled = process.env.EMANATE_CLUSTER_DISABLED || false;
+var isClusterDisabled = (process.env.EMANATE_CLUSTER_DISABLED === "true") ? true : false;
+var isHttps = (process.env.EMANATE_HTTPS_DISABLED === "true") ? false : true;
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
@@ -34,8 +35,6 @@ if (app_http_base_url.slice(-1) != "/") {
 if (app_https_base_url.slice(-1) != "/") {
   app_https_base_url = app_https_base_url + "/";
 }
-
-var isHttps = true;
 
 /**
  * These variables are now set with the environment variables
