@@ -19,7 +19,7 @@ helper.init(app);
 var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
-if (config.express.isProduction && cluster.isMaster) {
+if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisabled) {
   
   // Load the cron jobs on the master thread if it's production.
   helper.loadCronJobs(app);

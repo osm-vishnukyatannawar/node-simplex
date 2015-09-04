@@ -15,6 +15,7 @@ var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosy
 var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
 var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
+var isClusterDisabled = process.env.EMANATE_CLUSTER_DISABLED || false;
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
@@ -77,6 +78,7 @@ global.__CONFIG__ = {
   'log_folder_path': logDir,
   'package_file_path': __dirname + '/../package.json',
   'isHttps': isHttps,
+  'isClusterDisabled': isClusterDisabled,
   'email': {
     'server': 'mail.osmosys.asia',
     'username': 'emanate@osmosys.asia',
