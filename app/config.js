@@ -170,7 +170,8 @@ global.__CONFIG__ = {
     'factorySerialNumber': '0000000000',
     'factoryOrgId': '0000000000',
     'macTwoBytes': '00:50',
-    'assetIDMaxLength': 16
+    'assetIDMaxLength': 16,
+    'tagSNDisplayLength': 10
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
