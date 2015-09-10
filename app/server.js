@@ -19,19 +19,22 @@ helper.init(app);
 var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
-if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisabled) {
+if (config.express.isProduction && cluster.isMaster) {
   
   // Load the cron jobs on the master thread if it's production.
   helper.loadCronJobs(app);
-  
-  // Create a worker for each CPU
-  for (var i = 0; i < cpuCount; i += 1) {
-    cluster.fork();
-  }
 
-  cluster.on('exit', function() {
-    cluster.fork();
-  });
+  // if node.js clustering is disabled for debugging purposes
+  if (!__CONFIG__.isClusterDisabled) {
+    // Create a worker for each CPU
+    for (var i = 0; i < cpuCount; i += 1) {
+      cluster.fork();
+    }
+
+    cluster.on('exit', function() {
+      cluster.fork();
+    });
+  }
 
 } else {
   // A worker process
