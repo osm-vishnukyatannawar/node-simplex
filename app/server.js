@@ -23,7 +23,7 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
   
   // Load the cron jobs on the master thread if it's production.
   helper.loadCronJobs(app);
-  
+
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
     cluster.fork();
@@ -80,10 +80,10 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
     
   //
   // Bind the views.
-  helper.loadViews(app);    
-  
-  if(!config.express.isProduction) {
-    // Load the cron jobs on the child thread if it's NOT production.
+  helper.loadViews(app);
+
+  // Load the cron jobs on the child thread if it's NOT production or clustering is disabled
+  if (!config.express.isProduction || __CONFIG__.isClusterDisabled) {
     helper.loadCronJobs(app);
   }
   
