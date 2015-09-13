@@ -1,0 +1,173 @@
+Server started at |9/4/2015, 1:31:36 AM
+-------
+Type|URL|Access Type|Admin only?
+-------
+POST|/api/v1/log/debug|Public
+POST|/api/v1/log/usd|Public
+POST|/api/v1/log/histogram|Public
+
+
+Controller Name |AppInfoController.js
+GET|/api/v1/:token/powerpath/info|Not Public
+
+
+
+Controller Name |BackgroundTaskController.js
+POST|/api/v1/background-tasks/current-sync|Public
+
+
+
+Controller Name |CassandraController.js
+GET|/api/v1/tag/log|Public
+GET|/api/v1/tag/log/:id|Public
+GET|/api/v1/tag/dump|Public
+GET|/api/v1/tag/:orgId/dump/:id|Public
+GET|/api/v1/tag/blob|Public
+GET|/api/v1/tag/:orgId/blob/:id|Public
+
+
+
+Controller Name |CountryController.js
+GET|/api/v1/country/list|Public
+
+
+
+Controller Name |CurrentController.js
+GET|/api/v1/:token/current|Not Public
+
+
+
+Controller Name |DeploymentController.js
+GET|/api/v1/:token/deployment/:id|Not Public
+POST|/api/v1/:token/deployment|Not Public
+PUT|/api/v1/:token/deployment|Not Public
+DELETE|/api/v1/:token/deployment|Not Public
+
+
+
+Controller Name |DeviceController.js
+POST|/api/v1/:token/devices|Not Public|Admin
+GET|/api/v1/:token/devices|Not Public|Admin
+GET|/api/v1/:token/devices/import/errors|Not Public|Admin
+GET|/api/v1/:token/devices/info|Not Public|Admin
+GET|/api/v1/:token/device/types|Not Public
+GET|/api/v1/:token/device/manufacturers|Not Public
+GET|/api/v1/:token/device/models|Not Public
+GET|/api/v1/:token/devices/id|Not Public
+GET|/api/v1/devices/activeDevices|Public
+GET|/api/v1/devices|Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices/grid|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices/charts|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices/utilization/chart|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices/tagged/chart|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/devices/tagged|Not Public
+
+
+
+Controller Name |EnergyReportController.js
+GET|/api/v1/:token/energy/consumers/perDevice|Not Public
+GET|/api/v1/:token/energy/consumption|Not Public
+GET|/api/v1/:token/energy/consumers/allDevices|Not Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/energy/charts|Not Public
+
+
+
+Controller Name |FirmwareController.js
+POST|/api/v1/:token/firmware|Not Public|Admin
+POST|/api/v1/:token/firmware/delete|Not Public|Admin
+GET|/api/v1/:token/firmware|Not Public|Admin
+GET|/api/v1/:token/firmware/versions|Not Public
+GET|/api/v1/firmware/:overAllVersion/:type/:version|Public
+
+
+
+Controller Name |HistogramController.js
+GET|/api/v1/:token/histogram|Not Public
+
+
+
+Controller Name |LogController.js
+GET|/api/v1/:token/log/:logType|Not Public|Admin
+GET|/api/v1/:token/logTypes|Not Public|Admin
+GET|/api/v1/:token/log/debug/:tagSN|Not Public
+GET|/api/v1/:token/exception/log|Not Public|Admin
+GET|/api/v1/:token/uncaught/exception|Not Public|Admin
+GET|/api/v1/iphone/config|Public
+POST|/api/v1/:token/iphone/config|Not Public|Admin
+
+
+
+Controller Name |MaintenanceController.js
+POST|/api/v1/tag/maintenance|Public
+
+
+
+Controller Name |OrganizationController.js
+GET|/api/v1/:token/organization/:id/deployments|Not Public
+GET|/api/v1/:token/organization/:id/devices|Not Public
+GET|/api/v1/:token/organization/:id/deployment/:deploymentID/tags|Not Public
+GET|/api/v1/:token/user/:id/organizations|Not Public
+GET|/api/v1/:token/organization/:id|Not Public
+
+
+
+Controller Name |PimController.js
+GET|/api/v1/:token/pim|Not Public
+GET|/api/v1/:token/pim/export|Not Public
+
+
+
+Controller Name |ReportProblemController.js
+POST|/api/v1/:token/problem|Not Public
+
+
+
+Controller Name |RoleController.js
+GET|/api/v1/:token/roles|Not Public
+
+
+
+Controller Name |TagController.js
+GET|/api/v1/organization/:orgID/tag/:sn/config|Public
+GET|/api/v1/:token/organization/:orgID/deployment/:deploymentID/tag/:tagSN|Not Public
+GET|/api/v1/:token/tag/:id/edit|Not Public
+POST|/api/v1/:token/tag|Not Public
+POST|/api/v1/:token/tag/commission|Not Public
+POST|/api/v1/:token/tag/firmware|Not Public
+GET|/api/v1/:token/tags/organization/:orgID/deployment/:deploymentID/export|Not Public
+GET|/api/v1/:token/tag/defaults|Not Public
+POST|/api/v1/:token/tag/defaults|Not Public
+GET|/api/v1/:token/tag/factory-settings|Not Public
+DELETE|/api/v1/:token/organization/:orgID/tag|Not Public
+GET|/api/v1/:token/organization/:orgID/tags/log/:type|Not Public|Admin
+GET|/api/v1/:token/organization/:orgID/tags/currUtil|Not Public|Admin
+POST|/api/v1/:token/tag/edit|Not Public
+POST|/api/v1/:token/tags/move|Not Public
+GET|/api/v1/:token/organization/:orgID/tags/SN|Not Public
+GET|/api/v1/:token/organization/:orgID/tags/:tagSN/avgUses|Not Public
+GET|/api/v1/:token/organization/:orgID/tags/:tagSN/event/log|Not Public
+GET|/api/v1/:token/organization/:orgID/tags/batteryStatus|Not Public|Admin
+
+
+
+Controller Name |UserController.js
+POST|/api/v1/user/login|Public
+POST|/api/v1/:token/user/logout|Not Public
+GET|/api/v1/user/exists|Public
+POST|/api/v1/user/register|Public
+POST|/api/v1/:token/user|Not Public
+GET|/api/v1/:token/organization/:orgID/users|Not Public
+POST|/api/v1/:token/user/add|Not Public
+POST|/api/v1/user/password|Public
+GET|/api/v1/user/password-token/exists|Public
+PUT|/api/v1/user/password|Public
+PUT|/api/v1/user/:id/password|Public
+GET|/api/v1/user/:id/exists|Public
+POST|/api/v1/:token/user/delete|Not Public
+GET|/api/v1/:token/user/:id|Not Public
+PUT|/api/v1/:token/user|Not Public
+
+
+Done.
+
