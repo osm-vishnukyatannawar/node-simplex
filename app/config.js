@@ -259,6 +259,8 @@ global.__CONFIG__ = {
   'cs_keyspace' : 'emanate',
   'logPerformanceInfo': true,
   'maintInfoFileName' : 'tag_maintenance_info.csv',
+  'logDebugDataLogs': true,
+  'debugDataLogFileName' : 'tag_debug_data_log.txt',
   'tag_type_of_data' : {
      1 : 'POWERPATH_MAINT_CALL',
      2 : 'POWERPATH_REPORT_HIST_DATA',
