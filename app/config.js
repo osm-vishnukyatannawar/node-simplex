@@ -35,35 +35,6 @@ if (app_https_base_url.slice(-1) != "/") {
   app_https_base_url = app_https_base_url + "/";
 }
 
-/**
- * These variables are now set with the environment variables
- * or the default settings if not given.  This block is commented
- * so that the previously hard-coded values can be looked-up
- * until we transition to the environment variable settings.
- *
-var slogerrAppID;
-if (isProduction === 'production') {
-  if (isStaging === 'true') {
-    app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
-    app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
-    port = 80;
-    httpsPort = 443;
-    slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
-  } else {
-    emailsToSend = 'support.emanate@osmosys.asia';
-    app_http_base_url = 'http://cloud.emanatewireless.com/';
-    app_https_base_url = 'https://cloud.emanatewireless.com/';
-    port = 80;
-    httpsPort = 443;
-    slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
-  }
-  isProduction = true;
-} else {
-  isProduction = false;
-  slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
-}
-*/
-
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
@@ -336,6 +307,24 @@ __CONFIG__.getUploadsFolderPath = function() {
 __CONFIG__.getLogsFolderPath = function() {
   return __CONFIG__.app_base_path + '../logs/';
 };
+
+__CONFIG__.getBLEFirmwareURL = function(overallVersion, bleVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/ble/' + bleVersion; 
+  } else {
+    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN;
+  }
+}
+
+__CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/host/' + mcuVersion; 
+  } else {
+    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN;
+  }
+}
 
 config.express = {
   port: process.env.EXPRESS_PORT || port,
