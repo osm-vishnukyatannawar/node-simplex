@@ -47,7 +47,7 @@ var TagDataBackgroundSync = (function() {
       if (errRecords.length !== 0) {
         maintenanceString += util.inspect(errRecords, {
           depth: 4
-        });        
+        });
       }
       logger.logMaintError(maintenanceString);
     });

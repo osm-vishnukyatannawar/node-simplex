@@ -27,26 +27,26 @@ var util = {
     var str = dt.toLocaleString() + ' UTC';
     return new Date(str);
   },
-  getTagDateTimeInStr : function(timeStamp) {
+  getTagDateTimeInStr: function(timeStamp) {
     try {
       var tagDate = new Date(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
-      timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
-      timeStamp.tm_sec, 0);
-      return moment(tagDate).format('YYYY-MM-DD HH:mm:ss');  
+        timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
+        timeStamp.tm_sec, 0);
+      return moment(tagDate).format('YYYY-MM-DD HH:mm:ss');
     } catch (e) {
-      return false; 
-    }    
-  },
-  getTagDateTime : function(timeStamp) {
-    try {
-      return Date.UTC(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
-              timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
-              timeStamp.tm_sec, 0);
-    } catch(e) {
       return false;
     }
   },
-  toMySQLDateTimeWithoutISO : function(dt) {
+  getTagDateTime: function(timeStamp) {
+    try {
+      return Date.UTC(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
+        timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
+        timeStamp.tm_sec, 0);
+    } catch (e) {
+      return false;
+    }
+  },
+  toMySQLDateTimeWithoutISO: function(dt) {
     if (!dt) {
       dt = new Date();
     }

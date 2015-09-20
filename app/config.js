@@ -1,7 +1,6 @@
 /* global __CONFIG__ */
-/// <reference path="../typings/node/node.d.ts"/>
 var dbConfig = require(__dirname + '/db-config.js');
-var networkUtils = require('./network_utils');
+var networkUtils = require('./network-utils');
 
 var config = module.exports;
 
@@ -72,7 +71,7 @@ global.__CONFIG__ = {
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',
-  'enable_compression' : true,
+  'enable_compression': true,
   'httpProtocol': 'http://',
   'log_folder_path': logDir,
   'package_file_path': __dirname + '/../package.json',
@@ -87,22 +86,22 @@ global.__CONFIG__ = {
     'maxCon': 5,
     'maxMsgPerCon': 20,
     'emailsToSend': emailsToSend,
-    'debugMails' : debugSupportMails
+    'debugMails': debugSupportMails
   },
   'maintenance': {
     'run_maria_on_main': true,
     'max_tries': 5,
-    'max_records' : 20,
+    'max_records': 20,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
-    'current_sp_time' : '0 */1 * * *',
-    'sync_time' : '*/5 * * * *',  
+    'current_sp_time': '0 */1 * * *',
+    'sync_time': '*/5 * * * *',
     'necessary_tag_events': {
       'POWERPATH_INFO': '',
       'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
       'POWERPATH_SEND_DEBUG_LOG': '',
-    }    
+    }
   },
   'user': {
     'default_password': 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
@@ -197,9 +196,9 @@ global.__CONFIG__ = {
     'tag_maintenance': 'POWERPATH_MAINT_CALL',
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
     'tag_no_commands': 'POWERPATH_NO_COMMANDS',
-    'tag_maint_reboot' : 'POWERPATH_MAINT_REBOOT',
-    'tag_firmware_upgrade' : 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
-    'maint_reboot' : 'POWERPATH_MAINT_REBOOT'
+    'tag_maint_reboot': 'POWERPATH_MAINT_REBOOT',
+    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
+    'maint_reboot': 'POWERPATH_MAINT_REBOOT'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -239,7 +238,7 @@ global.__CONFIG__ = {
     'tagAvgProcess': 'sp_averages_tag',
     'utilPercentGraph': 'sp_utilization_percent_graph'
   },
-  'iphoneConfigFileName' : 'iphone-config.json',
+  'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'clientDisplayDateTimeFormat': 'MMM DD, YYYY HH:mm:ss',
@@ -255,24 +254,24 @@ global.__CONFIG__ = {
     'POWERPATH_UPDATE_MCU_FIRMWARE'
   ],
   'default_timezone': 'America/New_York',
-  'tagTimePadding' : 1000,
-  'cs_keyspace' : 'emanate',
+  'tagTimePadding': 1000,
+  'cs_keyspace': 'emanate',
   'logPerformanceInfo': true,
-  'maintInfoFileName' : 'tag_maintenance_info.csv',
+  'maintInfoFileName': 'tag_maintenance_info.csv',
   'logDebugDataLogs': true,
-  'debugDataLogFileName' : 'tag_debug_data_log.txt',
-  'tag_type_of_data' : {
-     1 : 'POWERPATH_MAINT_CALL',
-     2 : 'POWERPATH_REPORT_HIST_DATA',
-     4 : 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
-     5 : 'POWERPATH_INFO',
-     6 : 'POWERPATH_UPDATE_CONFIG_PARAM',
-     9 : 'POWERPATH_SEND_DEBUG_LOG',
-     16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
+  'debugDataLogFileName': 'tag_debug_data_log.txt',
+  'tag_type_of_data': {
+    1: 'POWERPATH_MAINT_CALL',
+    2: 'POWERPATH_REPORT_HIST_DATA',
+    4: 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
+    5: 'POWERPATH_INFO',
+    6: 'POWERPATH_UPDATE_CONFIG_PARAM',
+    9: 'POWERPATH_SEND_DEBUG_LOG',
+    16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
   },
-  'perDayCount' : {
-    'week' : 48,
-    'month' : 360,
+  'perDayCount': {
+    'week': 48,
+    'month': 360,
     'year': 365
   },
   'sslConfig': {
@@ -327,8 +326,7 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
  * @returns
  */
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
-  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
-    + __CONFIG__.firmware.baseVersionFolderName + version;
+  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder + __CONFIG__.firmware.baseVersionFolderName + version;
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
