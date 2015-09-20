@@ -25,6 +25,7 @@ var emailMaxMsgPerCon = process.env.EMANATE_EMAIL_MAX_MSG_PER_CON || 20;
 var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
 var isEmailSecure = (process.env.EMANATE_SECURE_EMAIL === "true") ? true : false;
+var compareFirmwareVersions = (process.env.EMANATE_COMPARE_FIRMWARE_VERSIONS === "true") ? true : false;
 
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
@@ -133,8 +134,8 @@ global.__CONFIG__ = {
       'wifi_fw_version': '.bin',
       'host_fw_version': '.bin'
     },
-    'baseVersionFolderName': 'Powerpath_FW_version_'
-
+    'baseVersionFolderName': 'Powerpath_FW_version_',
+    'compareFirmwareVersions' : compareFirmwareVersions
   },
   'organizationBleConfig': {
     'bleEnable': 1,
