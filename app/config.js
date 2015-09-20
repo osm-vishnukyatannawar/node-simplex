@@ -17,7 +17,7 @@ var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/
 var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 var isClusterDisabled = (process.env.EMANATE_CLUSTER_DISABLED === "true") ? true : false;
 var isHttps = (process.env.EMANATE_HTTPS_DISABLED === "true") ? false : true;
-
+var compareFirmwareVersions = (process.env.EMANATE_COMPARE_FIRMWARE_VERSIONS === "true") ? true : false;
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
 
@@ -124,8 +124,8 @@ global.__CONFIG__ = {
       'wifi_fw_version': '.bin',
       'host_fw_version': '.bin'
     },
-    'baseVersionFolderName': 'Powerpath_FW_version_'
-
+    'baseVersionFolderName': 'Powerpath_FW_version_',
+    'compareFirmwareVersions' : compareFirmwareVersions
   },
   'organizationBleConfig': {
     'bleEnable': 1,
