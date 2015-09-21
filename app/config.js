@@ -297,7 +297,7 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
  * @returns
  */
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
-  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder + __CONFIG__.firmware.baseVersionFolderName + version;
+  return __CONFIG__.app_api_url + 'firmware/' + version;
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
