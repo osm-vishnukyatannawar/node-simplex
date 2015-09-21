@@ -1,5 +1,8 @@
 {
-	"name": "settings",
-	"timeout": 10,
-	"logging": 1
+  "name": "settings",
+  "timeout": 10,
+  "logging": 1,
+  "actTagTimeout": 5,
+  "actTagNoOfRetry": 2,
+  "devInfoPreMAC": "00:50:43"
 }

@@ -16,7 +16,18 @@ var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/
 var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 var isClusterDisabled = (process.env.EMANATE_CLUSTER_DISABLED === "true") ? true : false;
 var isHttps = (process.env.EMANATE_HTTPS_DISABLED === "true") ? false : true;
+var emailServer = process.env.EMANATE_EMAIL_SERVER || 'mail.osmosys.asia';
+var emailPort = process.env.EMANATE_EMAIL_PORT || 587;
+var emailUsername = process.env.EMANATE_EMAIL_USERNAME || 'emanate@osmosys.asia';
+var emailPassword = process.env.EMANATE_EMAIL_PASSWORD || 'Emanat3!1';
+var emailFromName = process.env.EMANATE_EMAIL_FROM_NAME || 'The Emanate Wireless Team';
+var emailMaxCon = process.env.EMANATE_EMAIL_MAX_CON || 5;
+var emailMaxMsgPerCon = process.env.EMANATE_EMAIL_MAX_MSG_PER_CON || 20;
+var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var isEmailSecure = (process.env.EMANATE_SECURE_EMAIL === "true") ? true : false;
 var compareFirmwareVersions = (process.env.EMANATE_COMPARE_FIRMWARE_VERSIONS === "true") ? true : false;
+
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
 
@@ -49,15 +60,16 @@ global.__CONFIG__ = {
   'isHttps': isHttps,
   'isClusterDisabled': isClusterDisabled,
   'email': {
-    'server': 'mail.osmosys.asia',
-    'username': 'emanate@osmosys.asia',
-    'password': 'Emanat3!1',
-    'port': 587,
-    'fromName': 'The Emanate Wireless Team',
-    'maxCon': 5,
-    'maxMsgPerCon': 20,
+    'server': emailServer,
+    'username': emailUsername,
+    'password': emailPassword,
+    'port': emailPort,
+    'fromName': emailFromName,
+    'maxCon': emailMaxCon,
+    'maxMsgPerCon': emailMaxMsgPerCon,
     'emailsToSend': emailsToSend,
-    'debugMails': debugSupportMails
+    'debugMails' : debugSupportMails,
+    'secure': isEmailSecure
   },
   'maintenance': {
     'run_maria_on_main': true,
