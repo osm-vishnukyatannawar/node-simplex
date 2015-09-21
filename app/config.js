@@ -1,7 +1,6 @@
 /* global __CONFIG__ */
-/// <reference path="../typings/node/node.d.ts"/>
 var dbConfig = require(__dirname + '/db-config.js');
-var networkUtils = require('./network_utils');
+var networkUtils = require('./network-utils');
 
 var config = module.exports;
 
@@ -17,7 +16,18 @@ var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/
 var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
 var isClusterDisabled = (process.env.EMANATE_CLUSTER_DISABLED === "true") ? true : false;
 var isHttps = (process.env.EMANATE_HTTPS_DISABLED === "true") ? false : true;
+var emailServer = process.env.EMANATE_EMAIL_SERVER || 'mail.osmosys.asia';
+var emailPort = process.env.EMANATE_EMAIL_PORT || 587;
+var emailUsername = process.env.EMANATE_EMAIL_USERNAME || 'emanate@osmosys.asia';
+var emailPassword = process.env.EMANATE_EMAIL_PASSWORD || 'Emanat3!1';
+var emailFromName = process.env.EMANATE_EMAIL_FROM_NAME || 'The Emanate Wireless Team';
+var emailMaxCon = process.env.EMANATE_EMAIL_MAX_CON || 5;
+var emailMaxMsgPerCon = process.env.EMANATE_EMAIL_MAX_MSG_PER_CON || 20;
+var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var isEmailSecure = (process.env.EMANATE_SECURE_EMAIL === "true") ? true : false;
 var compareFirmwareVersions = (process.env.EMANATE_COMPARE_FIRMWARE_VERSIONS === "true") ? true : false;
+
 // get the ip-address associated with the configured network interface name
 var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
 
@@ -36,35 +46,6 @@ if (app_https_base_url.slice(-1) != "/") {
   app_https_base_url = app_https_base_url + "/";
 }
 
-/**
- * These variables are now set with the environment variables
- * or the default settings if not given.  This block is commented
- * so that the previously hard-coded values can be looked-up
- * until we transition to the environment variable settings.
- *
-var slogerrAppID;
-if (isProduction === 'production') {
-  if (isStaging === 'true') {
-    app_http_base_url = 'http://staging.emanate.osmosys.in:8888/';
-    app_https_base_url = 'https://staging.emanate.osmosys.in:8888/'; 
-    port = 80;
-    httpsPort = 443;
-    slogerrAppID = '551a6f94-8a50-4c47-bae6-1de45a0bc003';
-  } else {
-    emailsToSend = 'support.emanate@osmosys.asia';
-    app_http_base_url = 'http://cloud.emanatewireless.com/';
-    app_https_base_url = 'https://cloud.emanatewireless.com/';
-    port = 80;
-    httpsPort = 443;
-    slogerrAppID = '551a6fda-8ed4-4723-8af6-1de45a0bc003';
-  }
-  isProduction = true;
-} else {
-  isProduction = false;
-  slogerrAppID = '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
-}
-*/
-
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
@@ -72,37 +53,38 @@ global.__CONFIG__ = {
   'app_base_url_token': '/api/v1/:token/',
   'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',
-  'enable_compression' : true,
+  'enable_compression': true,
   'httpProtocol': 'http://',
   'log_folder_path': logDir,
   'package_file_path': __dirname + '/../package.json',
   'isHttps': isHttps,
   'isClusterDisabled': isClusterDisabled,
   'email': {
-    'server': 'mail.osmosys.asia',
-    'username': 'emanate@osmosys.asia',
-    'password': 'Emanat3!1',
-    'port': 587,
-    'fromName': 'The Emanate Wireless Team',
-    'maxCon': 5,
-    'maxMsgPerCon': 20,
+    'server': emailServer,
+    'username': emailUsername,
+    'password': emailPassword,
+    'port': emailPort,
+    'fromName': emailFromName,
+    'maxCon': emailMaxCon,
+    'maxMsgPerCon': emailMaxMsgPerCon,
     'emailsToSend': emailsToSend,
-    'debugMails' : debugSupportMails
+    'debugMails' : debugSupportMails,
+    'secure': isEmailSecure
   },
   'maintenance': {
     'run_maria_on_main': true,
     'max_tries': 5,
-    'max_records' : 20,
+    'max_records': 20,
     'default_value_tag_sn': '999',
     'default_value_org': '999',
     'default_value_type': 99,
-    'current_sp_time' : '0 */1 * * *',
-    'sync_time' : '*/5 * * * *',  
+    'current_sp_time': '0 */1 * * *',
+    'sync_time': '*/5 * * * *',
     'necessary_tag_events': {
       'POWERPATH_INFO': '',
       'POWERPATH_REPORT_CURRENT_UTIL_DATA': '',
       'POWERPATH_SEND_DEBUG_LOG': '',
-    }    
+    }
   },
   'user': {
     'default_password': 'cb8da6a0-776f-4f2e-acba-9055b7bcb3a5',
@@ -197,9 +179,9 @@ global.__CONFIG__ = {
     'tag_maintenance': 'POWERPATH_MAINT_CALL',
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
     'tag_no_commands': 'POWERPATH_NO_COMMANDS',
-    'tag_maint_reboot' : 'POWERPATH_MAINT_REBOOT',
-    'tag_firmware_upgrade' : 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
-    'maint_reboot' : 'POWERPATH_MAINT_REBOOT'
+    'tag_maint_reboot': 'POWERPATH_MAINT_REBOOT',
+    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
+    'maint_reboot': 'POWERPATH_MAINT_REBOOT'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -239,7 +221,7 @@ global.__CONFIG__ = {
     'tagAvgProcess': 'sp_averages_tag',
     'utilPercentGraph': 'sp_utilization_percent_graph'
   },
-  'iphoneConfigFileName' : 'iphone-config.json',
+  'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
   'clientSideDateTimeFormat': 'YYYY-MM-DD HH:mm',
   'clientDisplayDateTimeFormat': 'MMM DD, YYYY HH:mm:ss',
@@ -255,24 +237,24 @@ global.__CONFIG__ = {
     'POWERPATH_UPDATE_MCU_FIRMWARE'
   ],
   'default_timezone': 'America/New_York',
-  'tagTimePadding' : 1000,
-  'cs_keyspace' : 'emanate',
+  'tagTimePadding': 1000,
+  'cs_keyspace': 'emanate',
   'logPerformanceInfo': true,
-  'maintInfoFileName' : 'tag_maintenance_info.csv',
+  'maintInfoFileName': 'tag_maintenance_info.csv',
   'logDebugDataLogs': true,
-  'debugDataLogFileName' : 'tag_debug_data_log.txt',
-  'tag_type_of_data' : {
-     1 : 'POWERPATH_MAINT_CALL',
-     2 : 'POWERPATH_REPORT_HIST_DATA',
-     4 : 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
-     5 : 'POWERPATH_INFO',
-     6 : 'POWERPATH_UPDATE_CONFIG_PARAM',
-     9 : 'POWERPATH_SEND_DEBUG_LOG',
-     16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
+  'debugDataLogFileName': 'tag_debug_data_log.txt',
+  'tag_type_of_data': {
+    1: 'POWERPATH_MAINT_CALL',
+    2: 'POWERPATH_REPORT_HIST_DATA',
+    4: 'POWERPATH_REPORT_CURRENT_UTIL_DATA',
+    5: 'POWERPATH_INFO',
+    6: 'POWERPATH_UPDATE_CONFIG_PARAM',
+    9: 'POWERPATH_SEND_DEBUG_LOG',
+    16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
   },
-  'perDayCount' : {
-    'week' : 48,
-    'month' : 360,
+  'perDayCount': {
+    'week': 48,
+    'month': 360,
     'year': 365
   },
   'sslConfig': {
@@ -327,8 +309,7 @@ __CONFIG__.getFirmwareFolderBasedOnVersion = function(version) {
  * @returns
  */
 __CONFIG__.getFirmwareURLBasedOnVersion = function(version) {
-  return __CONFIG__.email.baseURL + __CONFIG__.filesFolderName + __CONFIG__.firmware.folder
-    + __CONFIG__.firmware.baseVersionFolderName + version;
+  return __CONFIG__.app_api_url + 'firmware/' + version;
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
@@ -338,6 +319,24 @@ __CONFIG__.getUploadsFolderPath = function() {
 __CONFIG__.getLogsFolderPath = function() {
   return __CONFIG__.app_base_path + '../logs/';
 };
+
+__CONFIG__.getBLEFirmwareURL = function(overallVersion, bleVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/ble/' + bleVersion; 
+  } else {
+    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN;
+  }
+}
+
+__CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/host/' + mcuVersion; 
+  } else {
+    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN;
+  }
+}
 
 config.express = {
   port: process.env.EXPRESS_PORT || port,

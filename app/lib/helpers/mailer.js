@@ -16,7 +16,8 @@ var transport = nodemailer.createTransport(smtpTransport({
     pass: __CONFIG__.email.password
   },
   maxConnections: __CONFIG__.email.maxCon,
-  maxMessages: __CONFIG__.email.maxMsgPerCon
+  maxMessages: __CONFIG__.email.maxMsgPerCon,
+  secure: __CONFIG__.email.secure
 }));
 var mailer = function() {
   /**
