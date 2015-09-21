@@ -20,7 +20,7 @@ var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
 if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisabled) {
-  
+
   // Load the cron jobs on the master thread if it's production.
   helper.loadCronJobs(app);
 
@@ -39,11 +39,11 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     res.performanceInfo = {};
     res.performanceInfo.startTimestamp = new Date().getTime();
-    if(__CONFIG__.isHttps) {
-      if(!req.secure) {
-		    res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, '') + req.url);
-	    } else {
-        next(); 
+    if (__CONFIG__.isHttps) {
+      if (!req.secure) {
+        res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, '') + req.url);
+      } else {
+        next();
       }
     } else {
       next();
@@ -65,19 +65,19 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
       next();
     }
   });
-  
+
   i18n.configure({
     locales: ['en'],
     defaultLocale: 'en',
     directory: __CONFIG__.app_base_path + '../locales',
     objectNotation: true
   });
-  
+
   app.use(i18n.init);
 
   // Bind the api routes.
   helper.loadRoutes(app);
-    
+
   //
   // Bind the views.
   helper.loadViews(app);
