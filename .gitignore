@@ -46,3 +46,6 @@ app/code/public_html/plugins/*
 
 # Uploads
 uploads/
+
+# VSCode
+.vscode

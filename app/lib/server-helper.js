@@ -28,7 +28,7 @@ var serverHelper = function() {
       routeObj.method = 'post';
       bindRequest(routeObj);
     };
-    
+
     app.httpGet = function(routeObj) {
       routeObj.method = 'get';
       bindRequest(routeObj);
@@ -52,24 +52,24 @@ var serverHelper = function() {
       routeObj.isPublic = false;
     }
     routeObj = __.extend(getDefaultRouteObj(), routeObj);
-    
-    if(routeObj.enableCompression === false) {
+
+    if (routeObj.enableCompression === false) {
       routeObj.enableCompression = false;
     } else {
       routeObj.enableCompression = true;
     }
-    
+
     var modifiedRoute = function(request, response, next) {
-      
-      response.on('close', function() {      
-      	logServerPerformance(request, response, true); //True indicates that the log is written on connection close.
+
+      response.on('close', function() {
+        logServerPerformance(request, response, true); //True indicates that the log is written on connection close.
       });
-        
+
       response.on('finish', function() {
-      	logServerPerformance(request, response, false); //False indicates that the log is written after response has been sent.
+        logServerPerformance(request, response, false); //False indicates that the log is written after response has been sent.
       });
-            
-      if (routeObj.route) {        
+
+      if (routeObj.route) {
         routeObj.route(request, response, next);
       }
     };
@@ -99,7 +99,7 @@ var serverHelper = function() {
       var form = new formidable.IncomingForm({
         uploadDir: __CONFIG__.getUploadsFolderPath(),
         keepExtensions: true,
-        multiples : true
+        multiples: true
       });
       form.parse(request, function(err, fields, files) {
         request.fields = fields;
@@ -149,22 +149,22 @@ var serverHelper = function() {
       }
       cntrlOutput += 'Error while loading controller - ' + path.basename(allControllers[i]);
       cntrlOutput += '\n';
-    }    
+    }
     cntrlOutput += '\nDone.\n';
     cntrlOutput += '\n';
     loadedControllersObj.length = 0;
   };
-  
+
   var loadCronJobs = function() {
     var cronDir = __CONFIG__.app_base_path + 'cron/';
     var files = fs.readdirSync(cronDir);
-    for(var i = 0; i !== files.length; ++i) {
+    for (var i = 0; i !== files.length; ++i) {
       require(cronDir + files[i]);
     }
   };
 
   var loadViews = function(app) {
-    if(__CONFIG__.enable_compression) {
+    if (__CONFIG__.enable_compression) {
       app.use(compression());
     }
     if (typeof loadCustomViews === 'function') {
@@ -188,10 +188,10 @@ var serverHelper = function() {
     }
     cntrlOutput += urlMethod + '\n';
 
-    if(__CONFIG__.enable_compression && routeObj.enableCompression) {
-        app[routeObj.method](routeObj.url, compression());    
+    if (__CONFIG__.enable_compression && routeObj.enableCompression) {
+      app[routeObj.method](routeObj.url, compression());
     }
-    if(typeof loadCustomApi.beforeRouteLoad === 'function') {
+    if (typeof loadCustomApi.beforeRouteLoad === 'function') {
       loadCustomApi.beforeRouteLoad(routeObj.url, app);
     }
     if (routeObj.isPublic) {
@@ -202,7 +202,7 @@ var serverHelper = function() {
       }
       if (routeObj.isAdmin && typeof loadCustomApi.checkIfAdmin === 'function') {
         app[routeObj.method](routeObj.url, loadCustomApi.checkIfAdmin);
-      }      
+      }
       app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
     }
   };
@@ -356,52 +356,56 @@ var serverHelper = function() {
     }
     fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' + 'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
   };
-  
-  var logServerPerformance = function(request,response, isClosed) {
-    if(__CONFIG__.logPerformanceInfo) {
-      if(response.hasOwnProperty('performanceInfo') && 
-          response.performanceInfo.logPerformance === true && 
-          !response.performanceInfo.isLogged) {
+
+  var logServerPerformance = function(request, response, isClosed) {
+    if (__CONFIG__.logPerformanceInfo) {
+      if (response.hasOwnProperty('performanceInfo') &&
+        response.performanceInfo.logPerformance === true &&
+        !response.performanceInfo.isLogged) {
         writePerformanceLog(request, response, isClosed);
         response.performanceInfo.isLogged = true;
       }
     }
   };
-  
+
   var writePerformanceLog = function(request, response, isClosed) {
     try {
       var endTimestamp = new Date().getTime();
-      var processTime = (endTimestamp - response.performanceInfo.startTimestamp)/1000;
+      var processTime = (endTimestamp - response.performanceInfo.startTimestamp) / 1000;
       var requestSize = 0;
-      if(request.body) {
-        requestSize = getbyteCount(util.inspect(request.body,  { depth : 5 }));
+      if (request.body) {
+        requestSize = getbyteCount(util.inspect(request.body, {
+          depth: 5
+        }));
       }
-      var responseSize = getbyteCount(util.inspect(response.dataSentToClient, { depth : 5 }));
+      var responseSize = getbyteCount(util.inspect(response.dataSentToClient, {
+        depth: 5
+      }));
       var path = __CONFIG__.getLogsFolderPath() + __CONFIG__.maintInfoFileName;
       var startTime = moment(new Date(response.performanceInfo.startTimestamp)).format('MMM DD YYYY HH:mm:ss:SSS');
       endTimestamp = moment(new Date(endTimestamp)).format('MMM DD YYYY HH:mm:ss:SSS');
       endTimestamp += (isClosed) ? ' [CLOSED]' : '';
       var performanceLog = '';
-      if(!response.performanceInfo.performanceLog) {
+      if (!response.performanceInfo.performanceLog) {
         response.performanceInfo.performanceLog = '';
       }
-      if(!response.performanceInfo.performanceHeaders) {
+      if (!response.performanceInfo.performanceHeaders) {
         response.performanceInfo.performanceHeaders = '';
       }
       fs.stat(path, function(err, stats) {
-        if(err && err.code === 'ENOENT') {
-          performanceLog += response.performanceInfo.performanceHeaders +', Request start time, Request end time, Request processing time (sec), Request size (bytes), Response size (bytes)';
+        if (err && err.code === 'ENOENT') {
+          performanceLog += response.performanceInfo.performanceHeaders + ', Request start time, Request end time, Request processing time (sec), Request size (bytes), Response size (bytes)';
           performanceLog += '\r\n';
-          performanceLog += response.performanceInfo.performanceLog + ',' + startTime + ',' + endTimestamp + ',' + processTime + 
-                            ',' + requestSize + ',' + responseSize;
-          performanceLog += '\r\n';  
+          performanceLog += response.performanceInfo.performanceLog + ',' + startTime + ',' + endTimestamp + ',' + processTime +
+            ',' + requestSize + ',' + responseSize;
+          performanceLog += '\r\n';
         } else {
-          performanceLog += response.performanceInfo.performanceLog + ',' + startTime + ',' + endTimestamp + ',' + processTime + 
-                            ',' + requestSize + ',' + responseSize;
+          performanceLog += response.performanceInfo.performanceLog + ',' + startTime + ',' + endTimestamp + ',' + processTime +
+            ',' + requestSize + ',' + responseSize;
           performanceLog += '\r\n';
         }
         fs.appendFile(path, performanceLog, function(err) {
-          if(err) {
+          if (err) {
             new AppError(err, 'There was an error while logging the maintenance calls info.', {});
           }
         });
@@ -411,11 +415,11 @@ var serverHelper = function() {
     }
     return;
   };
-  
+
   function getbyteCount(maintString) {
     return encodeURI(maintString).split(/%..|./).length - 1;
   }
-  
+
   function getDefaultRouteObj() {
     var routeObj = {
       isAdmin: false,
@@ -433,7 +437,7 @@ var serverHelper = function() {
     getRequestData: getRequestData,
     loadRoutes: loadRoutes,
     loadViews: loadViews,
-    loadCronJobs : loadCronJobs,
+    loadCronJobs: loadCronJobs,
     writeServerStartupLogs: writeServerStartupLogs
   };
 };

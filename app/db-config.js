@@ -28,8 +28,8 @@ var dbConfig = {
     name: 'cassandradb',
     host: cassandraHost,
     keyspace: cassandraKeyspace,
-    username : cassandraUser,
-    password : cassandraPassword,
+    username: cassandraUser,
+    password: cassandraPassword,
     connTimeout: 10
   }
 };
