@@ -1,6 +1,6 @@
 {
   "name": "powerpath-server",
-  "version": "0.7.1",
+  "version": "0.7.5",
   "description": "Serves as a backend for the Powertag RTLS system.",
   "repository": {
     "type": "git",
