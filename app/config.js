@@ -330,7 +330,7 @@ __CONFIG__.getBLEFirmwareURL = function(overallVersion, bleVersion, tagSN) {
   if(!tagSN) {
     return baseURL + '/ble/' + bleVersion; 
   } else {
-    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN + '&&type=7';
+    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN + '&type=7';
   }
 }
 
@@ -339,7 +339,7 @@ __CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
   if(!tagSN) {
     return baseURL + '/host/' + mcuVersion; 
   } else {
-    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN + '&&type=15';
+    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN + '&type=15';
   }
 }
 
