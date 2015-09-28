@@ -252,6 +252,11 @@ global.__CONFIG__ = {
     9: 'POWERPATH_SEND_DEBUG_LOG',
     16: 'POWERPATH_REPORT_USD_DEBUG_DATA'
   },
+  'firmware_pending_events': {
+    7: 'POWERPATH_UPDATE_BLE_FIRMWARE',
+    11: 'POWERPATH_UPDATE_WIFI_FIRMWARE',
+    15: 'POWERPATH_UPDATE_MCU_FIRMWARE' 
+  },
   'perDayCount': {
     'week': 48,
     'month': 360,
@@ -325,7 +330,7 @@ __CONFIG__.getBLEFirmwareURL = function(overallVersion, bleVersion, tagSN) {
   if(!tagSN) {
     return baseURL + '/ble/' + bleVersion; 
   } else {
-    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN;
+    return baseURL + '/ble/' + bleVersion + '?tagSN=' + tagSN + '&type=7';
   }
 }
 
@@ -334,7 +339,7 @@ __CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
   if(!tagSN) {
     return baseURL + '/host/' + mcuVersion; 
   } else {
-    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN;
+    return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN + '&type=15';
   }
 }
 
