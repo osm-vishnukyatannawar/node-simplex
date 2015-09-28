@@ -1,7 +1,8 @@
 <p>Hi <%= user.username %>!</p>
 <p>
 	You have been granted access to the organization "<strong><%=user.organizationName
-		%></strong>". Your log in email still is <strong><%=user.emailID %></strong>.
+		%></strong>". 
+	<br>Your log in email still is <strong><%=user.emailID %></strong>.
 
 </p>
 <p>
@@ -9,11 +10,6 @@
 		can log in to access the organization.</a>
 </p>
 
-Thanks,
+Thank you,
 <br>
 <strong><%= email.fromName %></strong>
-<hr>
-<p style="font-size: smaller">
-	Please do not reply to this email. Click <a
-		href="<%= email.baseURL %>help">here</a> to contact Emanate Support.
-</p>
