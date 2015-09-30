@@ -39,9 +39,9 @@ var util = {
   },
   getTagDateTime: function(timeStamp) {
     try {
-      return Date.UTC(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
+      return new Date(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
         timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
-        timeStamp.tm_sec, 0);
+        timeStamp.tm_sec, 0).getTime();
     } catch (e) {
       return false;
     }
