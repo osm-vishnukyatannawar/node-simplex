@@ -113,11 +113,11 @@ global.__CONFIG__ = {
     'bleEnable': 1,
     'bleGapRoleMinConnIntervalms': 8,
     'bleGapRoleMaxConnIntervalms': 8,
-    'bleGapRoleSlaveLatency': 9,
+    'bleGapRoleSlaveLatency': 0,
     'bleLimitedAdvertOnTimeSec': 120,
     'bleLimitedAdvertIntervalTimems': 1600,
-    'bleGeneralAdvertIntervalTimems': 1600,
-    'bleLowBattAdvertIntervalTimems': 1600,
+    'bleGeneralAdvertIntervalTimems': 1520,
+    'bleLowBattAdvertIntervalTimems': 1520,
     'bleDesiredConnectionTimeoutms': 1000,
     'advertOffTimems': 0,
     'blePasskey': 19655
@@ -153,7 +153,8 @@ global.__CONFIG__ = {
     'factoryOrgId': '0000000000',
     'macTwoBytes': '00:50',
     'assetIDMaxLength': 16,
-    'tagSNDisplayLength': 10
+    'tagSNDisplayLength': 10,
+    'maxMaintLowBatterySec': 43200
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
