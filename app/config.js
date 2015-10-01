@@ -181,8 +181,7 @@ global.__CONFIG__ = {
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
     'tag_no_commands': 'POWERPATH_NO_COMMANDS',
     'tag_maint_reboot': 'POWERPATH_MAINT_REBOOT',
-    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
-    'maint_reboot': 'POWERPATH_MAINT_REBOOT'
+    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -220,7 +219,8 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
-    'utilPercentGraph': 'sp_utilization_percent_graph'
+    'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
+    'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
   },
   'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
@@ -341,6 +341,15 @@ __CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
     return baseURL + '/host/' + mcuVersion; 
   } else {
     return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN + '&type=15';
+  }
+}
+
+__CONFIG__.getWIFIFirmwareURL = function(overallVersion, wifiVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/wifi/' + wifiVersion;
+  } else {
+    return baseURL + '/wifi/' + wifiVersion + '?tagSN=' + tagSN + '&type=11';
   }
 }
 
