@@ -64,30 +64,20 @@ Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
   timePeriod = timePeriod.toLowerCase();
   var endDate = getPrevDateTime(true);
   var interval = 1;
-  var iterations = 7;
+  var days = __CONFIG__.daysShown[timePeriod];
+  var iterations = __CONFIG__.samplesShown[timePeriod];
   var dateTimeArr = [];
-  var timeArr = [];
-  if (timePeriod === 'month') {
-    interval = 7;
-    iterations = 5;
-  } else if (timePeriod === 'year') {
-    interval = 30;
-    iterations = 12;
-  }
   var dtArr = [];
   var i = 0;
-  for (i = 0; i < iterations; ++i) {
+  for (i = 0; i < days; ++i) {
     var dt = getPrevDateTime(true);
     dt.setDate(dt.getDate() - (interval * i));
     dtArr.push(dt);
   }
   var startDate = dtArr[dtArr.length - 1];
-  for (i = 0; i < 48; ++i) {
-    timeArr.push(i);
-  }
   if (isHourly) {
     for (i = 0; i < dtArr.length; ++i) {
-      for (var j = 0; j < timeArr.length; ++j) {
+      for (var j = 0; j < iterations; ++j) {
         dateTimeArr.push(moment(dtArr[i]).format('MMM DD'));
       }
     }

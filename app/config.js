@@ -260,12 +260,29 @@ global.__CONFIG__ = {
   },
   'perDayCount': {
     'week': 48,
-    'month': 360,
-    'year': 365
+    'month': 12,
+    'quarter': 4
   },
   'sslConfig': {
     'sslCert': 'ssl_https.pfx',
     'passphrase': 'password'
+  },
+  'timespan': {
+    'week': 6,
+    'month': 24,
+    'quarter': 72
+  },
+  'samplesShown': {
+    'daily': 24,
+    'week': 48,
+    'month': 12,
+    'quarter': 4
+  },
+  'daysShown': {
+    'daily': 7,
+    'week': 7,
+    'month': 30,
+    'quarter': 90
   }
 };
 
