@@ -219,8 +219,7 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
-    'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
-    'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
+    'utilPercentGraph': 'sp_utilization_percent_graph'
   },
   'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
