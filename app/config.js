@@ -113,11 +113,11 @@ global.__CONFIG__ = {
     'bleEnable': 1,
     'bleGapRoleMinConnIntervalms': 8,
     'bleGapRoleMaxConnIntervalms': 8,
-    'bleGapRoleSlaveLatency': 9,
+    'bleGapRoleSlaveLatency': 0,
     'bleLimitedAdvertOnTimeSec': 120,
     'bleLimitedAdvertIntervalTimems': 1600,
-    'bleGeneralAdvertIntervalTimems': 1600,
-    'bleLowBattAdvertIntervalTimems': 1600,
+    'bleGeneralAdvertIntervalTimems': 1520,
+    'bleLowBattAdvertIntervalTimems': 1520,
     'bleDesiredConnectionTimeoutms': 1000,
     'advertOffTimems': 0,
     'blePasskey': 19655
@@ -153,7 +153,8 @@ global.__CONFIG__ = {
     'factoryOrgId': '0000000000',
     'macTwoBytes': '00:50',
     'assetIDMaxLength': 16,
-    'tagSNDisplayLength': 10
+    'tagSNDisplayLength': 10,
+    'maxMaintLowBatterySec': 43200
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -180,8 +181,7 @@ global.__CONFIG__ = {
     'tag_maint_activate': 'POWERPATH_MAINT_ACTIVATED',
     'tag_no_commands': 'POWERPATH_NO_COMMANDS',
     'tag_maint_reboot': 'POWERPATH_MAINT_REBOOT',
-    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE',
-    'maint_reboot': 'POWERPATH_MAINT_REBOOT'
+    'tag_firmware_upgrade': 'POWERPATH_MAINT_FIRMWARE_UPGRADE'
   },
   'tagDebugLog': {
     'writenFileName': 'tag-debug-log.txt',
@@ -340,6 +340,15 @@ __CONFIG__.getHostFirmwareURL = function(overallVersion, mcuVersion, tagSN) {
     return baseURL + '/host/' + mcuVersion; 
   } else {
     return baseURL + '/host/' + mcuVersion + '?tagSN=' + tagSN + '&type=15';
+  }
+}
+
+__CONFIG__.getWIFIFirmwareURL = function(overallVersion, wifiVersion, tagSN) {
+  var baseURL = __CONFIG__.getFirmwareURLBasedOnVersion(overallVersion);
+  if(!tagSN) {
+    return baseURL + '/wifi/' + wifiVersion;
+  } else {
+    return baseURL + '/wifi/' + wifiVersion + '?tagSN=' + tagSN + '&type=11';
   }
 }
 
