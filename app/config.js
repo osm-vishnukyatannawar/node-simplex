@@ -154,7 +154,7 @@ global.__CONFIG__ = {
     'macTwoBytes': '00:50',
     'assetIDMaxLength': 16,
     'tagSNDisplayLength': 10,
-    'maxMaintLowBatterySec': 43200
+    'maxMaintLowBatterySec': 86400
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -257,6 +257,20 @@ global.__CONFIG__ = {
     11: 'POWERPATH_UPDATE_WIFI_FIRMWARE',
     15: 'POWERPATH_UPDATE_MCU_FIRMWARE' 
   },
+  'tagMaintReasons': {
+    'POWERPATH_MAINT_MAJOR_ERROR' : {
+      'displayValue' : 'Major Error',
+      'mailSubject' : 'Problem reported by tag'
+    },
+    'POWERPATH_MAINT_MINOR_ERROR' : {
+      'displayValue' : 'Minor Error',
+      'mailSubject' : 'Problem reported by tag'
+    },
+    'POWERPATH_MAINT_REBOOT' : {
+      'displayValue' : 'Reboot',
+      'mailSubject' : 'Information about tag reboot'
+    }
+  },
   'perDayCount': {
     'week': 48,
     'month': 360,
@@ -279,7 +293,7 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_a
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 //__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
-//__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 
 // Functions to retrieve filenames/URLS
