@@ -154,7 +154,7 @@ global.__CONFIG__ = {
     'macTwoBytes': '00:50',
     'assetIDMaxLength': 16,
     'tagSNDisplayLength': 10,
-    'maxMaintLowBatterySec': 43200
+    'maxMaintLowBatterySec': 86400
   },
   'currentSampleTime': 5, // in minutes
   'dateFormat': 'MMMM Do YYYY, h:mm:ss a',
@@ -219,9 +219,7 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
-    'utilPercentGraph': 'sp_utilization_percent_graph',
-    'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
-    'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
+    'utilPercentGraph': 'sp_utilization_percent_graph'
   },
   'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
@@ -275,29 +273,12 @@ global.__CONFIG__ = {
   },
   'perDayCount': {
     'week': 48,
-    'month': 12,
-    'quarter': 4
+    'month': 360,
+    'year': 365
   },
   'sslConfig': {
     'sslCert': 'ssl_https.pfx',
     'passphrase': 'password'
-  },
-  'timespan': {
-    'week': 6,
-    'month': 24,
-    'quarter': 72
-  },
-  'samplesShown': {
-    'daily': 24,
-    'week': 48,
-    'month': 12,
-    'quarter': 4
-  },
-  'daysShown': {
-    'daily': 7,
-    'week': 7,
-    'month': 30,
-    'quarter': 90
   }
 };
 
@@ -312,7 +293,7 @@ __CONFIG__.maintenance.necessary_tag_events['POWERPATH_INFO'] = __CONFIG__.app_a
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_CURRENT_UTIL_DATA'] = __CONFIG__.app_api_maint_url;
 __CONFIG__.maintenance.necessary_tag_events['POWERPATH_SEND_DEBUG_LOG'] = __CONFIG__.app_api_url + 'log/debug';
 //__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_HIST_DATA'] = __CONFIG__.app_api_url + 'log/histogram';
-//__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
+__CONFIG__.maintenance.necessary_tag_events['POWERPATH_REPORT_USD_DEBUG_DATA'] = __CONFIG__.app_api_url + 'log/usd';
 
 
 // Functions to retrieve filenames/URLS
