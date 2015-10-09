@@ -219,6 +219,7 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
+    'utilPercentGraph': 'sp_utilization_percent_graph',
     'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
     'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
   },
@@ -257,6 +258,20 @@ global.__CONFIG__ = {
     7: 'POWERPATH_UPDATE_BLE_FIRMWARE',
     11: 'POWERPATH_UPDATE_WIFI_FIRMWARE',
     15: 'POWERPATH_UPDATE_MCU_FIRMWARE' 
+  },
+  'tagMaintReasons': {
+    'POWERPATH_MAINT_MAJOR_ERROR' : {
+      'displayValue' : 'Major Error',
+      'mailSubject' : 'Problem reported by tag'
+    },
+    'POWERPATH_MAINT_MINOR_ERROR' : {
+      'displayValue' : 'Minor Error',
+      'mailSubject' : 'Problem reported by tag'
+    },
+    'POWERPATH_MAINT_REBOOT' : {
+      'displayValue' : 'Reboot',
+      'mailSubject' : 'Information about tag reboot'
+    }
   },
   'perDayCount': {
     'week': 48,
