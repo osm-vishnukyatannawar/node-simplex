@@ -15,7 +15,7 @@
     "ng-file-upload": "2.0.5",
     "moment": "~2.9.0",
     "n3-line-chart": "1.1.6",
-    "eonasdan-bootstrap-datetimepicker": "4.0.0",
+    "eonasdan-bootstrap-datetimepicker": "4.17.37",
     "bowser": "0.7.2",
     "moment-timezone": "~0.3.1"
   }
