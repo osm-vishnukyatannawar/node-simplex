@@ -219,7 +219,9 @@ global.__CONFIG__ = {
   'storedProcedures': {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
-    'utilPercentGraph': 'sp_utilization_percent_graph'
+    'utilPercentGraph': 'sp_utilization_percent_graph',
+    'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
+    'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
   },
   'iphoneConfigFileName': 'iphone-config.json',
   'clientSideDateFormat': 'YYYY-MM-DD',
@@ -273,8 +275,23 @@ global.__CONFIG__ = {
   },
   'perDayCount': {
     'week': 48,
-    'month': 360,
-    'year': 365
+    'month': 12,
+    'quarter': 4
+  },
+  'timespan': {
+    'week': 6,
+    'month': 24,
+    'quarter': 72
+  },
+  'daysShown': {
+    'week': 7,
+    'month': 30,
+    'quarter': 90
+  },
+  'daySerialNum': {
+    'week': '(5, 6)',
+    'month': '(8, 9)',
+    'quarter': '(11, 12)'
   },
   'sslConfig': {
     'sslCert': 'ssl_https.pfx',
