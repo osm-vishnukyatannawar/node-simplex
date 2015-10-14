@@ -220,7 +220,9 @@ global.__CONFIG__ = {
     'currentDataProcess': 'sp_process_current_data',
     'tagAvgProcess': 'sp_averages_tag',
     'utilPercentGraph': 'sp_utilization_percent_graph',
+    'utilPercentGraphDaily': 'sp_utilization_percent_graph_daily',
     'utilPercentGraphWeekly': 'sp_utilization_percent_graph_weekly',
+    'minFreeDevicesGraphDaily': 'sp_minfree_devices_graph_daily',
     'minFreeDevicesGraphWeekly': 'sp_minfree_devices_graph_weekly'
   },
   'iphoneConfigFileName': 'iphone-config.json',
@@ -289,6 +291,7 @@ global.__CONFIG__ = {
     'quarter': 90
   },
   'daySerialNum': {
+    'day': '(2, 3)',
     'week': '(5, 6)',
     'month': '(8, 9)',
     'quarter': '(11, 12)'

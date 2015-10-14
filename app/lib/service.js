@@ -2,6 +2,7 @@ var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var zip = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var moment = require('moment');
+var S = require('string');
 
 function Service() {
   this.getStatusCode = getStatus;
@@ -70,17 +71,36 @@ Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
   var dtArr = [];
   var startDate = null;
   var i = 0;
-  for (i = 0; i < days; ++i) {
-    var dt = getPrevDateTime(true);
-    dt.setDate(dt.getDate() - (interval * i));
-    dtArr.push(dt);
-  }
+  var dayTime = '';
+  var min = '';
+  var minStart = 0;
   
-  if(timePeriod === 'day') {
-    startDate = endDate; 
-  } else {
+  if(timePeriod !== 'day') {
+    for (i = 0; i < days; ++i) {
+      var dt = getPrevDateTime(true);
+      dt.setDate(dt.getDate() - (interval * i));
+      dtArr.push(dt);
+    }
     startDate = dtArr[dtArr.length - 1];
+  } else {
+    for(i = 0; i < 24; ++i) {
+      min = i.toString();
+      if(min.length === 1) {
+        min = '0' + i;
+      }
+      for(j = 0; j < 12; ++j) {
+        dayTime = min + ':' + S(minStart).pad(2,'0');
+        dtArr.push(dayTime);
+        dayTime = '';
+        minStart = j * 5;
+      }
+      min = '';
+      minStart = 0;
+    }
+    dtArr = dtArr.reverse();
+    startDate = endDate;    
   }
+
   if (isHourly) {
     for (i = 0; i < dtArr.length; ++i) {
       for (var j = 0; j < iterations; ++j) {
