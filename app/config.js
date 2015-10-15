@@ -270,9 +270,13 @@ global.__CONFIG__ = {
       'displayValue' : 'Minor Error',
       'mailSubject' : 'Problem reported by tag'
     },
-    'POWERPATH_MAINT_REBOOT' : {
-      'displayValue' : 'Reboot',
-      'mailSubject' : 'Information about tag reboot'
+    // 'POWERPATH_MAINT_REBOOT' : {
+    //   'displayValue' : 'Reboot',
+    //   'mailSubject' : 'Information about Tag reboot'
+    // },
+    'POWERPATH_MAINT_CRITICALLY_LOW_BATTERY' : {
+      'displayValue' : 'Critically Low Battery',
+      'mailSubject' : 'Information about Low Battery - Critical'
     }
   },
   'perDayCount': {
