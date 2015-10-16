@@ -2,6 +2,7 @@ var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 var zip = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var moment = require('moment');
+var S = require('string');
 
 function Service() {
   this.getStatusCode = getStatus;
@@ -64,30 +65,45 @@ Service.prototype.getTimePeriod = function(timePeriod, isHourly) {
   timePeriod = timePeriod.toLowerCase();
   var endDate = getPrevDateTime(true);
   var interval = 1;
-  var iterations = 7;
+  var days = __CONFIG__.daysShown[timePeriod];
+  var iterations = __CONFIG__.perDayCount[timePeriod];
   var dateTimeArr = [];
-  var timeArr = [];
-  if (timePeriod === 'month') {
-    interval = 7;
-    iterations = 5;
-  } else if (timePeriod === 'year') {
-    interval = 30;
-    iterations = 12;
-  }
   var dtArr = [];
+  var startDate = null;
   var i = 0;
-  for (i = 0; i < iterations; ++i) {
-    var dt = getPrevDateTime(true);
-    dt.setDate(dt.getDate() - (interval * i));
-    dtArr.push(dt);
+  var dayTime = '';
+  var min = '';
+  var minStart = 0;
+  
+  if(timePeriod !== 'day') {
+    for (i = 0; i < days; ++i) {
+      var dt = getPrevDateTime(true);
+      dt.setDate(dt.getDate() - (interval * i));
+      dtArr.push(dt);
+    }
+    startDate = dtArr[dtArr.length - 1];
+  } else {
+    for(i = 0; i < 24; ++i) {
+      min = i.toString();
+      if(min.length === 1) {
+        min = '0' + i;
+      }
+      for(j = 0; j < 12; ++j) {
+        dayTime = min + ':' + S(minStart).pad(2,'0');
+        dtArr.push(dayTime);
+        dayTime = '';
+        minStart = j * 5;
+      }
+      min = '';
+      minStart = 0;
+    }
+    dtArr = dtArr.reverse();
+    startDate = endDate;    
   }
-  var startDate = dtArr[dtArr.length - 1];
-  for (i = 0; i < 48; ++i) {
-    timeArr.push(i);
-  }
+
   if (isHourly) {
     for (i = 0; i < dtArr.length; ++i) {
-      for (var j = 0; j < timeArr.length; ++j) {
+      for (var j = 0; j < iterations; ++j) {
         dateTimeArr.push(moment(dtArr[i]).format('MMM DD'));
       }
     }
