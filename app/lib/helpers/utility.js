@@ -1,4 +1,5 @@
 var moment = require('moment');
+var momentTimezone = require('moment-timezone');
 
 var util = {
   toMySQLDateTime: function(dt) {
@@ -51,6 +52,12 @@ var util = {
       dt = new Date();
     }
     return moment(dt).format('YYYY-MM-DD HH:mm:ss');
+  },
+  convertTimezoneBasedTimeToUTC: function(dt, timezone) {
+    if(!dt) {
+      dt = new Date();
+    }
+    return momentTimezone.tz(dt, timezone).utc().format('YYYY-MM-DD HH:mm:ss');
   }
 };
 
