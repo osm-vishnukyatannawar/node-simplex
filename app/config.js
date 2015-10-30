@@ -300,6 +300,28 @@ global.__CONFIG__ = {
     'month': '(8, 9)',
     'quarter': '(11, 12)'
   },
+  'dayRecordTypeSrNo': {
+    'day': {
+      'idWise': 1,
+      'typeWise': 2,
+      'allDevices': 3
+    },
+    'week': {
+      'idWise': 4,
+      'typeWise': 5,
+      'allDevices': 6
+    },
+    'month': {
+      'idWise': 7,
+      'typeWise': 8,
+      'allDevices': 9
+    },
+    'quarter': {
+      'idWise': 10,
+      'typeWise': 11,
+      'allDevices': 12
+    }
+  },
   'sslConfig': {
     'sslCert': 'ssl_https.pfx',
     'passphrase': 'password'
