@@ -1,7 +1,7 @@
 {
-  "name": "powerpath-server",
-  "version": "0.8.0",
-  "description": "Serves as a backend for the Powertag RTLS system.",
+  "name": "node-simplex",
+  "version": "0.7.0",
+  "description": "Serves as a backend for the .",
   "repository": {
     "type": "git",
     "url": "https://github.com/EmanateWireless/powerpath-server-base"
@@ -16,45 +16,43 @@
     "<surendra.b@osmosys.asia> (http://osmosys.asia)",
     "<madhavi.k@osmosys.asia> (http://osmosys.asia)"
   ],
-  "license": "-",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/OsmosysSoftware/node-simplex/issues/"
   },
   "dependencies": {
     "adm-zip": "0.4.7",
-    "async": "1.4.0",
-    "bcrypt": "0.8.2",
-    "body-parser": "1.12.3",
-    "cassandra-driver": "2.0.1",
-    "csv": "0.4.2",
-    "ejs": "1.0.0",
-    "email-templates": "1.2.1",
-    "express": "4.12.3",
+    "ajv" : "1.4.8",
+    "async": "1.5.0",
+    "bcrypt": "0.8.5",
+    "body-parser": "1.14.1",
+    "csv": "0.4.6",
+    "email-templates": "2.0.1",
+    "express": "4.13.3",
     "formidable": "1.0.17",
-    "fs-extra": "0.18.2",
-    "generic-pool": "2.2.0",
+    "fs-extra": "0.26.0",
+    "generic-pool": "2.2.1",
     "i18n": "0.5.0",
-    "mariasql": "0.1.22",
-    "moment": "2.10.2",
+    "mariasql": "0.2.4",
+    "moment": "2.10.6",
     "moment-timezone": "0.4.1",
-    "node-uuid": "1.4.2",
-    "nodemailer": "1.3.4",
-    "nodemailer-smtp-transport": "1.0.2",    
-    "string": "2.2.0",
+    "node-uuid": "1.4.3",
+    "nodemailer": "1.8.0",
+    "nodemailer-smtp-transport": "1.0.3",
+    "string": "3.3.1",
     "underscore": "1.8.3",
-    "validator": "3.39.0",
-    "winston": "1.0.0",
-    "jshint" : "2.7.0",
-    "compression" : "1.4.3",
+    "validator": "4.2.1",
+    "winston": "2.0.0",
+    "ajv" : "1.4.8",
+    "jshint" : "2.8.0",
+    "compression" : "1.6.0",
     "cron" : "1.0.9",
-    "request" : "2.56.0"
+    "request" : "2.65.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-uglify": "~0.7.0",
-    "grunt-jsbeautifier": "0.2.8",
-    "grunt-ng-annotate" : "0.10.*"
+    "grunt-jsbeautifier": "0.2.10"
   },
   "scripts": {
     "start": "node app/server.js"

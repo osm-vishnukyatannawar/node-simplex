@@ -19,6 +19,7 @@ var transport = nodemailer.createTransport(smtpTransport({
   maxMessages: __CONFIG__.email.maxMsgPerCon,
   secure: __CONFIG__.email.secure
 }));
+
 var mailer = function() {
   /**
    * Public : This is the primary method that is called
@@ -73,7 +74,7 @@ var mailer = function() {
   /**
    * Sends a mail that has a template attached.
    */
-  var sendTemplateMail = function(mailObj, template, cb) {
+  function sendTemplateMail(mailObj, template, cb) {
     if (!mailObj.templateName) {
       return cb(false, {
         'id': mailObj.emailID,
@@ -111,12 +112,12 @@ var mailer = function() {
         }
       });
     });
-  };
+  }
 
   /**
    * Sends a mail that does not have a template set.
    */
-  var sendNormalMail = function(mailObj, cb) {
+  function sendNormalMail(mailObj, cb) {
     if (!mailObj.data) {
       mailObj.data = '';
     } else {
@@ -144,7 +145,7 @@ var mailer = function() {
         });
       }
     });
-  };
+  }
 
   /**
    * Checks if the attachments are present on the

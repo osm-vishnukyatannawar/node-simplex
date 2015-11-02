@@ -7,15 +7,12 @@ A base framework for the PowerPath server.
 - Ensure that you have python (version of python must be > 2.5.0 and < 3.0.0). `node-mariasql` requires python to be installed and in the PATH variable.
 - node.js
 - npm
-- bower (`npm install -g bower`)
 
 # Installation
 
 ## Get the files from github
 
 1. Do a git clone - `git clone /path/to/git --recursive`. This will pull the latest code including the sub-directoy.
-2. Open a terminal in the sub-directory - `cd app/code`
-3. Change the branch to whatever is the current sprint. You can do so - `git checkout -b sprint_X`.
 
 ## Setup the SQL database
 

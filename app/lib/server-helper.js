@@ -207,7 +207,7 @@ var serverHelper = function() {
     }
   };
 
-  // Normalizes the URL passed, removes trailing slashes.   
+  // Normalizes the URL passed, removes trailing slashes.
   var normalizeUrl = function(url) {
     if (url.indexOf('/') === 0 || url.lastIndexOf('/') === url.length - 1) {
       return url.replace(/^\/|\/$/g, '');
@@ -244,21 +244,7 @@ var serverHelper = function() {
   };
 
   var getControllerNameByFolder = function(folderName) {
-    var modifiedFolderName = [folderName[0].toUpperCase()];
-    var nextCharIsAfterUnderscore = false;
-    for (var i = 1; i < folderName.length; ++i) {
-      if (folderName[i] === '_') {
-        nextCharIsAfterUnderscore = true;
-        continue;
-      }
-      if (nextCharIsAfterUnderscore) {
-        modifiedFolderName.push(folderName[i].toUpperCase());
-        nextCharIsAfterUnderscore = false;
-      } else {
-        modifiedFolderName.push(folderName[i]);
-      }
-    }
-    return modifiedFolderName.join('') + 'Controller.js';
+    return folderName + '-controller.js';
   };
 
   var logRequestResponse = function(request, response) {

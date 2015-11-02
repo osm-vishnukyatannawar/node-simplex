@@ -1,3 +1,0 @@
-[submodule "app/code"]
-	path = app/code
-	url = git@github.com:EmanateWireless/powerpath-server.git

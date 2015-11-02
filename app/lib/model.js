@@ -1,49 +1,44 @@
-var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
-var cassandraDb = require(__CONFIG__.app_base_path +
-  'lib/db-connector/cassandradb');
-
-var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
-
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
-var logger = require(__CONFIG__.app_base_path + 'logger');
-
-var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
-
-var utility = require(__CONFIG__.app_base_path + 'lib/helpers/utility');
-var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
-var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
-var csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
-
 var uuid = require('node-uuid');
 var __ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
 var util = require('util');
 
+var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
+var cassandraDb = require(__CONFIG__.app_base_path +
+  'lib/db-connector/cassandradb');
+
+var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
+var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var logger = require(__CONFIG__.app_base_path + 'logger');
+var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
+
+// Helpers
+var dateUtil = require(__CONFIG__.app_base_path + 'lib/helpers/date-utility');
+var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
+var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
+var csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
+var zipper = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
+
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = dbConfig['mariadb'];
   this.cassandraConfig = dbConfig['cassandradb'];
   this.db = new mariaDb(this.config);
   this.csDb = new cassandraDb(this.cassandraConfig);
-  this.validator = new validator(mProperties);
   this.getStatusCode = getStatus;
   this.queryModifiers = queryModifiers;
   this.buildObject(mProperties, objToBind);
-  this.dbUtils = utility;
-  this.email = {};
-  this.email.mailer = mailer;
+
+  // Helpers.
+  this.dateUtil = dateUtil;
+  this.mailer = mailer;
   this.csvHelper = new csv();
+  this.validator = new validator(mProperties);
+  this.zipper = new zipper();
 }
 
 Model.prototype.query = function(objQuery) {
-  var self = this;
-  if (objQuery.validate === true || objQuery.validate === undefined) {
-    if (!this.validator.isValid(objQuery.data)) {
-      objQuery.cb(new AppError(this.getStatusCode('badRequest'),
-        'Server encountered the following errors while processing the request --', this.validator.getErrors()));
-      return;
-    }
-  }
+  var self = this;  
   var beforeEvents = objQuery.before;
   if (__.isArray(beforeEvents) && beforeEvents.length !== 0) {
     this.currentData = objQuery.data;
@@ -116,43 +111,6 @@ Model.prototype.validate = function(obj) {
   return false;
 };
 
-Model.prototype.processGridQuery = function(selectQuery) {
-  var finalQueryParams = this.defaultSelectProps;
-  if (!__.isEmpty(this.queryModifiers)) {
-
-    // Columns
-    if (this.queryModifiers.sortCol) {
-      finalQueryParams.sortCol = __
-        .isEmpty(this.properties[this.queryModifiers.sortCol].dbName) ?
-        finalQueryParams.sortCol : this.properties[this.queryModifiers.sortCol]
-        .dbName;
-      finalQueryParams.sortBy = __.isEmpty(this.queryModifiers.sortBy) ?
-        finalQueryParams.sortBy : this.queryModifiers.sortBy;
-      finalQueryParams.sortBy = finalQueryParams.sortBy.toUpperCase();
-    }
-
-    // Records - Limit
-    var intLimit = parseInt(this.queryModifiers.limit, 10);
-
-    finalQueryParams.limit = isNaN(intLimit) ? finalQueryParams.limit :
-      intLimit;
-    var intStart = parseInt(this.queryModifiers.startRecord, 10);
-    finalQueryParams.startRecord = isNaN(intStart) ? finalQueryParams.startRecord :
-      this.queryModifiers.startRecord;
-  }
-  if (finalQueryParams.sortBy !== 'ASC' && finalQueryParams.sortBy !== 'DESC') {
-    finalQueryParams.sortBy = 'ASC';
-  }
-
-  if (selectQuery) {
-    selectQuery += ' ORDER BY ' + finalQueryParams.sortCol + ' ' +
-      finalQueryParams.sortBy + ' LIMIT ' + finalQueryParams.startRecord +
-      ', ' + finalQueryParams.limit;
-  }
-  this.defaultSelectProps = finalQueryParams;
-  return selectQuery;
-};
-
 Model.prototype.beginTransaction = function(cb) {
   this.db.beginTransaction(function(err, data) {
     processError(err);
@@ -196,7 +154,7 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
  *
  * @param objQueryDetails Information about the query to be generated
  * @param objQueryDetails.initialQuery string Initial part of the query
- * @param objQueryDetails.staticData object or array Static data, data that will stay the same for all the
+ * @param objQueryDetails.staticData object or array static data, data that will stay the same for all the
  * queries.
  * @param objQueryDetails.staticCols array Static columns. They should be in the same order as
  * present in the query.
@@ -214,13 +172,16 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
   var dataToBind = objQueryDetails.data;
   var hasPrimaryKey = objQueryDetails.hasPrimary;
   var defaultVals = objQueryDetails.defaultVals;
+
   var valuesQueryArr = [];
   var valuesQuery = '';
   var idCol = '';
+  var i = 0, len = 0, dynamicCols = [], j = 0, len2 = 0;
+  var currColName;
   if (__.isArray(dataToBind)) {
     // It's an array.
-    for (var i = 0, len = dataToBind.length; i < len; ++i) {
-      var dynamicCols = [];
+    for (i = 0, len = dataToBind.length; i < len; ++i) {
+      dynamicCols = [];
       if (hasPrimaryKey) {
         // Adding the id column.
         idCol = 'id_' + i.toString();
@@ -230,8 +191,8 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
 
       // Now adding the data itself.
       var currData = dataToBind[i];
-      for (var j = 0, len2 = propNames.length; j < len2; ++j) {
-        var currColName = propNames[j] + '_' + i.toString();
+      for (j = 0, len2 = propNames.length; j < len2; ++j) {
+        currColName = propNames[j] + '_' + i.toString();
         dynamicCols.push(':' + currColName);
         finalData[currColName] = currData[propNames[j]];
       }
@@ -241,15 +202,15 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
     valuesQuery = valuesQueryArr.join();
   } else {
     // It's an object.
-    for (var i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
-      var dynamicCols = [];
+    for (i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
+      dynamicCols = [];
       if (hasPrimaryKey) {
         idCol = 'id_' + i.toString();
         dynamicCols.push(':' + idCol);
         finalData[idCol] = uuid.v4();
       }
-      for (var j = 0, len2 = propNames.length; j < len2; ++j) {
-        var currColName = propNames[j] + '_' + i.toString();
+      for (j = 0, len2 = propNames.length; j < len2; ++j) {
+        currColName = propNames[j] + '_' + i.toString();
         dynamicCols.push(':' + currColName);
         if (dataToBind[propNames[j]] && dataToBind[propNames[j]][i]) {
           finalData[currColName] = dataToBind[propNames[j]][i];
@@ -269,14 +230,6 @@ Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
     query: initialQuery + valuesQuery + ';',
     data: finalData
   };
-};
-
-Model.prototype.convertTagTimeStamp = function(timeStamp) {
-  timeStamp = __.defaults(timeStamp, getDefaultTagDateObj());
-  var convDate = new Date(timeStamp.tm_year, parseInt(timeStamp.tm_mon) - 1,
-    timeStamp.tm_mday, timeStamp.tm_hour, timeStamp.tm_min,
-    timeStamp.tm_sec, 0);
-  return convDate.toISOString().slice(0, 19).replace('T', ' ');
 };
 
 Model.prototype.getBcryptHash = function(stringToHash, noOfRounds, cb) {
@@ -303,19 +256,6 @@ Model.prototype.readCsvFile = function(path, cb) {
 Model.prototype.queries = function(objQuery) {
   runQuery(objQuery, this);
 };
-
-function getDefaultTagDateObj() {
-  var dt = new Date();
-  return {
-    tm_year: 1900 + dt.getYear(),
-    tm_mon: dt.getMonth() + 1,
-    tm_mday: dt.getDate(),
-    tm_hour: 0,
-    tm_min: 0,
-    tm_sec: 0
-  };
-}
-
 
 function processError(err, objQuery) {
   'use strict';

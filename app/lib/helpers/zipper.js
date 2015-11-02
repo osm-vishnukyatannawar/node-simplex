@@ -1,9 +1,7 @@
  var admzip = require('adm-zip');
  var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
- function zipper() {
-
- }
+ function zipper() {}
 
  zipper.prototype.getFilesInfo = function(sourcePath, cb) {
    var zipEntries = null;
