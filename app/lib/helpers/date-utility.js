@@ -1,7 +1,7 @@
 var moment = require('moment');
 var momentTimezone = require('moment-timezone');
 
-var util = {
+var DateUtil = {
   toMySQLDateTime: function(dt) {
     if (!dt) {
       dt = new Date();
@@ -42,4 +42,4 @@ var util = {
   }
 };
 
-module.exports = util;
+module.exports = DateUtil;

@@ -6,33 +6,33 @@ var config = module.exports;
 
 // get the environment variables
 var isProduction = (process.env.NODE_ENV === 'production') ? true : false;
-var logDir = process.env.EMANATE_LOG_DIR || (__dirname + '/../logs/');
-var networkInterfaceName = process.env.EMANATE_NETWORK_INTERFACE || 'eth0';
-var port = process.env.EMANATE_HTTP_PORT || 80;
-var httpsPort = process.env.EMANATE_HTTPS_PORT || 443;
-var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
-var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
-var slogerrUrl = process.env.EMANATE_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
-var slogerrAppID = process.env.EMANATE_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
-var isClusterDisabled = (process.env.EMANATE_CLUSTER_DISABLED === "true") ? true : false;
-var isHttps = (process.env.EMANATE_HTTPS_DISABLED === "true") ? false : true;
-var emailServer = process.env.EMANATE_EMAIL_SERVER || 'mail.osmosys.asia';
-var emailPort = process.env.EMANATE_EMAIL_PORT || 587;
-var emailUsername = process.env.EMANATE_EMAIL_USERNAME || 'emanate@osmosys.asia';
-var emailPassword = process.env.EMANATE_EMAIL_PASSWORD || 'Emanat3!1';
-var emailFromName = process.env.EMANATE_EMAIL_FROM_NAME || 'The Emanate Wireless Team';
-var emailMaxCon = process.env.EMANATE_EMAIL_MAX_CON || 5;
-var emailMaxMsgPerCon = process.env.EMANATE_EMAIL_MAX_MSG_PER_CON || 20;
-var emailsToSend = process.env.EMANATE_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
-var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
-var isEmailSecure = (process.env.EMANATE_SECURE_EMAIL === "true") ? true : false;
+var logDir = process.env.OSM_LOG_DIR || (__dirname + '/../logs/');
+var networkInterfaceName = process.env.OSM_NETWORK_INTERFACE || 'eth0';
+var port = process.env.OSM_HTTP_PORT || 3000;
+var httpsPort = process.env.OSM_HTTPS_PORT || 443;
+var emailsToSend = process.env.OSM_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.OSM_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var slogerrUrl = process.env.OSM_LOGGER_URL || 'http://log.osmosys.asia/api/log/WriteLog1';
+var slogerrAppID = process.env.OSM_LOGGER_API_ID || '551a6f48-e2c4-45aa-80e5-1de45a0bc003';
+var isClusterDisabled = (process.env.OSM_CLUSTER_DISABLED === "true") ? true : false;
+var isHttps = (process.env.OSM_HTTPS_ENABLED === "true") ? true : false;
+var emailServer = process.env.OSM_EMAIL_SERVER || 'mail.osmosys.asia';
+var emailPort = process.env.OSM_EMAIL_PORT || 587;
+var emailUsername = process.env.OSM_EMAIL_USERNAME || 'emanate@osmosys.asia';
+var emailPassword = process.env.OSM_EMAIL_PASSWORD || 'Emanat3!1';
+var emailFromName = process.env.OSM_EMAIL_FROM_NAME || 'The Emanate Wireless Team';
+var emailMaxCon = process.env.OSM_EMAIL_MAX_CON || 5;
+var emailMaxMsgPerCon = process.env.OSM_EMAIL_MAX_MSG_PER_CON || 20;
+var emailsToSend = process.env.OSM_SUPPORT_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var debugSupportMails = process.env.OSM_DEBUG_EMAIL_ADDRS || 'surendra.b@osmosys.asia';
+var isEmailSecure = (process.env.OSM_SECURE_EMAIL === "true") ? true : false;
 
 // get the ip-address associated with the configured network interface name
-var ipAddress = NetworkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
+var ipAddress = NetworkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || 'localhost';
 
 // set the api base url's for the http and https interfaces
-var app_http_base_url = process.env.EMANATE_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
-var app_https_base_url = process.env.EMANATE_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
+var app_http_base_url = process.env.OSM_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
+var app_https_base_url = process.env.OSM_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
 
 // validate and format the environment variable settings if needed
 if (logDir.slice(-1) != "/") {
@@ -48,8 +48,8 @@ if (app_https_base_url.slice(-1) != "/") {
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
-  'app_lib_path' : __dirname + '/code/lib',
-  'app_helper_path' : __dirname + '/code/lib/helpers',
+  'app_lib_path' : __dirname + '/lib/',
+  'app_helper_path' : __dirname + '/code/lib/helpers/',
   'app_base_url': '/api/v1/',  
   'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',

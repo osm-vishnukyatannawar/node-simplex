@@ -7,3 +7,5 @@ function AppService(app) {
 }
 
 util.inherits(AppService, Service);
+
+module.exports = AppService;

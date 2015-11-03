@@ -7,3 +7,5 @@ function AppController(app) {
 }
 
 util.inherits(AppController, Controller);
+
+module.exports = AppController;

@@ -7,3 +7,5 @@ function AppModel(app) {
 }
 
 util.inherits(AppModel, Model);
+
+module.exports = AppModel;

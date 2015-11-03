@@ -8,9 +8,9 @@ var express = require('express');
 
 // Osm Includes
 var Config = require(__dirname + '/config');
-var Logger = require(__CONFIG__.app_base_path + '/logger');
-var GetStatus = require('./lib/status');
-var Helper = require('./lib/server-helper');
+var Logger = require(__CONFIG__.app_base_path + 'logger');
+var GetStatus = require(__CONFIG__.app_lib_path + 'status');
+var Helper = require(__CONFIG__.app_lib_path + 'server-helper');
 
 var app = express();
 Helper.init(app);
@@ -76,12 +76,7 @@ if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_d
 
   // 404 error
   app.use('/api', Helper.notFound);
-  
-  var sslConfig = {
-    'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.ssl_config.ssl_cert),
-    'passphrase': __CONFIG__.ssl_config.passphrase
-  };
-
+    
   http.createServer(app).listen(Config.express.port, Config.express.ip, function(error) {
     if (error) {
       Logger.logAppErrors(error);
@@ -91,6 +86,11 @@ if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_d
   });
   
   if(__CONFIG__.is_https) {
+    var sslConfig = {
+      'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.ssl_config.ssl_cert),
+      'passphrase': __CONFIG__.ssl_config.passphrase
+    };
+
     https.createServer(sslConfig, app).listen(Config.express.httpsPort, Config.express.ip, function(error) {
       if (error) {
         Logger.logAppErrors(error);

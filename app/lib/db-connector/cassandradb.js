@@ -3,6 +3,7 @@
  */
 'use strict';
 var cassandra = require('cassandra-driver');
+
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
 var defaultMsg = {

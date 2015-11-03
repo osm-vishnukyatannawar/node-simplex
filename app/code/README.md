@@ -21,6 +21,7 @@ Space for your code.
 // Third party modules
 var fs = require('fs');
 var async = require('async');
+var util = require('util');
 
 // Internal modules
 var AppController = require(__CONFIG__.app_code_path + 'app-controller.js');

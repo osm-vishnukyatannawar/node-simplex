@@ -122,7 +122,10 @@ var serverHelper = function() {
   function _loadCronJobs() {
     var cronDir = __CONFIG__.app_base_path + 'cron/';
     var files = fs.readdirSync(cronDir);
-    for (var i = 0; i !== files.length; ++i) {
+    for (var i = 0; i !== files.length; ++i) { 
+      if(path.extname(files[i]) !== 'js') {
+        continue;
+      }     
       require(cronDir + files[i]);
     }
   };    
