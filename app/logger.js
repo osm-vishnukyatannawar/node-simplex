@@ -1,16 +1,17 @@
+/* global __CONFIG__ */
 var winston = require('winston');
 var fs = require('fs');
 
 var logger = (function() {
   var errLogger = new(winston.Logger)({
     transports: [new winston.transports.File({
-      filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
+      filename: __CONFIG__.log_folder_path + 'exceptions.log',
       timestamp: true,
       prettyPrint: false,
       json: false
     })],
     exceptionHandlers: [new winston.transports.File({
-      filename: __CONFIG__.app_base_path + '../logs/exceptions.log',
+      filename: __CONFIG__.log_folder_path + 'exceptions.log',
       json: false,
       timestamp: true,
       prettyPrint: true,
@@ -23,27 +24,19 @@ var logger = (function() {
       json: false,
       timestamp: true
     }), new winston.transports.File({
-      filename: __CONFIG__.app_base_path + '../logs/debug.log',
+      filename: __CONFIG__.log_folder_path + 'debug.log',
       json: false,
       timestamp: true
     })]
-  });
-
-  var maintLogger = new(winston.Logger)({
-    transports: [new winston.transports.File({
-      filename: __CONFIG__.app_base_path + '../logs/maintenance.log',
-      json: false,
-      timestamp: false,
-      prettyPrint: true,
-    })]
-  });
+  });  
 
   var logAppErrors = function(error) {
-    errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + '\n Severity : ' + error.severity + '\n----\n');
+    errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + 
+      '\n Severity : ' + error.severity + '\n----\n');
   };
 
   var logUncaughtError = function(error) {
-    var filename = __CONFIG__.app_base_path + '../logs/uncaught-exceptions.log';
+    var filename = __CONFIG__.log_folder_path + 'uncaught-exceptions.log';
     var message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
       'Message : ' + error.message + '\n--\n' +
       'Type : ' + error.type + '\n--\n' +
@@ -59,19 +52,12 @@ var logger = (function() {
 
   var writeErrLog = function(err) {
     errLogger.error(err);
-  };
-
-  var logMaintError = function(info) {
-    var dt = new Date();
-    var headerDate = dt.toDateString() + ' ' + dt.toTimeString();
-    maintLogger.info('\n--------------- Maintenance Data - ' + headerDate + ' --------------------\n\n' + info);
-  };
+  };  
 
   return {
     logAppErrors: logAppErrors,
     logAppInfo: logAppInfo,
     writeLogErr: writeErrLog,
-    logMaintError: logMaintError,
     logUncaughtError: logUncaughtError
   };
 }());

@@ -1,7 +1,7 @@
-powerpath-server-base
+node-simplex
 ========================
 
-A base framework for the PowerPath server.
+Node Simplex
 
 # Requirements
 - Ensure that you have python (version of python must be > 2.5.0 and < 3.0.0). `node-mariasql` requires python to be installed and in the PATH variable.

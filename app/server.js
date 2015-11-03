@@ -1,18 +1,19 @@
+/* global __CONFIG__ */
 // NodeJS includes
 var cluster = require('cluster');
-
-// Osm Includes
-var config = require('./config');
-var logger = require('./logger');
-var ExclusionController = require(__CONFIG__.app_code_path + 'exclusion-api.js');
-var getStatus = require('./lib/status');
-var express = require('express');
-var app = express();
-var helper = require('./lib/server-helper');
 var i18n = require('i18n');
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
+var express = require('express');
+
+// Osm Includes
+var config = require(__dirname + '/config');
+var logger = require(__CONFIG__.app_base_path + '/logger');
+var getStatus = require('./lib/status');
+var helper = require('./lib/server-helper');
+
+var app = express();
 helper.init(app);
 
 // Count the machine's CPUs
@@ -49,8 +50,6 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
       next();
     }
   });
-
-  new ExclusionController(app);
 
   app.use(helper.parseBodyType);
 
@@ -91,14 +90,11 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
 
   // 404 error
   app.use('/api', helper.notFound);
-
-  app.use('/*', express.static(__dirname + '/code/public_html/404.html'));
   
   var sslConfig = {
     'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.sslConfig.sslCert),
     'passphrase': __CONFIG__.sslConfig.passphrase
   };
-
 
   http.createServer(app).listen(config.express.port, config.express.ip, function(error) {
     if (error) {
@@ -108,13 +104,15 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
     logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
   });
   
-  https.createServer(sslConfig, app).listen(config.express.httpsPort, config.express.ip, function(error) {
-    if (error) {
-      logger.logAppErrors(error);
-      process.exit(10);
-    }
-    logger.logAppInfo('Express is listening on https://' + config.express.ip + ':' + config.express.httpsPort);
-  });
+  if(__CONFIG__.isHttps) {
+    https.createServer(sslConfig, app).listen(config.express.httpsPort, config.express.ip, function(error) {
+      if (error) {
+        logger.logAppErrors(error);
+        process.exit(10);
+      }
+      logger.logAppInfo('Express is listening on https://' + config.express.ip + ':' + config.express.httpsPort);
+    }); 
+  }  
 }
 
 process.on('uncaughtException', function(err) {
