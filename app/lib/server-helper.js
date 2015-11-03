@@ -7,7 +7,6 @@ var util = require('util');
 var __ = require('underscore');
 var fs = require('fs');
 var path = require('path');
-var loadCustomViews = require(__CONFIG__.app_code_path + 'views.js');
 var compression = require('compression');
 var moment = require('moment');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
@@ -248,7 +247,7 @@ var serverHelper = function() {
   };
 
   var logRequestResponse = function(request, response) {
-    if (!__CONFIG__.logToSlogerr) {
+    if (!__CONFIG__.log_to_slogger) {
       // Logging is turned off.
       return;
     }
@@ -344,7 +343,7 @@ var serverHelper = function() {
   };
 
   var logServerPerformance = function(request, response, isClosed) {
-    if (__CONFIG__.logPerformanceInfo) {
+    if (__CONFIG__.log_performance_info) {
       if (response.hasOwnProperty('performanceInfo') &&
         response.performanceInfo.logPerformance === true &&
         !response.performanceInfo.isLogged) {

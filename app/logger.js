@@ -5,13 +5,13 @@ var fs = require('fs');
 var logger = (function() {
   var errLogger = new(winston.Logger)({
     transports: [new winston.transports.File({
-      filename: __CONFIG__.log_folder_path + 'exceptions.log',
+      filename: __CONFIG__.getLogsFolderPath() + 'exceptions.log',
       timestamp: true,
       prettyPrint: false,
       json: false
     })],
     exceptionHandlers: [new winston.transports.File({
-      filename: __CONFIG__.log_folder_path + 'exceptions.log',
+      filename: __CONFIG__.getLogsFolderPath() + 'exceptions.log',
       json: false,
       timestamp: true,
       prettyPrint: true,
@@ -24,7 +24,7 @@ var logger = (function() {
       json: false,
       timestamp: true
     }), new winston.transports.File({
-      filename: __CONFIG__.log_folder_path + 'debug.log',
+      filename: __CONFIG__.getLogsFolderPath() + 'debug.log',
       json: false,
       timestamp: true
     })]
@@ -36,14 +36,13 @@ var logger = (function() {
   };
 
   var logUncaughtError = function(error) {
-    var filename = __CONFIG__.log_folder_path + 'uncaught-exceptions.log';
+    var filename = __CONFIG__.getLogsFolderPath() + 'uncaught-exceptions.log';
     var message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
       'Message : ' + error.message + '\n--\n' +
       'Type : ' + error.type + '\n--\n' +
       'StackTrace : ' + error.stack + '\n--\n' +
       '----------------------------------\n';
     fs.appendFileSync(filename, message);
-
   };
 
   var logAppInfo = function(info) {

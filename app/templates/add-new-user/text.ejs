@@ -1,9 +1,9 @@
 Hi <%= user.username %>,
 
-You have been signed up for a  <%= email.fromName %> account to the organization "<%=user.organizationName %>." 
+You have been signed up for a  <%= email.from_name %> account to the organization "<%=user.organizationName %>." 
 Your log in email is <%=user.emailID %>.
 		
 <%=email.baseURL %>reset-password?token=<%= user.userID  %>Choose your password here.
 
 Thank you,
-<%= email.fromName %> 
+<%= email.from_name %> 

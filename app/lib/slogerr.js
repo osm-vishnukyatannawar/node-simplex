@@ -1,4 +1,4 @@
-var slogerrConfig = require(__CONFIG__.app_base_path + 'slogerr-config');
+var SlogerrConfig = require(__CONFIG__.app_base_path + 'slogerr-config');
 var request = require('request');
 
 /**
@@ -10,14 +10,14 @@ var request = require('request');
 
 var Slogerr = {
   log: function(logMessage, stackTrace, severity, cb) {
-    var dataToSend = slogerrConfig.data;
+    var dataToSend = SlogerrConfig.data;
     dataToSend.LogMessage = logMessage;
     dataToSend.StackTrace = stackTrace;
     dataToSend.Severity = severity;
     var options = {
-      url: slogerrConfig.url,
-      method: slogerrConfig.method,
-      headers: slogerrConfig.headers,
+      url: SlogerrConfig.url,
+      method: SlogerrConfig.method,
+      headers: SlogerrConfig.headers,
       body: JSON.stringify(dataToSend)
     };
     request(options, function(err, response, body) {

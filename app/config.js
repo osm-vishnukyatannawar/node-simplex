@@ -1,6 +1,6 @@
 /* global __CONFIG__ */
-var dbConfig = require(__dirname + '/db-config.js');
-var networkUtils = require('./lib/network-utils');
+var DBConfig = require(__dirname + '/db-config.js');
+var NetworkUtils = require(__dirname + '/lib/network-utils');
 
 var config = module.exports;
 
@@ -28,7 +28,7 @@ var debugSupportMails = process.env.EMANATE_DEBUG_EMAIL_ADDRS || 'surendra.b@osm
 var isEmailSecure = (process.env.EMANATE_SECURE_EMAIL === "true") ? true : false;
 
 // get the ip-address associated with the configured network interface name
-var ipAddress = networkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
+var ipAddress = NetworkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || '127.0.0.1';
 
 // set the api base url's for the http and https interfaces
 var app_http_base_url = process.env.EMANATE_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
@@ -48,25 +48,25 @@ if (app_https_base_url.slice(-1) != "/") {
 global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
-  'app_base_url': '/api/v1/',
-  'app_base_url_token': '/api/v1/:token/',
+  'app_lib_path' : __dirname + '/code/lib',
+  'app_helper_path' : __dirname + '/code/lib/helpers',
+  'app_base_url': '/api/v1/',  
   'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',
-  'enable_compression': true,
-  'httpProtocol': 'http://',
+  'enable_compression': true,  
   'log_folder_path': logDir,  
-  'isHttps': isHttps,
-  'isClusterDisabled': isClusterDisabled,
+  'is_https': isHttps,
+  'is_cluster_disabled': isClusterDisabled,
   'email': {
     'server': emailServer,
     'username': emailUsername,
     'password': emailPassword,
     'port': emailPort,
-    'fromName': emailFromName,
-    'maxCon': emailMaxCon,
-    'maxMsgPerCon': emailMaxMsgPerCon,
-    'emailsToSend': emailsToSend,
-    'debugMails' : debugSupportMails,
+    'from_name': emailFromName,
+    'max_con': emailMaxCon,
+    'max_msg_per_con': emailMaxMsgPerCon,
+    'emails_to_send': emailsToSend,
+    'debug_mails' : debugSupportMails,
     'secure': isEmailSecure
   },
   'user': {
@@ -75,27 +75,27 @@ global.__CONFIG__ = {
     'default_pass_encrypt_rounds': 10,
     'default_forgot_pass_time': 6, // hours
     'default_created_by': 'NodeJS'
-  },      
-  'currentSampleTime': 5, // in minutes
-  'dateFormat': 'MMMM Do YYYY, h:mm:ss a',  
-  'logTxtFormat': true,
-  'tokenLength': 16,
-  'fwTokenLength': 16,  
-  'filesFolderName': 'files',  
-  'maxDecimalLength': 2,       
-  'logToSlogerr': false,
-  'slogerrAppID': slogerrAppID,
-  'slogerrUrl': slogerrUrl,
-  'excludedControllers': [],  
+  },        
+  'date_format': 'MMMM Do YYYY, h:mm:ss a',  
+  'log_txt_format': true,
+  'token_length': 16,
+  'fw_token_length': 16,  
+  'files_folder_name': 'files',  
+  'max_decimal_length': 2,       
+  'log_to_slogger': false,
+  'slogger_app_id': slogerrAppID,
+  'slogger_url': slogerrUrl,
+  'ex': [],  
   'default_timezone': 'America/New_York',    
-  'logPerformanceInfo': true,  
-  'sslConfig': {
-    'sslCert': 'ssl_https.pfx',
+  'log_performance_info': true,  
+  'ssl_config': {
+    'ssl_cert': 'ssl_https.pfx',
     'passphrase': 'password'
-  }
+  },
+  'cron_time' : 60000
 };
 
-__CONFIG__.isProduction = isProduction;
+__CONFIG__.is_production = isProduction;
 __CONFIG__.email.baseURL = __CONFIG__.app_http_base_url;
 __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CONFIG__.app_base_url;
 
@@ -103,7 +103,7 @@ __CONFIG__.app_api_url = __CONFIG__.app_http_base_url.replace(/\/+$/, '') + __CO
  * Returns the path the files folder
  */
 __CONFIG__.getFilesFolderPath = function() {
-  return __CONFIG__.app_base_path + '../' + __CONFIG__.filesFolderName + '/';
+  return __CONFIG__.app_base_path + '../' + __CONFIG__.files_folder_name + '/';
 };
 
 __CONFIG__.getUploadsFolderPath = function() {
@@ -117,6 +117,6 @@ __CONFIG__.getLogsFolderPath = function() {
 config.express = {
   port: process.env.EXPRESS_PORT || port,
   ip: ipAddress,
-  isProduction: isProduction,
-  httpsPort: httpsPort
+  is_production: isProduction,
+  http_port: httpsPort
 };

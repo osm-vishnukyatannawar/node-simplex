@@ -71,10 +71,8 @@ function getPropertyCsvName(key, props) {
 }
 
 csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
-  cb) {
-  // @Vamsi, to get the path of the files folder, use __CONFIG__.getFilesFolderPath() function.
-  fs.writeFile(global.__CONFIG__.app_base_path + '../' + global.__CONFIG__.filesFolderName +
-    '/' + fileName,
+  cb) {  
+  fs.writeFile(__CONFIG__.getFilesFolderPath() + '/' + fileName,
     data,
     function(err) {
       if (err) {

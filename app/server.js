@@ -1,29 +1,28 @@
 /* global __CONFIG__ */
 // NodeJS includes
 var cluster = require('cluster');
-var i18n = require('i18n');
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var express = require('express');
 
 // Osm Includes
-var config = require(__dirname + '/config');
-var logger = require(__CONFIG__.app_base_path + '/logger');
-var getStatus = require('./lib/status');
-var helper = require('./lib/server-helper');
+var Config = require(__dirname + '/config');
+var Logger = require(__CONFIG__.app_base_path + '/logger');
+var GetStatus = require('./lib/status');
+var Helper = require('./lib/server-helper');
 
 var app = express();
-helper.init(app);
+Helper.init(app);
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
 
 // The master process - will only be used when on PROD
-if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisabled) {
+if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_disabled) {
 
   // Load the cron jobs on the master thread if it's production.
-  helper.loadCronJobs(app);
+  Helper.loadCronJobs(app);
 
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
@@ -40,7 +39,7 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
     res.setHeader('X-Powered-By', 'Emanate Wireless');
     res.performanceInfo = {};
     res.performanceInfo.startTimestamp = new Date().getTime();
-    if (__CONFIG__.isHttps) {
+    if (__CONFIG__.is_https) {
       if (!req.secure) {
         res.redirect(__CONFIG__.app_http_base_url.replace(/\/+$/, '') + req.url);
       } else {
@@ -51,66 +50,53 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
     }
   });
 
-  app.use(helper.parseBodyType);
+  app.use(Helper.parseBodyType);
 
   app.use(function(err, req, res, next) {
     if (err) {
       res.set('Connection', 'close');
-      res.status(getStatus('badRequest')).json({
+      res.status(GetStatus('badRequest')).json({
         status: 'fail',
         message: 'JSON sent is invalid.'
       });
     } else {
       next();
     }
-  });
-
-  i18n.configure({
-    locales: ['en'],
-    defaultLocale: 'en',
-    directory: __CONFIG__.app_base_path + '../locales',
-    objectNotation: true
-  });
-
-  app.use(i18n.init);
+  });  
 
   // Bind the api routes.
-  helper.loadRoutes(app);
-
-  //
-  // Bind the views.
-  helper.loadViews(app);
+  Helper.loadRoutes(app);
 
   // Load the cron jobs on the child thread if it's NOT production or clustering is disabled
-  if (!config.express.isProduction || __CONFIG__.isClusterDisabled) {
-    helper.loadCronJobs(app);
+  if (!Config.express.is_production || __CONFIG__.is_cluster_disabled) {
+    Helper.loadCronJobs(app);
   }
   
-  helper.writeServerStartupLogs();
+  Helper.writeServerStartupLogs();
 
   // 404 error
-  app.use('/api', helper.notFound);
+  app.use('/api', Helper.notFound);
   
   var sslConfig = {
-    'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.sslConfig.sslCert),
-    'passphrase': __CONFIG__.sslConfig.passphrase
+    'pfx': fs.readFileSync(__CONFIG__.app_base_path + __CONFIG__.ssl_config.ssl_cert),
+    'passphrase': __CONFIG__.ssl_config.passphrase
   };
 
-  http.createServer(app).listen(config.express.port, config.express.ip, function(error) {
+  http.createServer(app).listen(Config.express.port, Config.express.ip, function(error) {
     if (error) {
-      logger.logAppErrors(error);
+      Logger.logAppErrors(error);
       process.exit(10);
     }
-    logger.logAppInfo('Express is listening on http://' + config.express.ip + ':' + config.express.port);
+    Logger.logAppInfo('Express is listening on http://' + Config.express.ip + ':' + Config.express.port);
   });
   
-  if(__CONFIG__.isHttps) {
-    https.createServer(sslConfig, app).listen(config.express.httpsPort, config.express.ip, function(error) {
+  if(__CONFIG__.is_https) {
+    https.createServer(sslConfig, app).listen(Config.express.httpsPort, Config.express.ip, function(error) {
       if (error) {
-        logger.logAppErrors(error);
+        Logger.logAppErrors(error);
         process.exit(10);
       }
-      logger.logAppInfo('Express is listening on https://' + config.express.ip + ':' + config.express.httpsPort);
+      Logger.logAppInfo('Express is listening on https://' + Config.express.ip + ':' + Config.express.httpsPort);
     }); 
   }  
 }
@@ -118,7 +104,7 @@ if (config.express.isProduction && cluster.isMaster && !__CONFIG__.isClusterDisa
 process.on('uncaughtException', function(err) {
   try {
     console.log(err);
-    logger.logUncaughtError(err);
+    Logger.logUncaughtError(err);
   } catch (e) {
     console.log(e);
   }
