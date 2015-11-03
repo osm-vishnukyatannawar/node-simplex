@@ -1,5 +1,6 @@
-var logger = require(__CONFIG__.app_base_path + 'logger');
 var __ = require('underscore');
+
+var Logger = require(__CONFIG__.app_base_path + 'logger');
 /**
  * A small wrapper around the error object for use within our app.
  *
@@ -43,7 +44,7 @@ AppError.prototype.writeToLog = function() {
     strError += 'Message : ' + this.message + ' \n';
   }
   strError += '-----------\n\n';
-  logger.writeLogErr(strError);
+  Logger.writeLogErr(strError);
 };
 
 AppError.prototype.setAppMessage = function(message) {

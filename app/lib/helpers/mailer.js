@@ -3,10 +3,11 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var path = require('path');
 var templatesDir = path.join(__CONFIG__.app_base_path, 'templates');
 var emailTemplates = require('email-templates');
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var async = require('async');
 var fs = require('fs');
-var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
+
+var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
 var transport = nodemailer.createTransport(smtpTransport({
   'host': __CONFIG__.email.server,

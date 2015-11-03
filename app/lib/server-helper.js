@@ -1,27 +1,31 @@
 var formidable = require('formidable');
 var bodyParser = require('body-parser');
-var loadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
-var appStatus = require(__CONFIG__.app_base_path + 'lib/status');
-var slogger = require(__CONFIG__.app_base_path + 'lib/slogerr');
 var util = require('util');
 var __ = require('underscore');
 var fs = require('fs');
 var path = require('path');
 var compression = require('compression');
 var moment = require('moment');
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
-var internalExclusionApi = ['public_html'];
-internalExclusionApi.concat(__CONFIG__.excludedControllers);
+var LoadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
+var GetStatus = require(__CONFIG__.app_lib_path + 'status');
+var Slogger = require(__CONFIG__.app_lib_path + 'slogerr');
+var AppError = require(__CONFIG__.app_lib_path + 'app-error');
+
+// Folders that will not be considered as controllers while autoloading controllers.
+var internalExclusionApi = [];
+internalExclusionApi.concat(__CONFIG__.excluded_controllers);
+
 var cntrlOutput = '';
 
 var serverHelper = function() {
   var app = null;
   var validMethodTypes = ['get', 'post', 'delete', 'put'];
-
+  var jsonParser = bodyParser.json();
+  
   // The initialization method.
   // Binds a wrapper around the express app variable.
-  var init = function(baseApp) {
+  function _init(baseApp) {
     app = baseApp;
     app.httpPost = function(routeObj) {
       routeObj.method = 'post';
@@ -42,51 +46,11 @@ var serverHelper = function() {
       routeObj.method = 'put';
       bindRequest(routeObj);
     };
-  };
-
-  var bindRequest = function(routeObj) {
-    routeObj.url = normalizeUrl(routeObj.url);
-    routeObj.method = routeObj.method.toLowerCase();
-    if (routeObj.isAdmin) {
-      routeObj.isPublic = false;
-    }
-    routeObj = __.extend(getDefaultRouteObj(), routeObj);
-
-    if (routeObj.enableCompression === false) {
-      routeObj.enableCompression = false;
-    } else {
-      routeObj.enableCompression = true;
-    }
-
-    var modifiedRoute = function(request, response, next) {
-
-      response.on('close', function() {
-        logServerPerformance(request, response, true); //True indicates that the log is written on connection close.
-      });
-
-      response.on('finish', function() {
-        logServerPerformance(request, response, false); //False indicates that the log is written after response has been sent.
-      });
-
-      if (routeObj.route) {
-        routeObj.route(request, response, next);
-      }
-    };
-
-    if (validMethodTypes.indexOf(routeObj.method) !== -1) {
-      routeObj.url = getFinalUrl(routeObj.url, routeObj.isPublic);
-      routeObj.modifiedRoute = modifiedRoute;
-      bindHttpRequest(routeObj);
-    } else {
-      console.log('Invalid method type for - ' + routeObj.url);
-    }
-  };
-
-  var jsonParser = bodyParser.json();
+  }; 
 
   // Checks the request type, and if it's a multipart/form-data
   // request, it parses that, else it assumes that it's JSON
-  var parseBodyTypeValues = function(request, response, next) {
+  function _parseBodyTypeValues(request, response, next) {
     var contentType = request.get('content-type');
     var type = typeof(contentType);
     var isMultipart = -1;
@@ -105,13 +69,13 @@ var serverHelper = function() {
         request.files = files;
         next();
       });
-
     } else {
+      // Treat the data as JSON, and use the parser.
       jsonParser(request, response, next);
     }
   };
 
-  var loadRoutes = function(app) {
+  function _loadRoutes(app) {
     // get all the folder names
     var files = fs.readdirSync(__CONFIG__.app_code_path);
     if (!files) {
@@ -125,7 +89,7 @@ var serverHelper = function() {
     var allControllers = [];
     for (var i = 0; i < files.length; ++i) {
       statObj = fs.statSync(__CONFIG__.app_code_path + files[i]);
-
+      // Check if its a valid folder.
       if (statObj && statObj.isDirectory() && isValidControllerFolder(files[i])) {
         controllerName = getControllerNameByFolder(files[i]);
         var controllerFileName = __CONFIG__.app_code_path + files[i] + '/' + controllerName;
@@ -136,6 +100,7 @@ var serverHelper = function() {
     }
     var loadedControllersObj;
     loadedControllersObj = [];
+    // Now require the controllers.
     for (i = 0; i < allControllers.length; ++i) {
       cntrlOutput += '\n\n';
       var cntrlObj = require(allControllers[i]);
@@ -154,99 +119,27 @@ var serverHelper = function() {
     loadedControllersObj.length = 0;
   };
 
-  var loadCronJobs = function() {
+  function _loadCronJobs() {
     var cronDir = __CONFIG__.app_base_path + 'cron/';
     var files = fs.readdirSync(cronDir);
     for (var i = 0; i !== files.length; ++i) {
       require(cronDir + files[i]);
     }
-  };
-
-  var loadViews = function(app) {
-    if (__CONFIG__.enable_compression) {
-      app.use(compression());
-    }
-    if (typeof loadCustomViews === 'function') {
-      loadCustomViews(app);
-    }
-  };
-
-  /**
-   * Common method to bind different type of requests to the express app
-   * Checks
-   */
-  var bindHttpRequest = function(routeObj) {
-    var urlMethod = routeObj.method.toUpperCase() + '|' + routeObj.url;
-    if (routeObj.isPublic) {
-      urlMethod += '|Public';
-    } else {
-      urlMethod += '|Not Public';
-      if (routeObj.isAdmin) {
-        urlMethod += '|Admin';
-      }
-    }
-    cntrlOutput += urlMethod + '\n';
-
-    if (__CONFIG__.enable_compression && routeObj.enableCompression) {
-      app[routeObj.method](routeObj.url, compression());
-    }
-    if (typeof loadCustomApi.beforeRouteLoad === 'function') {
-      loadCustomApi.beforeRouteLoad(routeObj.url, app);
-    }
-    if (routeObj.isPublic) {
-      app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
-    } else {
-      if (typeof loadCustomApi.validate === 'function') {
-        app[routeObj.method](routeObj.url, loadCustomApi.validate);
-      }
-      if (routeObj.isAdmin && typeof loadCustomApi.checkIfAdmin === 'function') {
-        app[routeObj.method](routeObj.url, loadCustomApi.checkIfAdmin);
-      }
-      app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
-    }
-  };
-
-  // Normalizes the URL passed, removes trailing slashes.
-  var normalizeUrl = function(url) {
-    if (url.indexOf('/') === 0 || url.lastIndexOf('/') === url.length - 1) {
-      return url.replace(/^\/|\/$/g, '');
-    }
-    return url;
-  };
-
-  // Returns the final URL based on the config value
-  var getFinalUrl = function(url, isPublic) {
-    var finalUrl = __CONFIG__.app_base_url_token + url;
-    if (isPublic) {
-      finalUrl = __CONFIG__.app_base_url + url;
-    }
-    return finalUrl;
-  };
+  };    
 
   // Not found handler.
-  var notFound = function(request, response) {
-    if (typeof loadCustomApi.notFound === 'function') {
-      loadCustomApi.notFound(request, response);
+  function _notFound(request, response) {
+    if (typeof LoadCustomApi.notFound === 'function') {
+      LoadCustomApi.notFound(request, response);
     } else {
-      response.status(appStatus('notFound')).json({
+      response.status(GetStatus('notFound')).json({
         'status': 'fail',
         'data': 'The requested url "' + request.originalUrl + '" is not supported by this service.'
       });
     }
   };
 
-  var isValidControllerFolder = function(folderName) {
-    if (!folderName || internalExclusionApi.indexOf(folderName) !== -1) {
-      return false;
-    }
-    return true;
-  };
-
-  var getControllerNameByFolder = function(folderName) {
-    return folderName + '-controller.js';
-  };
-
-  var logRequestResponse = function(request, response) {
+  function _logRequestResponse(request, response) {
     if (!__CONFIG__.log_to_slogger) {
       // Logging is turned off.
       return;
@@ -257,7 +150,7 @@ var serverHelper = function() {
     stackTrace += 'Request Headers : ' + util.inspect(request.headers, {
       depth: 3
     }) + '\n';
-    getRequestData(request, function(err, data) {
+    _getRequestData(request, function(err, data) {
       if (err) {
         return;
       }
@@ -291,11 +184,11 @@ var serverHelper = function() {
       stackTrace += 'Message : ' + responseMessage + '\n';
       stackTrace += 'Response Data: \n\n' + responseBody;
       logMessage = '[' + new Date().toUTCString() + '] Logging REQUEST/RESPONSE to ' + request.ip + ' for ' + request.originalUrl;
-      slogger.log(logMessage, stackTrace, 1);
+      Slogger.log(logMessage, stackTrace, 1);
     });
   };
 
-  var getRequestData = function(request, cb) {
+  function _getRequestData(request, cb) {
     if (request.method === 'POST') {
       var body = '';
       var hasError = false;
@@ -329,7 +222,7 @@ var serverHelper = function() {
     }
   };
 
-  var writeServerStartupLogs = function() {
+  function _writeServerStartupLogs() {
     // TODO : will be called many times, not a good model, need to find alternative.
     var now = new Date();
     var serverLogFile = 'server-startup-log.csv';
@@ -342,28 +235,26 @@ var serverHelper = function() {
     fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' + 'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
   };
 
-  var logServerPerformance = function(request, response, isClosed) {
-    if (__CONFIG__.log_performance_info) {
+  function logServerPerformance(request, response, isClosed) {    
       if (response.hasOwnProperty('performanceInfo') &&
         response.performanceInfo.logPerformance === true &&
         !response.performanceInfo.isLogged) {
         writePerformanceLog(request, response, isClosed);
         response.performanceInfo.isLogged = true;
-      }
-    }
+      }    
   };
 
-  var writePerformanceLog = function(request, response, isClosed) {
+  function writePerformanceLog(request, response, isClosed) {
     try {
       var endTimestamp = new Date().getTime();
       var processTime = (endTimestamp - response.performanceInfo.startTimestamp) / 1000;
       var requestSize = 0;
       if (request.body) {
-        requestSize = getbyteCount(util.inspect(request.body, {
+        requestSize = getByteCount(util.inspect(request.body, {
           depth: 5
         }));
       }
-      var responseSize = getbyteCount(util.inspect(response.dataSentToClient, {
+      var responseSize = getByteCount(util.inspect(response.dataSentToClient, {
         depth: 5
       }));
       var path = __CONFIG__.getLogsFolderPath() + __CONFIG__.maintInfoFileName;
@@ -401,7 +292,7 @@ var serverHelper = function() {
     return;
   };
 
-  function getbyteCount(maintString) {
+  function getByteCount(maintString) {
     return encodeURI(maintString).split(/%..|./).length - 1;
   }
 
@@ -413,17 +304,120 @@ var serverHelper = function() {
     };
     return routeObj;
   }
+  
+  var isValidControllerFolder = function(folderName) {
+    if (!folderName || internalExclusionApi.indexOf(folderName) !== -1) {
+      return false;
+    }
+    return true;
+  };
 
+  var getControllerNameByFolder = function(folderName) {
+    return folderName + '-controller.js';
+  }
+  
+  /**
+   * Common method to bind different type of requests to the express app
+   * Checks
+   */
+  var bindHttpRequest = function(routeObj) {
+    var urlMethod = routeObj.method.toUpperCase() + '|' + routeObj.url;
+    if (routeObj.isPublic) {
+      urlMethod += '|Public';
+    } else {
+      urlMethod += '|Not Public';
+      if (routeObj.isAdmin) {
+        urlMethod += '|Admin';
+      }
+    }
+    cntrlOutput += urlMethod + '\n';
+
+    if (__CONFIG__.enable_compression && routeObj.enableCompression) {
+      app[routeObj.method](routeObj.url, compression());
+    }
+    if (typeof LoadCustomApi.beforeRouteLoad === 'function') {
+      LoadCustomApi.beforeRouteLoad(routeObj.url, app);
+    }
+    if (routeObj.isPublic) {
+      app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
+    } else {
+      if (typeof LoadCustomApi.validate === 'function') {
+        app[routeObj.method](routeObj.url, LoadCustomApi.validate);
+      }
+      if (routeObj.isAdmin && typeof LoadCustomApi.checkIfAdmin === 'function') {
+        app[routeObj.method](routeObj.url, LoadCustomApi.checkIfAdmin);
+      }
+      app[routeObj.method](routeObj.url, routeObj.modifiedRoute);
+    }
+  };
+
+  // Normalizes the URL passed, removes trailing slashes.
+  var normalizeUrl = function(url) {
+    if (url.indexOf('/') === 0 || url.lastIndexOf('/') === url.length - 1) {
+      return url.replace(/^\/|\/$/g, '');
+    }
+    return url;
+  };
+
+  // Returns the final URL based on the config value
+  var getFinalUrl = function(url, isPublic) {
+    var finalUrl = __CONFIG__.app_base_url_token + url;
+    if (isPublic) {
+      finalUrl = __CONFIG__.app_base_url + url;
+    }
+    return finalUrl;
+  };
+  
+  var bindRequest = function(routeObj) {
+    routeObj.url = normalizeUrl(routeObj.url);
+    routeObj.method = routeObj.method.toLowerCase();
+    if (routeObj.isAdmin) {
+      routeObj.isPublic = false;
+    }
+    routeObj = __.extend(getDefaultRouteObj(), routeObj);
+
+    if (routeObj.enableCompression === false) {
+      routeObj.enableCompression = false;
+    } else {
+      routeObj.enableCompression = true;
+    }
+
+    function modifiedRoute(request, response, next) {      
+      if(__CONFIG__.log_performance_info) {
+        response.on('close', function() {
+          // True indicates that the log is written on connection close.
+          logServerPerformance(request, response, true); 
+        });
+  
+        response.on('finish', function() {
+          // False indicates that the log is written after response has been sent.
+          logServerPerformance(request, response, false); 
+        }); 
+      }
+
+      if (routeObj.route) {
+        routeObj.route(request, response, next);
+      }
+    };
+
+    if (validMethodTypes.indexOf(routeObj.method) !== -1) {
+      routeObj.url = getFinalUrl(routeObj.url, routeObj.isPublic);
+      routeObj.modifiedRoute = modifiedRoute;
+      bindHttpRequest(routeObj);
+    } else {
+      console.log('Invalid method type for - ' + routeObj.url);
+    }
+  };
+  
   return {
-    parseBodyType: parseBodyTypeValues,
-    init: init,
-    notFound: notFound,
-    logRequestResponse: logRequestResponse,
-    getRequestData: getRequestData,
-    loadRoutes: loadRoutes,
-    loadViews: loadViews,
-    loadCronJobs: loadCronJobs,
-    writeServerStartupLogs: writeServerStartupLogs
+    parseBodyType: _parseBodyTypeValues,
+    init: _init,
+    notFound: _notFound,
+    logRequestResponse: _logRequestResponse,
+    getRequestData: _getRequestData,
+    loadRoutes: _loadRoutes,    
+    loadCronJobs: _loadCronJobs,
+    writeServerStartupLogs: _writeServerStartupLogs
   };
 };
 

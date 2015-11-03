@@ -4,37 +4,37 @@ var async = require('async');
 var bcrypt = require('bcrypt');
 var util = require('util');
 
-var mariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
-var cassandraDb = require(__CONFIG__.app_base_path +
+var MariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
+var CassandraDb = require(__CONFIG__.app_base_path +
   'lib/db-connector/cassandradb');
 
-var dbConfig = require(__CONFIG__.app_base_path + 'db-config');
+var DBConfig = require(__CONFIG__.app_base_path + 'db-config');
 var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
-var logger = require(__CONFIG__.app_base_path + 'logger');
-var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
+var Logger = require(__CONFIG__.app_base_path + 'logger');
+var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
 // Helpers
-var dateUtil = require(__CONFIG__.app_base_path + 'lib/helpers/date-utility');
-var mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
-var validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
-var csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
-var zipper = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
+var DateUtil = require(__CONFIG__.app_base_path + 'lib/helpers/date-utility');
+var Mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
+var Validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
+var Csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
+var Zipper = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
 
 function Model(mProperties, objToBind, queryModifiers) {
-  this.config = dbConfig['mariadb'];
-  this.cassandraConfig = dbConfig['cassandradb'];
-  this.db = new mariaDb(this.config);
-  this.csDb = new cassandraDb(this.cassandraConfig);
-  this.getStatusCode = getStatus;
+  this.config = DBConfig['mariadb'];
+  this.cassandraConfig = DBConfig['cassandradb'];
+  this.db = new MariaDb(this.config);
+  this.csDb = new CassandraDb(this.cassandraConfig);
+  this.getStatusCode = GetStatus;
   this.queryModifiers = queryModifiers;
   this.buildObject(mProperties, objToBind);
 
   // Helpers.
-  this.dateUtil = dateUtil;
-  this.mailer = mailer;
-  this.csvHelper = new csv();
-  this.validator = new validator(mProperties);
-  this.zipper = new zipper();
+  this.dateUtil = DateUtil;
+  this.mailer = Mailer;
+  this.csvHelper = new Csv();
+  this.validator = new Validator(mProperties);
+  this.zipper = new Zipper();
 }
 
 Model.prototype.query = function(objQuery) {
@@ -150,109 +150,6 @@ Model.prototype.handleTransactionEnd = function(err, transactionID, cb) {
   }
 };
 
-/**
- *
- * @param objQueryDetails Information about the query to be generated
- * @param objQueryDetails.initialQuery string Initial part of the query
- * @param objQueryDetails.staticData object or array static data, data that will stay the same for all the
- * queries.
- * @param objQueryDetails.staticCols array Static columns. They should be in the same order as
- * present in the query.
- * @param objQueryDetails.hasPrimary boolean True if there is a primary key column.
- * @param objQueryDetails.data
- * @param objQueryDetails.propNames
- * @param objQueryDetails.defaultVals
- * @returns
- */
-Model.prototype.getMultipleInsertQuery = function(objQueryDetails) {
-  var initialQuery = objQueryDetails.initialQuery;
-  var finalData = objQueryDetails.staticData;
-  var propNames = objQueryDetails.propNames;
-  var staticCols = objQueryDetails.staticCols;
-  var dataToBind = objQueryDetails.data;
-  var hasPrimaryKey = objQueryDetails.hasPrimary;
-  var defaultVals = objQueryDetails.defaultVals;
-
-  var valuesQueryArr = [];
-  var valuesQuery = '';
-  var idCol = '';
-  var i = 0, len = 0, dynamicCols = [], j = 0, len2 = 0;
-  var currColName;
-  if (__.isArray(dataToBind)) {
-    // It's an array.
-    for (i = 0, len = dataToBind.length; i < len; ++i) {
-      dynamicCols = [];
-      if (hasPrimaryKey) {
-        // Adding the id column.
-        idCol = 'id_' + i.toString();
-        dynamicCols.push(':' + idCol);
-        finalData[idCol] = uuid.v4();
-      }
-
-      // Now adding the data itself.
-      var currData = dataToBind[i];
-      for (j = 0, len2 = propNames.length; j < len2; ++j) {
-        currColName = propNames[j] + '_' + i.toString();
-        dynamicCols.push(':' + currColName);
-        finalData[currColName] = currData[propNames[j]];
-      }
-      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() +
-        ')');
-    }
-    valuesQuery = valuesQueryArr.join();
-  } else {
-    // It's an object.
-    for (i = 0, len = dataToBind[propNames[0]].length; i < len; ++i) {
-      dynamicCols = [];
-      if (hasPrimaryKey) {
-        idCol = 'id_' + i.toString();
-        dynamicCols.push(':' + idCol);
-        finalData[idCol] = uuid.v4();
-      }
-      for (j = 0, len2 = propNames.length; j < len2; ++j) {
-        currColName = propNames[j] + '_' + i.toString();
-        dynamicCols.push(':' + currColName);
-        if (dataToBind[propNames[j]] && dataToBind[propNames[j]][i]) {
-          finalData[currColName] = dataToBind[propNames[j]][i];
-        } else if (defaultVals[propNames[j]]) {
-          finalData[currColName] = defaultVals[propNames[j]];
-        } else {
-          finalData[currColName] = '';
-        }
-      }
-      valuesQueryArr.push('(' + dynamicCols.join() + ', ' + staticCols.join() +
-        ')');
-    }
-    valuesQuery = valuesQueryArr.join();
-  }
-
-  return {
-    query: initialQuery + valuesQuery + ';',
-    data: finalData
-  };
-};
-
-Model.prototype.getBcryptHash = function(stringToHash, noOfRounds, cb) {
-  bcrypt.hash(stringToHash, noOfRounds, function(err, hash) {
-    return cb(err, hash);
-  });
-};
-
-Model.prototype.compareHash = function(stringToCheck, hashString, cb) {
-  bcrypt.compare(stringToCheck, hashString, function(err, res) {
-    return cb(err, res);
-  });
-};
-
-Model.prototype.readCsvFile = function(path, cb) {
-  this.csvHelper.readCsvHelper(path, function(err, data) {
-    if (err) {
-      cb(err);
-    }
-    cb(null, data);
-  });
-};
-
 Model.prototype.queries = function(objQuery) {
   runQuery(objQuery, this);
 };
@@ -269,7 +166,7 @@ function processError(err, objQuery) {
         }) + '\n';
       }
       strError += '-----------\n\n';
-      logger.writeLogErr(strError);
+      Logger.writeLogErr(strError);
     }
   }
 }

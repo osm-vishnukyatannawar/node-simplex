@@ -7,9 +7,9 @@
 'use strict';
 
 var mSQLClient = require('mysql');
-var mSQLPool = require(__CONFIG__.app_base_path + 'lib/db-connector/pools/mysql-pool');
 
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+var SQLPool = require(__CONFIG__.app_lib_path + 'db-connector/pools/mysql-pool');
+var AppError = require(__CONFIG__.app_lib_path + 'app-error');
 
 var defaultMsg = {
   errorDbConn: "There was an error while communicating with the database.",
@@ -71,7 +71,7 @@ MySQL.prototype.getResults = function(objQuery, cb) {
 // isSelect is currently not being used, leaving it as is, to maybe use in the
 // future
 function runQuery(objMySQL, isSelect, query, data, cb, closeConn) {
-  mSQLPool(objMySQL.config, function(err, connection) {
+  SQLPool(objMySQL.config, function(err, connection) {
     if (err) {
       cb(new AppError(err, objMySQL.msgStrings['errorDbConn']), null);
       return;

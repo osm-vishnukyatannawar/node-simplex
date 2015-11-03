@@ -2,6 +2,8 @@
  * Module of network utility functions
  */
 
+'use strict';
+
 var os = require('os');
 var _ = require('underscore');
 
@@ -26,19 +28,19 @@ function getIpAddressForNetworkInterface(networkInterfaceName) {
   // if the network interface is available
   if (networkInterface) {
     // find the interface associated with the name
-    var interface = _.find(networkInterface, function(interface) {
+    var nInterface = _.find(networkInterface, function(nInterface) {
       // skip any localhost or non-IPv4 addresses
-      if ('IPv4' !== interface.family || interface.internal !== false) {
+      if ('IPv4' !== nInterface.family || nInterface.internal !== false) {
         return false;
       } else {
         return true;
       }
     });
 
-    // if a interface was found
-    if (interface) {
+    // if an interface was found
+    if (nInterface) {
       // get the ip-address for the interface
-      ipAddress = interface.address;
+      ipAddress = nInterface.address;
     }
   }
 

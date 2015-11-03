@@ -1,19 +1,13 @@
 /* global __CONFIG__ */
-var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
-var Authorization = require(__CONFIG__.app_code_path + 'authorization/Authorization');
-var Controller = require(__CONFIG__.app_base_path + 'lib/controller');
+'use strict';
 var i18n = require('i18n');
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
+
+var GetStatus = require(__CONFIG__.app_lib_path + 'status');
+var Controller = require(__CONFIG__.app_lib_path + 'controller');
+var AppError = require(__CONFIG__.app_lib_path + 'app-error');
 
 var API = function(app) {
-  i18n.configure({
-    locales: ['en'],
-    defaultLocale: 'en',
-    prefix: 'emanate-',
-    directory: __CONFIG__.app_base_path + '../locales'
-  });
-
-  app.use(i18n.init);
+    
 };
 
 API.validate = function(request, response, next) {

@@ -1,9 +1,10 @@
-var getStatus = require(__CONFIG__.app_base_path + 'lib/status');
 'use strict';
+
+var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
 
 function Controller() {
   'use strict';
-  this.getStatusCode = getStatus;
+  this.getStatusCode = GetStatus;
 }
 
 Controller.prototype.sendResponse = function(err, data, response) {
@@ -95,17 +96,6 @@ Controller.prototype.download = function(response, fileNameToShow, folderPath, f
         }
       }
     });
-};
-
-Controller.prototype.getDateStamp = function() {
-  var d = new Date();
-  var year = d.getFullYear();
-  var date = d.getDate();
-  var month = d.getMonth() + 1;
-  var hours = d.getHours();
-  var mins = d.getMinutes();
-  var dateString = year + '' + month + '' + date + '_' + hours + mins + '_';
-  return dateString;
 };
 
 module.exports = Controller;

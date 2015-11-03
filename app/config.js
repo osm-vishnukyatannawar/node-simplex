@@ -92,7 +92,8 @@ global.__CONFIG__ = {
     'ssl_cert': 'ssl_https.pfx',
     'passphrase': 'password'
   },
-  'cron_time' : 60000
+  'cron_time' : 60000,
+  'excluded_controllers' : []
 };
 
 __CONFIG__.is_production = isProduction;

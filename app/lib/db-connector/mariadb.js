@@ -6,10 +6,12 @@
 'use strict';
 
 var mSQLClient = require('mariasql');
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var uuid = require('node-uuid');
-var transactionPool = {};
-var getPool = require(__CONFIG__.app_base_path + 'lib/db-connector/pools/mariadb-pool');
+
+var TransactionPool = {};
+var AppError = require(__CONFIG__.app_lib_path + 'app-error');
+var GetPool = require(__CONFIG__.app_lib_path + 'db-connector/pools/mariadb-pool');
+
 var defaultMsg = {
   errorDbConn: 'There was an error while communicating with the database.',
   queryExecution: 'There was an error while executing the query.'
@@ -25,7 +27,7 @@ var defaultMsg = {
  */
 function MariaDB(dbConfig, customMsgs) {
   this.config = modifyConfigObj(dbConfig);
-  this.pool = getPool(this.config);
+  this.pool = GetPool(this.config);
   this.msgStrings = defaultMsg;
   if (customMsgs !== undefined && customMsgs.errorDbConn && customMsgs.queryExecution) {
     this.msgStrings = customMsgs;
@@ -97,7 +99,7 @@ MariaDB.prototype.beginTransaction = function(cb) {
     if (err) {
       return cb(err);
     }
-    transactionPool[transactionID] = client;
+    TransactionPool[transactionID] = client;
     client.query('START TRANSACTION;').on('result', function() {}).on('end', function() {
       cb(null, transactionID);
     }).on('error', function(err) {
@@ -108,7 +110,7 @@ MariaDB.prototype.beginTransaction = function(cb) {
 };
 
 MariaDB.prototype.commitTransaction = function(transactionID, cb) {
-  var client = transactionPool[transactionID];
+  var client = TransactionPool[transactionID];
   var that = this;
   if (!client) {
     // TODO : Change this...
@@ -139,7 +141,7 @@ MariaDB.prototype.commitTransaction = function(transactionID, cb) {
 };
 
 MariaDB.prototype.rollbackTransaction = function(transactionID, cb) {
-  var client = transactionPool[transactionID];
+  var client = TransactionPool[transactionID];
   var that = this;
   if (client) {
     client.query('ROLLBACK;').on('result', function(res) {
@@ -166,12 +168,12 @@ MariaDB.prototype.queries = function(objQuery, cb) {
 
 
 function destroyTransactionClient(objMaria, transactionID) {
-  if (!transactionPool[transactionID]) {
+  if (!TransactionPool[transactionID]) {
     return;
   }
-  var clientObj = transactionPool[transactionID];
+  var clientObj = TransactionPool[transactionID];
   objMaria.pool.release(clientObj);
-  delete transactionPool[transactionID];
+  delete TransactionPool[transactionID];
 }
 
 function getDefaultValues(objQuery) {
@@ -197,7 +199,7 @@ function runQuery(objMaria, isSelect, query, data, cb, closeConn, useArray, tran
   var qCnt = 0;
 
   if (transactionID) {
-    clientObj = transactionPool[transactionID];
+    clientObj = TransactionPool[transactionID];
     runQueryWithClient();
   } else {
     objMaria.pool.acquire(function(err, client) {
