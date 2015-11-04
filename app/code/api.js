@@ -18,8 +18,10 @@ API.checkIfAdmin = function(request, response, next) {
   // Check if current user has admin privelege
 };
 
+/*
 API.notFound = function(request, response) {
   // Write code to handle the api not found condition.
-};
+}; 
+*/
 
 module.exports = API;

@@ -27,6 +27,7 @@
     "bcrypt": "0.8.5",
     "body-parser": "1.14.1",
     "csv": "0.4.6",
+    "cassandra-driver" : "2.2.2",
     "email-templates": "2.0.1",
     "express": "4.13.3",
     "formidable": "1.0.17",

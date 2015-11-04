@@ -1,6 +1,6 @@
 /* global __CONFIG__ */
 var DBConfig = require(__dirname + '/db-config.js');
-var NetworkUtils = require(__dirname + '/lib/network-utils');
+var NetworkUtils = require(__dirname + '/lib/helpers/network-utils');
 
 var config = module.exports;
 
@@ -49,7 +49,7 @@ global.__CONFIG__ = {
   'app_base_path': __dirname + '/',
   'app_code_path': __dirname + '/code/',
   'app_lib_path' : __dirname + '/lib/',
-  'app_helper_path' : __dirname + '/code/lib/helpers/',
+  'app_helper_path' : __dirname + '/lib/helpers/',
   'app_base_url': '/api/v1/',  
   'app_http_base_url': (isHttps) ? app_https_base_url : app_http_base_url,
   'app_transaction_prop': 'transactionID',

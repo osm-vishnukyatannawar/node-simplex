@@ -4,21 +4,20 @@ var async = require('async');
 var bcrypt = require('bcrypt');
 var util = require('util');
 
-var MariaDb = require(__CONFIG__.app_base_path + 'lib/db-connector/mariadb');
-var CassandraDb = require(__CONFIG__.app_base_path +
-  'lib/db-connector/cassandradb');
-
 var DBConfig = require(__CONFIG__.app_base_path + 'db-config');
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 var Logger = require(__CONFIG__.app_base_path + 'logger');
-var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
+
+var AppError = require(__CONFIG__.app_lib_path + 'app-error');
+var GetStatus = require(__CONFIG__.app_lib_path + 'status');
+var MariaDb = require(__CONFIG__.app_lib_path + 'db-connector/mariadb');
+var CassandraDb = require(__CONFIG__.app_lib_path + 'db-connector/cassandradb');
 
 // Helpers
-var DateUtil = require(__CONFIG__.app_base_path + 'lib/helpers/date-utility');
-var Mailer = require(__CONFIG__.app_base_path + 'lib/helpers/mailer');
-var Validator = require(__CONFIG__.app_base_path + 'lib/helpers/validator');
-var Csv = require(__CONFIG__.app_base_path + 'lib/helpers/csvHelper');
-var Zipper = require(__CONFIG__.app_base_path + 'lib/helpers/zipper');
+var DateUtil = require(__CONFIG__.app_helper_path + 'date-utility');
+var Mailer = require(__CONFIG__.app_helper_path + 'mailer');
+var Validator = require(__CONFIG__.app_helper_path + 'validator');
+var Csv = require(__CONFIG__.app_helper_path + 'csv-helper');
+var Zipper = require(__CONFIG__.app_helper_path + 'zipper');
 
 function Model(mProperties, objToBind, queryModifiers) {
   this.config = DBConfig['mariadb'];

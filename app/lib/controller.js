@@ -1,6 +1,6 @@
 'use strict';
 
-var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
+var GetStatus = require(__CONFIG__.app_lib_path + 'status');
 
 function Controller() {
   'use strict';

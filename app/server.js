@@ -10,10 +10,10 @@ var express = require('express');
 var Config = require(__dirname + '/config');
 var Logger = require(__CONFIG__.app_base_path + 'logger');
 var GetStatus = require(__CONFIG__.app_lib_path + 'status');
-var Helper = require(__CONFIG__.app_lib_path + 'server-helper');
+var Router = require(__CONFIG__.app_lib_path + 'router/router.js');
 
 var app = express();
-Helper.init(app);
+Router.init(app);
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
@@ -22,7 +22,7 @@ var cpuCount = require('os').cpus().length;
 if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_disabled) {
 
   // Load the cron jobs on the master thread if it's production.
-  Helper.loadCronJobs(app);
+  Router.loadCronJobs(app);
 
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
@@ -50,7 +50,7 @@ if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_d
     }
   });
 
-  app.use(Helper.parseBodyType);
+  app.use(Router.parseBodyType);
 
   app.use(function(err, req, res, next) {
     if (err) {
@@ -65,18 +65,18 @@ if (Config.express.is_production && cluster.isMaster && !__CONFIG__.is_cluster_d
   });  
 
   // Bind the api routes.
-  Helper.loadRoutes(app);
+  Router.loadRoutes(app);
 
   // Load the cron jobs on the child thread if it's NOT production or clustering is disabled
   if (!Config.express.is_production || __CONFIG__.is_cluster_disabled) {
-    Helper.loadCronJobs(app);
+    Router.loadCronJobs(app);
   }
   
-  Helper.writeServerStartupLogs();
+  Router.writeServerStartupLogs();
 
-  // 404 error
-  app.use('/api', Helper.notFound);
-    
+  // 404 error  
+  app.use('/', Router.notFound);
+  
   http.createServer(app).listen(Config.express.port, Config.express.ip, function(error) {
     if (error) {
       Logger.logAppErrors(error);
