@@ -11,8 +11,8 @@ var AppService = require(__CONFIG__.app_code_path + 'app-service.js');
 var GetStatus = require(__CONFIG__.app_lib_path + 'status.js');
 var UserModel = require(__CONFIG__.app_code_path + 'user/user-model.js');
 
-function UserService(app) {  
-  UserService.call(this);     
+function UserService(app) {
+  AppService.call(this);
 }
 
 util.inherits(UserService, AppService);
