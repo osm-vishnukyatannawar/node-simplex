@@ -4,8 +4,9 @@
 
 'use strict';
 
-var os = require('os');
-var _ = require('underscore');
+// Third party modules
+const os = require('os');
+const _ = require('underscore');
 
 /**
  * Finds and returns the IP-address for the given network
@@ -15,7 +16,7 @@ var _ = require('underscore');
  * @param networkInterfaceName Network interface name (eg: 'eth0')
  * @returns {string} IP-address of the given network interface (null if not found)
  */
-function getIpAddressForNetworkInterface(networkInterfaceName) {
+function getIpAddressForNetworkInterface (networkInterfaceName) {
   // default to return null if ip-address is not found
   var ipAddress = null;
 
@@ -28,9 +29,9 @@ function getIpAddressForNetworkInterface(networkInterfaceName) {
   // if the network interface is available
   if (networkInterface) {
     // find the interface associated with the name
-    var nInterface = _.find(networkInterface, function(nInterface) {
+    var nInterface = _.find(networkInterface, function (nInterface) {
       // skip any localhost or non-IPv4 addresses
-      if ('IPv4' !== nInterface.family || nInterface.internal !== false) {
+      if (nInterface.family !== 'IPv4' || nInterface.internal !== false) {
         return false;
       } else {
         return true;

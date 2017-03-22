@@ -8,7 +8,7 @@ var sloggerConfig = {
     'LogMessage': '',
     'StackTrace': '',
     'User': 'Osmosys',
-    'Customer': 'Emanate Wireless',
+    'Customer': 'Osmosys',
     'PageOrModuleName': '',
     'Application': __CONFIG__.slogger_app_id,
     'Subscription': null,

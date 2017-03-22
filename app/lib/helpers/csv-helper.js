@@ -1,25 +1,26 @@
-var csv = require('csv');
-var fs = require('fs');
-var async = require('async');
+'use strict';
+// Third party modules
+const csv = require('csv');
+const fs = require('fs');
+const async = require('async');
 
-function csvHelper() {}
+function csvHelper () {}
 
-csvHelper.prototype.readCsvHelper = function(path, cb) {
+csvHelper.prototype.readCsvHelper = function (path, cb) {
   var fileStream = fs.createReadStream(path);
   var parser = csv.parse({
     'columns': true
-  }, function(err, data) {
+  }, function (err, data) {
     if (err) {
       cb(err);
     }
     cb(null, data);
-
   });
   fileStream.pipe(parser);
 };
 
-csvHelper.prototype.readObjCreateCsv = function(arrayToRead, cb) {
-  csv.stringify(arrayToRead, function(err, output) {
+csvHelper.prototype.readObjCreateCsv = function (arrayToRead, cb) {
+  csv.stringify(arrayToRead, function (err, output) {
     if (err) {
       return cb(err);
     }
@@ -27,7 +28,7 @@ csvHelper.prototype.readObjCreateCsv = function(arrayToRead, cb) {
   });
 };
 
-csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
+csvHelper.prototype.getArrayForCsv = function (data, cb, properties) {
   var baseArray = [];
   var labelsArray = [];
   for (var index in data) {
@@ -42,11 +43,9 @@ csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
           } else {
             labelsArray.push(key);
           }
-
         } else {
           labelsArray.push(key);
         }
-
       }
       baseArray.push(labelsArray);
     }
@@ -58,7 +57,7 @@ csvHelper.prototype.getArrayForCsv = function(data, cb, properties) {
   cb(null, baseArray);
 };
 
-function getPropertyCsvName(key, props) {
+function getPropertyCsvName (key, props) {
   if (props.hasOwnProperty(key)) {
     if (props[key].hasOwnProperty('csvName')) {
       return props[key]['csvName'];
@@ -70,11 +69,11 @@ function getPropertyCsvName(key, props) {
   }
 }
 
-csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
-  cb) {  
+csvHelper.prototype.writeCsvStringToFile = function (data, fileName,
+  cb) {
   fs.writeFile(__CONFIG__.getFilesFolderPath() + '/' + fileName,
     data,
-    function(err) {
+    function (err) {
       if (err) {
         return cb(err);
       } else {
@@ -83,20 +82,19 @@ csvHelper.prototype.writeCsvStringToFile = function(data, fileName,
     });
 };
 
-
-csvHelper.prototype.getCSV = function(data, fileName, cb, properties) {
+csvHelper.prototype.getCSV = function (data, fileName, cb, properties) {
   var that = this;
   async.waterfall([
-    function(wfcb) {
+    function (wfcb) {
       that.getArrayForCsv(data, wfcb, properties);
     },
-    function(array, wfcb) {
+    function (array, wfcb) {
       that.readObjCreateCsv(array, wfcb);
     },
-    function(stringToWrite, wfcb) {
+    function (stringToWrite, wfcb) {
       that.writeCsvStringToFile(stringToWrite, fileName, wfcb);
     }
-  ], function(err, data) {
+  ], function (err, data) {
     cb(err, data);
   });
 };

@@ -1,26 +1,29 @@
-var validatorLib = require('validator');
-var __ = require('underscore');
+'use strict';
 
-validatorLib.extend('isRequired', function(str) {
+// Third party modules
+const validatorLib = require('validator');
+const __ = require('underscore');
+
+validatorLib.extend('isRequired', function (str) {
   if (!str || str.length === 0) {
     return false;
   }
   return true;
 });
 
-validatorLib.extend('isBoolRequired', function(str) {
+validatorLib.extend('isBoolRequired', function (str) {
   if (!str || str.length !== 0) {
     return true;
   }
   return false;
 });
 
-function Validator(requiredFields) {
+function Validator (requiredFields) {
   this.requiredFields = requiredFields;
   this.errorObj = {};
 }
 
-Validator.prototype.isValid = function(objToValidate, propsToValidate) {
+Validator.prototype.isValid = function (objToValidate, propsToValidate) {
   this.errorObj = {};
   if (propsToValidate) {
     for (var i = 0, len = propsToValidate.length, propName; i < len; ++i) {
@@ -40,7 +43,7 @@ Validator.prototype.isValid = function(objToValidate, propsToValidate) {
   return __.isEmpty(this.errorObj);
 };
 
-Validator.prototype.validateProperty = function(objToValidate, propName,
+Validator.prototype.validateProperty = function (objToValidate, propName,
   propsToValidate) {
   if (!propsToValidate) {
     return;
@@ -57,19 +60,19 @@ Validator.prototype.validateProperty = function(objToValidate, propName,
   }
 };
 
-Validator.prototype.getErrors = function() {
+Validator.prototype.getErrors = function () {
   return this.errorObj;
 };
 
-Validator.prototype.isUUID4 = function(str) {
+Validator.prototype.isUUID4 = function (str) {
   return validatorLib.isUUID(str, 4);
 };
 
-Validator.prototype.isEmail = function(str) {
+Validator.prototype.isEmail = function (str) {
   return validatorLib.isEmail(str);
 };
 
-Validator.prototype.chkPswrdLength = function(str) {
+Validator.prototype.chkPswrdLength = function (str) {
   if (!str || str.length < 7) {
     return false;
   }

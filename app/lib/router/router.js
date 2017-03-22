@@ -1,60 +1,62 @@
-/* global __CONFIG__ */
-var formidable = require('formidable');
-var bodyParser = require('body-parser');
-var util = require('util');
-var __ = require('underscore');
-var fs = require('fs');
-var path = require('path');
-var compression = require('compression');
-var moment = require('moment');
+'use strict';
+// Third party modules
+const formidable = require('formidable');
+const bodyParser = require('body-parser');
+const util = require('util');
+const __ = require('underscore');
+const fs = require('fs');
+const path = require('path');
+const compression = require('compression');
+const moment = require('moment');
 
-var LoadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
-var GetStatus = require(__CONFIG__.app_lib_path + 'status');
-var Slogger = require(__CONFIG__.app_helper_path + 'slogerr');
-var AppError = require(__CONFIG__.app_lib_path + 'app-error');
-var RouteHelper = require(__CONFIG__.app_lib_path + 'router/route-helper.js');
+// Osm includes
+let LoadCustomApi = require(__CONFIG__.app_code_path + 'api.js');
+let GetStatus = require(__CONFIG__.app_lib_path + 'status');
+let Slogger = require(__CONFIG__.app_helper_path + 'slogerr');
+let AppError = require(__CONFIG__.app_lib_path + 'app-error');
+let RouteHelper = require(__CONFIG__.app_lib_path + 'router/route-helper.js');
 
 // Folders that will not be considered as controllers while autoloading controllers.
-var internalExclusionApi = [];
+let internalExclusionApi = [];
 internalExclusionApi.concat(__CONFIG__.excluded_controllers);
 
-var cntrlOutput = '';
+let cntrlOutput = '';
 
-var serverHelper = function() {
+var serverHelper = function () {
   var app = null;
   var validMethodTypes = ['get', 'post', 'delete', 'put'];
   var jsonParser = bodyParser.json();
-  
+
   // The initialization method.
   // Binds a wrapper around the express app variable.
-  function _init(baseApp) {
+  function _init (baseApp) {
     app = baseApp;
-    app.httpPost = function(routeObj) {
+    app.httpPost = function (routeObj) {
       routeObj.method = 'post';
       bindRequest(routeObj);
     };
 
-    app.httpGet = function(routeObj) {
+    app.httpGet = function (routeObj) {
       routeObj.method = 'get';
       bindRequest(routeObj);
     };
 
-    app.httpDelete = function(routeObj) {
+    app.httpDelete = function (routeObj) {
       routeObj.method = 'delete';
       bindRequest(routeObj);
     };
 
-    app.httpPut = function(routeObj) {
+    app.httpPut = function (routeObj) {
       routeObj.method = 'put';
       bindRequest(routeObj);
     };
-  }; 
+  };
 
   // Checks the request type, and if it's a multipart/form-data
   // request, it parses that, else it assumes that it's JSON
-  function _parseBodyTypeValues(request, response, next) {
+  function _parseBodyTypeValues (request, response, next) {
     var contentType = request.get('content-type');
-    var type = typeof(contentType);
+    var type = typeof (contentType);
     var isMultipart = -1;
     if (type !== 'undefined') {
       isMultipart = contentType.search('multipart/form-data');
@@ -66,7 +68,7 @@ var serverHelper = function() {
         keepExtensions: true,
         multiples: true
       });
-      form.parse(request, function(err, fields, files) {
+      form.parse(request, function (err, fields, files) {
         request.fields = fields;
         request.files = files;
         next();
@@ -77,7 +79,7 @@ var serverHelper = function() {
     }
   };
 
-  function _loadRoutes(app) {
+  function _loadRoutes (app) {
     // Get all the folder names
     var files = fs.readdirSync(__CONFIG__.app_code_path);
     if (!files) {
@@ -121,19 +123,19 @@ var serverHelper = function() {
     loadedControllersObj.length = 0;
   };
 
-  function _loadCronJobs() {
+  function _loadCronJobs () {
     var cronDir = __CONFIG__.app_base_path + 'cron/';
     var files = fs.readdirSync(cronDir);
-    for (var i = 0; i !== files.length; ++i) { 
-      if(path.extname(files[i]) !== 'js') {
+    for (var i = 0; i !== files.length; ++i) {
+      if (path.extname(files[i]) !== 'js') {
         continue;
-      }     
+      }
       require(cronDir + files[i]);
     }
-  };    
+  };
 
   // Not found handler.
-  function _notFound(request, response) {
+  function _notFound (request, response) {
     if (typeof LoadCustomApi.notFound === 'function') {
       LoadCustomApi.notFound(request, response);
     } else {
@@ -144,7 +146,7 @@ var serverHelper = function() {
     }
   };
 
-  function _logRequestResponse(request, response) {
+  function _logRequestResponse (request, response) {
     if (!__CONFIG__.log_to_slogger) {
       // Logging is turned off.
       return;
@@ -155,7 +157,7 @@ var serverHelper = function() {
     stackTrace += 'Request Headers : ' + util.inspect(request.headers, {
       depth: 3
     }) + '\n';
-    _getRequestData(request, function(err, data) {
+    _getRequestData(request, function (err, data) {
       if (err) {
         return;
       }
@@ -193,11 +195,11 @@ var serverHelper = function() {
     });
   };
 
-  function _getRequestData(request, cb) {
+  function _getRequestData (request, cb) {
     if (request.method === 'POST') {
       var body = '';
       var hasError = false;
-      request.on('data', function(data) {
+      request.on('data', function (data) {
         body += data;
         request.body = body;
         // Too much POST data, kill the connection!
@@ -206,13 +208,13 @@ var serverHelper = function() {
         }
       });
 
-      request.on('error', function(e) {
+      request.on('error', function (e) {
         request.end();
         hasError = true;
         return cb(e);
       });
 
-      request.on('end', function() {
+      request.on('end', function () {
         if (!hasError) {
           cb(null, body);
         }
@@ -227,7 +229,7 @@ var serverHelper = function() {
     }
   };
 
-  function _writeServerStartupLogs() {
+  function _writeServerStartupLogs () {
     // TODO : will be called many times, not a good model, need to find alternative.
     var now = new Date();
     var serverLogFile = 'server-startup-log.csv';
@@ -237,20 +239,20 @@ var serverHelper = function() {
     if (fs.existsSync(__CONFIG__.log_folder_path + serverLogFile)) {
       fs.unlinkSync(__CONFIG__.log_folder_path + serverLogFile);
     }
-    fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' 
-      + 'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
+    fs.writeFileSync(__CONFIG__.log_folder_path + serverLogFile, 'Server started at |' + nowUTC.toLocaleString() + '\n-------\n' +
+      'Type|URL|Access Type|Admin only?' + '\n-------\n' + cntrlOutput);
   };
 
-  function logServerPerformance(request, response, isClosed) {    
-      if (response.hasOwnProperty('performanceInfo') &&
-        response.performanceInfo.logPerformance === true &&
-        !response.performanceInfo.isLogged) {
-        writePerformanceLog(request, response, isClosed);
-        response.performanceInfo.isLogged = true;
-      }    
+  function logServerPerformance (request, response, isClosed) {
+    if (response.hasOwnProperty('performanceInfo') &&
+      response.performanceInfo.logPerformance === true &&
+      !response.performanceInfo.isLogged) {
+      writePerformanceLog(request, response, isClosed);
+      response.performanceInfo.isLogged = true;
+    }
   };
 
-  function writePerformanceLog(request, response, isClosed) {
+  function writePerformanceLog (request, response, isClosed) {
     try {
       var endTimestamp = new Date().getTime();
       var processTime = (endTimestamp - response.performanceInfo.startTimestamp) / 1000;
@@ -274,9 +276,9 @@ var serverHelper = function() {
       if (!response.performanceInfo.performanceHeaders) {
         response.performanceInfo.performanceHeaders = '';
       }
-      fs.stat(path, function(err, stats) {
+      fs.stat(path, function (err, stats) {
         if (err && err.code === 'ENOENT') {
-          performanceLog += response.performanceInfo.performanceHeaders + ', Request start time, Request end time, Request ' 
+          performanceLog += response.performanceInfo.performanceHeaders + ', Request start time, Request end time, Request '
             + 'processing time (sec), Request size (bytes), Response size (bytes)';
           performanceLog += '\r\n';
           performanceLog += response.performanceInfo.performanceLog + ',' + startTime + ',' + endTimestamp + ',' + processTime +
@@ -287,7 +289,7 @@ var serverHelper = function() {
             ',' + requestSize + ',' + responseSize;
           performanceLog += '\r\n';
         }
-        fs.appendFile(path, performanceLog, function(err) {
+        fs.appendFile(path, performanceLog, function (err) {
           if (err) {
             new AppError(err, 'There was an error while logging the maintenance calls info.', {});
           }
@@ -296,23 +298,22 @@ var serverHelper = function() {
     } catch (e) {
       new AppError(e, 'Something went wrong while writing the maintenance logs.', {});
     }
-    return;
-  };  
+  };
 
-  function getDefaultRouteObj() {
+  function getDefaultRouteObj () {
     var routeObj = {
       isAdmin: false,
       isPublic: false,
       enableCompression: true
     };
     return routeObj;
-  }    
-  
+  }
+
   /**
    * Common method to bind different type of requests to the express app
    * Checks
    */
-  var bindHttpRequest = function(routeObj) {
+  var bindHttpRequest = function (routeObj) {
     var urlMethod = routeObj.method.toUpperCase() + '|' + routeObj.url;
     if (routeObj.isPublic) {
       urlMethod += '|Public';
@@ -324,11 +325,11 @@ var serverHelper = function() {
     }
     cntrlOutput += urlMethod + '\n';
 
-    if(__CONFIG__.log_performance_info) {
+    if (__CONFIG__.log_performance_info) {
       // Performance logging is turned on.
-      app[routeObj.method](routeObj.url, logPerformanceRoute);        
+      app[routeObj.method](routeObj.url, logPerformanceRoute);
     }
-    
+
     if (__CONFIG__.enable_compression && routeObj.enableCompression) {
       // Enable compression
       app[routeObj.method](routeObj.url, compression());
@@ -336,25 +337,25 @@ var serverHelper = function() {
     if (typeof LoadCustomApi.beforeRouteLoad === 'function') {
       // Before route load method has been added.
       LoadCustomApi.beforeRouteLoad(routeObj.url, app);
-    }            
+    }
     if (routeObj.isPublic) {
       // Public route, no validation required, call the route method.
       app[routeObj.method](routeObj.url, routeObj.route);
     } else {
       if (typeof LoadCustomApi.validate === 'function') {
-        // Not a public route, and the custom API has a validate function.        
+        // Not a public route, and the custom API has a validate function.
         app[routeObj.method](routeObj.url, LoadCustomApi.validate);
       }
       if (routeObj.isAdmin && typeof LoadCustomApi.checkIfAdmin === 'function') {
         // Admin route, and the custom API has a checkIfAdmin function.
         app[routeObj.method](routeObj.url, LoadCustomApi.checkIfAdmin);
-      }      
+      }
       // Finally add the route.
       app[routeObj.method](routeObj.url, routeObj.route);
     }
   };
-    
-  var bindRequest = function(routeObj) {
+
+  var bindRequest = function (routeObj) {
     routeObj.url = RouteHelper.normalizeUrl(routeObj.url);
     routeObj.method = routeObj.method.toLowerCase();
     if (routeObj.isAdmin) {
@@ -367,39 +368,39 @@ var serverHelper = function() {
     } else {
       routeObj.enableCompression = true;
     }
-    
+
     if (validMethodTypes.indexOf(routeObj.method) !== -1) {
-      routeObj.url = RouteHelper.getFinalUrl(routeObj.url, routeObj.isPublic);           
+      routeObj.url = RouteHelper.getFinalUrl(routeObj.url, routeObj.isPublic);
       bindHttpRequest(routeObj);
       routeObj = null;
     } else {
       console.log('Invalid method type for - ' + routeObj.url);
     }
   };
-  
-  function logPerformanceRoute(request, response, next) {
-      response.on('close', function() {
-        // True indicates that the log is written on connection close.
-        logServerPerformance(request, response, true); 
-      });
 
-      response.on('finish', function() {
+  function logPerformanceRoute (request, response, next) {
+    response.on('close', function () {
+        // True indicates that the log is written on connection close.
+      logServerPerformance(request, response, true);
+    });
+
+    response.on('finish', function () {
         // False indicates that the log is written after response has been sent.
-        logServerPerformance(request, response, false); 
-      });
-            
-      if(next) {
-        next();
-      }
+      logServerPerformance(request, response, false);
+    });
+
+    if (next) {
+      next();
+    }
   }
-  
+
   return {
     parseBodyType: _parseBodyTypeValues,
     init: _init,
     notFound: _notFound,
     logRequestResponse: _logRequestResponse,
     getRequestData: _getRequestData,
-    loadRoutes: _loadRoutes,    
+    loadRoutes: _loadRoutes,
     loadCronJobs: _loadCronJobs,
     writeServerStartupLogs: _writeServerStartupLogs
   };

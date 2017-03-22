@@ -1,28 +1,31 @@
- var AdmZip = require('adm-zip');
- 
- var AppError = require(__CONFIG__.app_lib_path + 'app-error');
+'use strict';
 
- function zipper() {}
+// Third party modules
+const AdmZip = require('adm-zip');
+// Osm includes
+let AppError = require(__CONFIG__.app_lib_path + 'app-error');
 
- zipper.prototype.getFilesInfo = function(sourcePath, cb) {
-   var zipEntries = null;
-   try {
-     var zip = new AdmZip(sourcePath);
-     zipEntries = zip.getEntries();
-   } catch (e) {
-     return cb(new AppError(e, 'There was an error while reading the zip file.', {}));
-   }
-   return cb(null, zipEntries);
- };
+function zipper () { }
 
- zipper.prototype.extractFiles = function(sourcePath, destpath, cb) {
-   try {
-     var zip = new AdmZip(sourcePath);
-     zip.extractAllTo(destpath, true);
-     return cb(null);
-   } catch (e) {
-     return cb(new AppError(e, 'There was an error while extracting the zip file.', {}));
-   }
- };
+zipper.prototype.getFilesInfo = function (sourcePath, cb) {
+  var zipEntries = null;
+  try {
+    var zip = new AdmZip(sourcePath);
+    zipEntries = zip.getEntries();
+  } catch (e) {
+    return cb(new AppError(e, 'There was an error while reading the zip file.', {}));
+  }
+  return cb(null, zipEntries);
+};
 
- module.exports = zipper;
+zipper.prototype.extractFiles = function (sourcePath, destpath, cb) {
+  try {
+    var zip = new AdmZip(sourcePath);
+    zip.extractAllTo(destpath, true);
+    return cb(null);
+  } catch (e) {
+    return cb(new AppError(e, 'There was an error while extracting the zip file.', {}));
+  }
+};
+
+module.exports = zipper;

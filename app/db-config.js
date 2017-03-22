@@ -1,13 +1,13 @@
-var os = require('os');
+'use strict';
 
 // get the environment variable settings
-var mariadbHost = process.env.EMANATE_MARIADB_HOST || '10.0.0.66';
-var mariadbUser = process.env.EMANATE_MARIADB_USER || 'osmosys';
-var mariadbPassword = process.env.EMANATE_MARIADB_PASSWORD || 'Change123';
-var mariadbDatabase = process.env.EMANATE_MARIADB_DATABASE || 'emanate_prod';
+const mariadbHost = process.env.OSM_MARIADB_HOST || '10.0.0.66';
+const mariadbUser = process.env.OSM_MARIADB_USER || 'osmosys';
+const mariadbPassword = process.env.OSM_MARIADB_PASSWORD || 'Change123';
+const mariadbDatabase = process.env.OSM_MARIADB_DATABASE || 'test_instance';
 
 // define the database configuration
-var dbConfig = {
+const dbConfig = {
   'mariadb': {
     name: 'mariadb',
     maxConn: 40,

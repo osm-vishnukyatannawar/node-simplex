@@ -1,13 +1,15 @@
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
-var path = require('path');
-var templatesDir = path.join(__CONFIG__.app_base_path, 'templates');
-var emailTemplates = require('email-templates');
-var async = require('async');
-var fs = require('fs');
+'use strict';
+// Third party modules
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+const path = require('path');
+const emailTemplates = require('email-templates');
+const async = require('async');
+const fs = require('fs');
 
-var AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
-var GetStatus = require(__CONFIG__.app_base_path + 'lib/status');
+// Osm includes
+let templatesDir = path.join(__CONFIG__.app_base_path, 'templates');
+let AppError = require(__CONFIG__.app_base_path + 'lib/app-error');
 
 var transport = nodemailer.createTransport(smtpTransport({
   'host': __CONFIG__.email.server,
@@ -21,19 +23,19 @@ var transport = nodemailer.createTransport(smtpTransport({
   secure: __CONFIG__.email.secure
 }));
 
-var mailer = function() {
+var mailer = function () {
   /**
    * Public : This is the primary method that is called
    * from outside to send the mails.
    */
-  var sendMails = function(arrObjEmails, cb) {
+  var sendMails = function (arrObjEmails, cb) {
     var allEmailsLen = arrObjEmails.length;
     if (!allEmailsLen) {
       return;
     }
     var errMails = [];
     var succMails = [];
-    var processResponse = function(isSuccess, respObj) {
+    var processResponse = function (isSuccess, respObj) {
       if (isSuccess) {
         succMails.push(respObj);
       } else {
@@ -47,7 +49,7 @@ var mailer = function() {
       }
     };
 
-    emailTemplates(templatesDir, function(err, template) {
+    emailTemplates(templatesDir, function (err, template) {
       if (err) {
         return cb(new AppError(getStatus('internalError'),
           'There was an error while reading the templates', {}));
@@ -56,7 +58,7 @@ var mailer = function() {
         processAttachments(arrObjEmails[i], processAttachmentCb);
       }
 
-      function processAttachmentCb(err, mailObj) {
+      function processAttachmentCb (err, mailObj) {
         if (err) {
           return processResponse(false, {
             'id': mailObj.emailID,
@@ -75,14 +77,14 @@ var mailer = function() {
   /**
    * Sends a mail that has a template attached.
    */
-  function sendTemplateMail(mailObj, template, cb) {
+  function sendTemplateMail (mailObj, template, cb) {
     if (!mailObj.templateName) {
       return cb(false, {
         'id': mailObj.emailID,
         'error': 'No template provided'
       });
     }
-    template(mailObj.templateName, JSON.parse(mailObj.data), function(err,
+    template(mailObj.templateName, JSON.parse(mailObj.data), function (err,
       html, text) {
       if (err) {
         return cb(false, {
@@ -99,7 +101,7 @@ var mailer = function() {
         subject: mailObj.subject,
         from: mailObj.fromEmail,
         attachments: mailObj.attachments
-      }, function(err, responseStatus) {
+      }, function (err, responseStatus) {
         if (err) {
           return cb(false, {
             'id': mailObj.emailID,
@@ -118,7 +120,7 @@ var mailer = function() {
   /**
    * Sends a mail that does not have a template set.
    */
-  function sendNormalMail(mailObj, cb) {
+  function sendNormalMail (mailObj, cb) {
     if (!mailObj.data) {
       mailObj.data = '';
     } else {
@@ -132,8 +134,8 @@ var mailer = function() {
       html: mailObj.data,
       subject: mailObj.subject,
       from: mailObj.fromEmail,
-      attachments: mailObj.attachments,
-    }, function(err, responseStatus) {
+      attachments: mailObj.attachments
+    }, function (err, responseStatus) {
       if (err) {
         return cb(false, {
           'id': mailObj.emailID,
@@ -152,7 +154,7 @@ var mailer = function() {
    * Checks if the attachments are present on the
    * filesystem.
    */
-  function processAttachments(mailObj, cb) {
+  function processAttachments (mailObj, cb) {
     try {
       mailObj.attachments = JSON.parse(mailObj.attachments);
     } catch (err) {
@@ -162,9 +164,9 @@ var mailer = function() {
       delete mailObj.attachments;
       return cb(null, mailObj);
     }
-    async.filter(mailObj.attachments, function(attachment, next) {
+    async.filter(mailObj.attachments, function (attachment, next) {
       fs.exists(attachment.path, next);
-    }, function(results) {
+    }, function (results) {
       mailObj.attachments = results;
       return cb(null, mailObj);
     });

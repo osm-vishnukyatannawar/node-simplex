@@ -6,14 +6,16 @@
 
 'use strict';
 
-var mSQLClient = require('mysql');
+// Third party modules
+const mSQLClient = require('mysql');
 
-var SQLPool = require(__CONFIG__.app_lib_path + 'db-connector/pools/mysql-pool');
-var AppError = require(__CONFIG__.app_lib_path + 'app-error');
+// Osm includes
+let SQLPool = require(__CONFIG__.app_lib_path + 'db-connector/pools/mysql-pool');
+let AppError = require(__CONFIG__.app_lib_path + 'app-error');
 
 var defaultMsg = {
-  errorDbConn: "There was an error while communicating with the database.",
-  queryExecution: "There was an error while executing the query."
+  errorDbConn: 'There was an error while communicating with the database.',
+  queryExecution: 'There was an error while executing the query.'
 };
 
 /**
@@ -24,7 +26,7 @@ var defaultMsg = {
  * @param customMsgs
  *          Use this parameter to override the custom messages used.
  */
-function MySQL(dbConfig, customMsgs) {
+function MySQL (dbConfig, customMsgs) {
   this.config = dbConfig;
   this.msgStrings = defaultMsg;
   if (customMsgs !== undefined && customMsgs.errorDbConn && customMsgs.queryExecution) {
@@ -32,7 +34,7 @@ function MySQL(dbConfig, customMsgs) {
   }
 }
 
-MySQL.prototype.setDbConfig = function(dbConfig) {
+MySQL.prototype.setDbConfig = function (dbConfig) {
   this.config = dbConfig;
   this.closeConnection();
 };
@@ -46,12 +48,12 @@ MySQL.prototype.setDbConfig = function(dbConfig) {
  *          Close the connection automatically. useArray - Respond with an array
  *          rather than an object.
  */
-MySQL.prototype.query = function(objQuery, cb) {
+MySQL.prototype.query = function (objQuery, cb) {
   runQuery(this, false, objQuery.query, objQuery.data, cb, objQuery.closeConn);
 };
 
-MySQL.prototype.getResult = function(objQuery, cb) {
-  runQuery(this, true, objQuery.query, objQuery.data, function(err, data) {
+MySQL.prototype.getResult = function (objQuery, cb) {
+  runQuery(this, true, objQuery.query, objQuery.data, function (err, data) {
     if (err) {
       cb(err, null);
       return;
@@ -64,19 +66,19 @@ MySQL.prototype.getResult = function(objQuery, cb) {
   }, objQuery.closeConn, objQuery.useArray);
 };
 
-MySQL.prototype.getResults = function(objQuery, cb) {
+MySQL.prototype.getResults = function (objQuery, cb) {
   runQuery(this, true, objQuery.query, objQuery.data, cb, objQuery.closeConn);
 };
 
 // isSelect is currently not being used, leaving it as is, to maybe use in the
 // future
-function runQuery(objMySQL, isSelect, query, data, cb, closeConn) {
-  SQLPool(objMySQL.config, function(err, connection) {
+function runQuery (objMySQL, isSelect, query, data, cb, closeConn) {
+  SQLPool(objMySQL.config, function (err, connection) {
     if (err) {
       cb(new AppError(err, objMySQL.msgStrings['errorDbConn']), null);
       return;
     }
-    connection.query(query, data, function(err, result) {
+    connection.query(query, data, function (err, result) {
       if (err) {
         cb(new AppError(err, objMySQL.msgStrings['queryExecution']), null);
         return;

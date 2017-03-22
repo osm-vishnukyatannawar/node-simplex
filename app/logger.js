@@ -1,9 +1,10 @@
-/* global __CONFIG__ */
-var winston = require('winston');
-var fs = require('fs');
+'use strict';
+// Third party modules
+const winston = require('winston');
+const fs = require('fs');
 
-var logger = (function() {
-  var errLogger = new(winston.Logger)({
+let logger = (function () {
+  let errLogger = new (winston.Logger)({
     transports: [new winston.transports.File({
       filename: __CONFIG__.getLogsFolderPath() + 'exceptions.log',
       timestamp: true,
@@ -14,12 +15,12 @@ var logger = (function() {
       filename: __CONFIG__.getLogsFolderPath() + 'exceptions.log',
       json: false,
       timestamp: true,
-      prettyPrint: true,
+      prettyPrint: true
     })],
     exitOnError: false
   });
 
-  var infoLogger = new(winston.Logger)({
+  let infoLogger = new (winston.Logger)({
     transports: [new winston.transports.Console({
       json: false,
       timestamp: true
@@ -28,16 +29,16 @@ var logger = (function() {
       json: false,
       timestamp: true
     })]
-  });  
+  });
 
-  var logAppErrors = function(error) {
-    errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments + 
+  let logAppErrors = function (error) {
+    errLogger.error('\n----\n' + error.stack + '\n Arguments : ' + error.arguments +
       '\n Severity : ' + error.severity + '\n----\n');
   };
 
-  var logUncaughtError = function(error) {
-    var filename = __CONFIG__.getLogsFolderPath() + 'uncaught-exceptions.log';
-    var message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
+  let logUncaughtError = function (error) {
+    let filename = __CONFIG__.getLogsFolderPath() + 'uncaught-exceptions.log';
+    let message = '\n\n----------UNCAUGHT ERROR!!! ----------------\n\n' +
       'Message : ' + error.message + '\n--\n' +
       'Type : ' + error.type + '\n--\n' +
       'StackTrace : ' + error.stack + '\n--\n' +
@@ -45,13 +46,13 @@ var logger = (function() {
     fs.appendFileSync(filename, message);
   };
 
-  var logAppInfo = function(info) {
+  let logAppInfo = function (info) {
     infoLogger.info(info + '\n----\n');
   };
 
-  var writeErrLog = function(err) {
+  let writeErrLog = function (err) {
     errLogger.error(err);
-  };  
+  };
 
   return {
     logAppErrors: logAppErrors,

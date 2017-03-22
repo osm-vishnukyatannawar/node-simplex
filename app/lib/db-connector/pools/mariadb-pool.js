@@ -1,10 +1,10 @@
 'use strict';
+// Third party modules
+const poolModule = require('generic-pool');
+let poolsList = {};
 
-var poolModule = require('generic-pool');
-var poolsList = {};
-
-var getPoolObj = function(objDbConfig) {
-  var poolName = objDbConfig.name;
+let getPoolObj = function (objDbConfig) {
+  let poolName = objDbConfig.name;
   if (!poolName) {
     // pool name is mandatory
     return;
@@ -14,10 +14,10 @@ var getPoolObj = function(objDbConfig) {
   }
   poolsList[poolName] = poolModule.Pool({
     name: poolName,
-    create: function(callback) {
+    create: function (callback) {
       objDbConfig.create(callback);
     },
-    destroy: function(client) {
+    destroy: function (client) {
       objDbConfig.destroy(client);
     },
     max: objDbConfig.maxConn,
