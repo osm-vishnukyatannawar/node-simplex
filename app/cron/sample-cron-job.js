@@ -1,21 +1,22 @@
-/* global __CONFIG__ */
-/**
- * Runs the tag background syncing process for records that have 
- * failed earlier in Cassandra.
- */
-var util = require('util');
-var CronJob = require('cron').CronJob;
-var async = require('async');
-var logger = require(__CONFIG__.app_base_path + 'logger');
-var __ = require('underscore');
+'use strict';
 
-var SampleCronJob = (function() {
-  function doNothing() {
-    
-  } 
-  
+// Third party modules
+const util = require('util');
+const CronJob = require('cron').CronJob;
+const async = require('async');
+const __ = require('underscore');
+const path = require('path');
+
+// Osm includes
+let logger = require(path.join(__CONFIG__.app_base_path, 'logger'));
+
+var SampleCronJob = (function () {
+  function doNothing () {
+
+  }
+
   return {
-    doNothing : doNothing
+    doNothing: doNothing
   };
 }());
 
@@ -25,6 +26,5 @@ var job = new CronJob({
   onTick: SampleCronJob.doNothing,
   start: true
 });
-
 
 module.exports = SampleCronJob;

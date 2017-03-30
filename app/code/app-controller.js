@@ -1,9 +1,14 @@
-var util = require('util');
+'use strict';
 
-var Controller = require(__CONFIG__.app_lib_path + 'controller');
+// Third party modules
+const util = require('util');
+const path = require('path');
 
-function AppController(app) {
-	Controller.call(this);
+// Osm includes
+let Controller = require(path.join(__CONFIG__.app_lib_path, 'controller'));
+
+function AppController (app) {
+  Controller.call(this);
 }
 
 util.inherits(AppController, Controller);

@@ -32,8 +32,8 @@ const isEmailSecure = (process.env.OSM_SECURE_EMAIL === 'true');
 const ipAddress = NetworkUtils.getIpAddressForNetworkInterface(networkInterfaceName) || 'localhost';
 
 // set the api base url's for the http and https interfaces
-const app_http_base_url = process.env.OSM_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
-const app_https_base_url = process.env.OSM_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
+let app_http_base_url = process.env.OSM_API_HTTP_BASE_URL || 'http://' + ipAddress + ':' + port;
+let app_https_base_url = process.env.OSM_API_HTTPS_BASE_URL || 'https://' + ipAddress + ':' + httpsPort;
 
 // validate and format the environment variable settings if needed
 if (logDir.slice(-1) !== '/') {
