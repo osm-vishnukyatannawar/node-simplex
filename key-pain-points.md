@@ -1,36 +1,36 @@
-* Re-design the logger methods to log the following information separately.
+- [ ] Re-design the logger methods to log the following information separately.
 
   - Warnings
   - Errors
   - Info
   - Uncaught errors
 
-* We need to fix the format of the log files.
+- [ ] We need to fix the format of the log files.
 
-* We need to configure eslint, so that we can avoid writing unnecessary code like declaring variables and not using them.
+- [ ] We need to configure eslint, so that we can avoid writing unnecessary code like declaring variables and not using them.
 
-* Remove https redirection from the server app and SSL configuration from the config file.
+- [ ] Remove https redirection from the server app and SSL configuration from the config file.
 
-* Modify the response object to include the error and success codes.
+- [ ] Modify the response object to include the error and success codes.
 
 ```js
 // Success object
 {
-  status: 'success', // Status of the request
-  code: 0, // Always 0 for the success response
-  data: {} // Any additional information
+  "status": "success",
+  "code": 0,
+  "data": {}
 }
 // Error object
 {
-  status: 'fail', // Status of the request
-  code: 123, // Error code
-  data: {}, // Any additional information
-  message: 'Error!', // Message shown to the user
-  validations: [] // Any validation errors
+  "status": "fail",
+  "code": 123,
+  "data": {},
+  "message": "Error!",
+  "validations": []
 }
 ```
-* We need to know immediately whenever server crashed due to an uncaught exception.
-* Configure **i18n** module to add support for internalization of messages and all the messages that are sent to the client
+- [ ] We need to know immediately whenever server crashed due to an uncaught exception.
+- [ ] Configure **i18n** module to add support for internalization of messages and all the messages that are sent to the client
 should fetch from the **en.json** file.
 ```js
 // Use express
@@ -49,9 +49,9 @@ i18n.configure({
 app.use(i18n.init);
 ```
 
-* Need load helper class to return the different paths of projects folder (logs, files, uploads etc..)
-* Need to fix the issues with running multiple queries in the same connection.
-* We need to add support row callback after executing the select statements (Already we did this in one of our projects.)
+- [ ] Need load helper class to return the different paths of projects folder (logs, files, uploads etc..)
+- [ ] Need to fix the issues with running multiple queries in the same connection.
+- [ ] We need to add support row callback after executing the select statements (Already we did this in one of our projects.)
 
 ```js
 {
@@ -59,7 +59,7 @@ app.use(i18n.init);
   rowCbParams: [timezone]
 }
 ```
-* We are not following data types while sending the response back to the client. I think we should implement this.
+- [ ] We are not following data types while sending the response back to the client. I think we should implement this.
 
 ```js
 {
@@ -70,9 +70,9 @@ app.use(i18n.init);
   pin: '534301' // Should be of type integer
 }
 ```
-* Add retry transaction support in mariasql wrapper class.
-* Don't include the token in the the URL rather than accept in the request header.
-We need to update the following method in `route-helper.js` file.
+- [ ] Add retry transaction support in mariasql wrapper class.
+- [ ] Don't include the token in the the URL rather than accept in the request header.
+- [ ] We need to update the following method in `route-helper.js` file.
 ```js
 // Returns the final URL based on the config value
 function getFinalUrl(url, isPublic) {
@@ -84,8 +84,8 @@ function getFinalUrl(url, isPublic) {
   return finalUrl;
 };
 ```
-* Currently, in the API we are not handling the error properly if the request payload is higher than the expected for GET and DELETE requests.
-* Adding CORS support.
+- [ ] Currently, in the API we are not handling the error properly if the request payload is higher than the expected for GET and DELETE requests.
+- [ ] Adding CORS support.
 ```js
 const express = require('express');
 // Requiring cors module
@@ -94,5 +94,5 @@ const app = express();
 // Configuring the express app to support cors
 app.use(cors());
 ```
-* Currently, we are not validaing the size of the data received in the request.body (POST and PUT).
-* We are not handling response headers properly while sending the files.
+- [ ] Currently, we are not validaing the size of the data received in the request.body (POST and PUT).
+- [ ] We are not handling response headers properly while sending the files.
